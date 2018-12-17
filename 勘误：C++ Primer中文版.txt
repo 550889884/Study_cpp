@@ -1,0 +1,1316 @@
+本勘误档更新日期: 2002/12/13
+
+《C++ Primer 3/e 中文版》
+Addison-Wesley.  峰资讯股份有限公司 合作出版, 1999
+
+目前刷次: 1999/09 第一刷 印量  0001~3000
+          1999/10 第二刷 印量  3001~5000（版权页记录为 3001~4500，错误）
+          2000/03 第三刷 印量  5001~8000
+          2000/11 第四刷 印量  8001~11000
+          2001/10 第五刷 印量 11001~14000（2001修订本。制版疏失以致未列版权页）
+            2001修订本特色：
+              1. 本表所载勘误至 2001/07/23 止皆已修正於纸本
+              2. 目录附黑色页边，有益查找
+              3. 改用网片印刷，网底效果极佳（唯 p252 原图扫描效果不佳）
+              4. 摺口介绍 8 本循序渐进的好书
+          2002/08 第六刷 印量 14001~16500
+
+原着：C++ Primer 3/e, 
+      by Stanly B. Lippman & Josee Lajoie,
+      Addison Wesley/1998
+
+
+注意：英文版 1999.08.10 之前的勘误已直接修正於中文版内。
+原文书的 errata 在
+(1)  http://people.we.mediaone.net/stanlipp/index.html
+(2)  http://www.awl.com/cseng/titles/0-201-82470-1/
+
+注意：自 2000/05/18 之後的勘误条款，皆加上修正日期，
+并以日期排序，以利您的寻找。
+
+======================================================
+
+书籍内容更正，有两种作法，一是在网际网路上做个专属勘误
+网页，让大家上去看。这是比较即时的作法。而更理想更负责
+的作法是：不但有勘误网页，并且在新刷中予以更正 -- 如果
+有新刷的话。
+
+不过，理想与现实之间需要一点协调。书籍的制作是这样的，
+制版与印刷时，是以台（8 或 16 页）为单位。因此，每换一
+页，同台的各页统统要换过。这便造成印制成本的大量增加。
+
+以前，我从不考虑成本，只要我认为书籍内容有修改必要，即
+使只是某个字词用得不甚理想，我都会请出版社更新。出版社
+也都全力配合（这一点让我非常感谢）。
+
+慢慢地，我的行事不再这麽霹雳，我觉得我多少也要站在出版
+社的立场想想。所以我打算，如果是关系到对错正误的根本性
+问题，我便一定在新刷修正。如果是易判别的错别字或排版误
+失或用词不很恰当┅等等，我便先在勘误网页上明载，但不求
+立刻於新刷中更正。直到收集来的这类误失较为密集了，才一
+并於下一刷修正。
+
+哪些是新刷已修正的，哪些是暂请读者自行动手更改的，我会
+在勘误网页（网址见书封底）上很清楚地说明。
+
+这是个便宜法门，请读者见谅。
+
+书籍应该在出版前就详细检查，以完美之姿出现。但是完美很
+难达到。对於下列大大小小轻重不等的误失，我谨向读者说抱
+歉。
+
+本档欢迎广为流传，谢谢。
+
+
+以下为更新记录。如果您购买的是第 n 刷，请将以下第 n+1
+刷之後的更新内容自行修正至书上。谢谢
+
+======================================================
+
+二刷更正内容：
+（注意，Lm 表示第 m 行，L-n 表示倒数第 n 行）
+
+■导读 p23
+原文：
+template <typename T>
+T func( T p1, T p2, int p3 ) // ( T p1, T p2, int p3 ) 称为 template parameter list
+{     ...     }              // p1, p2 称为型别叁数（type parameter）
+                             // p3 称为非型别叁数（nontype parameter）
+更正：
+template <typename T>        // <typename T> 称为 template parameter list
+T func( T p1, T p2, int p3 ) //   其中 T 是 template type parameter（型别叁数）
+{     ...     }              //   另有所谓 template nontype parameter（非型别叁数），
+                             //   本例未出现。
+
+■p36 L-2
+原文：当它後面紧跟着一个 class 名称
+更正：当它紧跟着一个 class 名称後面
+感谢：黄向阳先生
+
+■p106 L17（原书笔误）
+原文：int *&ptrVal2 = pi;
+更正：int *&refPtr = pi;
+感谢：黄向阳先生
+
+■p342: L-4（原书笔误）
+原文：以下示范利用 rswap() 交换两个指标
+更正：以下示范利用 ptrswap() 交换两个指标
+
+■p496: L13
+原文：inline 或 extern 修饰词应该放在 template 叁数列之前，而非┅
+更正：inline 或 extern 修饰词应该放在 template 叁数列之後，而非┅
+
+■p1130: copy_backward() 下的第二段文字（原书错误）
+原文：
+例如，给予数列 {0,1,2,3,4,5}，我们可以复制最後三个元素 (3,4,5) 到
+最前三个元素 (0,1,2) 身上，作法是将 first 设定为元素 0 的位址，
+last1 设定为元素 3 的位址，last2 设定为元素 5 的下一个位址。
+於是元素 5 会被指定到原来的元素 2 身上，元素 4 会被指定到原来的元素 1 身上，
+元素 3 会被指定到原来的元素 0 身上。最後的结果是 {3,4,5,3,4,5}。
+
+更正：
+例如，给予数列 {0,1,2,3,4,5}，我们可以复制最前三个元素 (0,1,2) 到
+最後三个元素 (3,4,5) 身上，作法是将 first 设定为元素 0 的位址，
+last1 设定为元素 3 的位址，last2 设定为元素 5 的下一个位址。
+於是元素 2 会被指定到原来的元素 5 身上，元素 1 会被指定到原来的元素 4 身上，
+元素 0 会被指定到原来的元素 3 身上。最後的结果是 {0,1,2,0,1,2}。
+
+================================================================
+
+三刷更正内容：
+（注意，Lm 表示第 m 行，L-n 表示倒数第 n 行）
+
+■p252 图片过於粗糙，重制。
+
+■p318 最後一段第二行（误译）
+原文：这种作法之所以能够成功，是因为这些 containers 保证其
+      元素实体会以连续的方式出现（存在）。
+更正：这种作法之所以能够成功，是因为这些 containers 保证其
+      键值相同的元素会连续出现（存在）。
+
+■p322 最後一段第二行（修润）
+原文：我们称 stack 为一种所谓的 container adapter，因为它
+      在底层的 container 集合体身上课徵 stack 抽象性质。
+更正：我们称 stack 为一种所谓的 container adapter，因为它
+      系利用底层各类型 container 加工完成 stack 抽象性质。
+
+■p495, L4（原书笔误）
+原文：// ok: Type used many times in template parameter list
+更正：// ok: Type used many times in function parameter list
+感谢：kylin
+
+■p501, L12（中译本误植）
+原文：min2() 的第一个函式叁数是个型别为 *Type 的指标。
+更正：min2() 的第一个函式叁数是个型别为 Type* 的指标。
+
+■p503, L-5（原书笔误）
+原文：上述的 template 引数 T 从第一个函式引数中推导得 int，
+      又自第二个函式引数中推导得 unsigned int，因此 template 引数推导失败。
+更正：上述的 template 引数 T 从第一个函式引数中推导得 unsigned int，
+      又自第二个函式引数中推导得 int，因此 template 引数推导失败。
+感谢：leetron
+
+■p565, L7（原书笔误）
+原文：Exception declaration 是函式介面的一部份，所以它必须...
+更正：Exception specification 是函式介面的一部份，所以它必须...
+
+■p576, 最上（中译稿漏印，缺少两个右大括号）
+原文：     // ...
+更正：     }
+           // ...
+       }
+注意：我在本书第三刷（3/p）中将 p575 和 p576 相邻处的 layout 做了
+一点点挪移，所以第三刷的读者在 p576 最上所见并非上述那样子。请勿疑虑。
+
+■p595, L-5
+原文：当然，「令一个 non-const iterator 指向一个 const iterator」总是可以的。
+更正：当然，「将一个 non-const iterator 指派给一个 const iterator」总是可以的。
+
+■p596（原书笔误）
+说明：本页下方有三点，讨论 back_inserter, front_inserter, inserter.
+      并均利用 unique_copy() 做为使用范例。每一个 unique_copy() 都
+      遗漏了最後的右大括弧。
+更正：请为 unique_copy() 加上最後的右大括弧。
+感谢：Megadeth
+
+■p652, L-1（中译稿漏印，少了最後一行）
+原文：有着以下的型别：
+更正：有着以下的型别： int (Screen::*)()
+
+■p731, 第一段（中译误失）
+原文：
+举个例子，如果我再次修改 Account class 的定义，令 _name 的型别为 string，
+那麽预设的 memberwise 指派动作：
+newAcct = oldAcct;
+就会被编译器唤起，犹如编译器为我们产生了以下的 copy assignment 运算子：
+
+更正：
+举个例子，如果我再次修改 Account class 的定义，令 _name 的型别为 string，
+那麽当：
+newAcct = oldAcct;
+预设的 memberwise 指派动作就会被编译器唤起，犹如编译器为我们产生了
+以下的 copy assignment 运算子：
+
+■p915, 第二段文字，第一行（译笔不佳，重译）
+原文：一个 derived class constructor 只能合法地唤起其
+      「直接 base class」的 constructor
+更正：一个 derived class constructor 能够合法直接唤起的 construtor 只有其
+      「直接 base class」的 constructor
+
+■p915, 17.4.4 的标题（修润）
+原文：17.4.4 惰式错误侦测（Lazy Error Detection）
+更正：17.4.4 缓式错误侦测（Lazy Error Detection）
+注意：请同时修改
+      p.ix, 目录
+      p.916, L6
+      p.981, 18.3.2 标题前两行
+      p.984, L-6
+      p.1224, 索引
+讨论：我想，译为「缓式」可能比译为「惰式」更符合华人用语。在 Scott Meyers
+的《More Effective C++》item17 "Consider using lazy evaluation" 中，
+对於 Lazy evaluation 有深刻的解说，并提出一个对应词：eager evaluation。
+我把 eager evaluation 译为「急式评估」。
+
+■p941, 17.5.8 标题（误译）
+原文：虚拟函式、虚拟解构式 constructor、虚拟解构式 destructor
+更正：在建构式（constructors）与解构式（destructors）中呼叫虚拟函式
+注意：请同时修改目录 (p.x)
+
+■p1006, L-13（译笔不佳，重译）
+原文：一旦成为 base class，class template 必须完整列出其叁数列。
+修改：欲令一个 class template 扮演 base class 的角色，我们必须完整列出其叁数列。
+
+■p1045  19.2.7 标题（笔误）
+原文：19.2.7 Constructors（解构式）和 Function try Blocks 的关系
+更正：19.2.7 Constructors（建构式）和 Function try Blocks 的关系
+感谢：leetron
+注意：请同时修改目录 (p.x)
+
+■p1126, adjacent_difference 内文第二行（误译）
+原文：给予数列 {0,1,1,2,3,5,8}，新数列的 first 元素是
+      原数列的 first 元素的拷贝：0。
+更正：给予数列 {0,1,1,2,3,5,8}，新数列的第一个元素是
+      原数列的第一个元素的拷贝：0。
+
+■p1126, L-15, p1127, L9（原书错误）
+说明：这两行出现的 times，是某 function object 的旧名称，
+      在 C++ standard 中已改名为 multiplies. 见 p590
+更正：将这两行出现的 times<int> 改为 multiplies<int>
+
+■p1127, adjacent_find() 第二版本规格，最後一行（原书错误）
+原文：ForwardIterator last, Predicate pred);
+更正：ForwardIterator last, BinaryPredicate pred);
+
+■p1128, binary_search() 第二版本规格，缺一行（原书遗漏）
+原文：bool
+      binary_search(ForwardIterator first,
+                    ForwardIterator last, const Type &value,
+                    Compare comp);
+更正：请在 bool 前面加上一行
+      template <class ForwardIterator, class Type, class Compare>
+
+■p1149, inner_product() 规格说明最後一行（原书错误）
+原文：  (2+1) - (3+2) - (5+3) - (8+4)
+更正：- (2+1) - (3+2) - (5+3) - (8+4)
+
+■p1166, L9, L20（原书错误）
+■p1167, L1, L3 （原书错误）
+说明：这四行出现的 times，是某 function object 的旧名称，
+      在 C++ standard 中已改名为 multiplies. 见 p590
+更正：将这四行出现的 times<int> 改为 multiplies<int>
+
+■p1177, rotate() 规格说明第一行（原书错误）
+原文：rotate() 会将 [first,middle) 范围内的元素搬移到 container 尾端。
+更正：rotate() 会将 [first,middle) 范围内的元素搬移到 last 所指位置。
+
+
+■p433, p434, p453, p454, p767, p769, p770, p771, p774, p781, p790,
+  p849, p863, p865, p866, p881, p898, p911, p914
+字体变小，制版不当（做了缩版动作）。第三刷已重新制版。
+
+
+==================================================================
+
+★英文 dimension 一词用於阵列有两义：(1) 维度 (2) 尺度（元素个数）
+我在翻译过程中一时拘泥，译得不好。现重新检讨如下（抱歉，页数颇多）：
+
+■p24: L-13
+原文：阵列的名称是 fibon。这是一个整数阵列，维数为 9。
+更正：阵列的名称是 fibon。这是一个整数阵列，尺度（元素个数）为 9。
+
+■p24: L-6
+原文：最後一个元素，我们应该把维数减 1 做为索引值
+更正：最後一个元素，我们应该把尺度（元素个数）减 1 做为索引值
+
+■p28: L-9
+原文：new 算式的第二个版本配置出一个特定型别和特定维数的阵列。
+更正：new 算式的第二个版本配置出一个特定型别和特定尺度（元素个数）的阵列。
+
+■p34: L7
+原文：我把阵列的维数指定给 array_size。
+更正：我把阵列的大小指定给 array_size。
+
+■p114: 最後一段文字
+原文：
+阵列的定义系由型别符号、识别名称、维度（dimension）三者构成。
+维度以一个中括号表示，指出阵列之中有多少元素。阵列的维度大小必须
+大於或等於 1。维度值必须是一个常数算式，也就是说，它必须能够在
+编译时期便被编译器核定（evaluate）其值。换言之一个 non-const
+变数不能够用来指定阵列的维度大小。
+
+更正：
+阵列的定义系由型别符号、识别名称、尺度（dimension）三者构成。
+尺度以一个中括号表示，指出阵列之中有多少元素。阵列的尺度必须
+大於或等於 1。尺度必须是一个常数算式，也就是说，它必须能够在
+编译时期便被编译器核定（evaluate）其值。换言之一个 non-const
+变数不能够用来指定阵列的尺度大小。
+
+■p115: L2
+原文：只能够在执行时期完成，所以它不能够用来指定阵列维度。
+更正：只能够在执行时期完成，所以它不能够用来指定阵列尺度。
+
+■p115: L-13
+原文：面对一个明白初始化的阵列，你不需要再指定其维度，
+更正：面对一个明白初始化的阵列，你不需要再指定其尺度，
+
+■p115: L-9
+原文：如果维度被明白指出，那麽串列中的元素个数就不能够超越该值，
+更正：如果尺度被明白指出，那麽串列中的元素个数就不能够超越该值，
+
+■p116: L1
+原文：ca1 的维度值是 3 而 ca2 的维度值是 4。
+更正：ca1 的尺度（元素个数）是 3 而 ca2 的尺度是 4。
+
+■p162: L8
+原文：像是阵列的维数，或是 template 的 nontype 叁数。
+更正：像是阵列的尺度（元素个数），或是 template 的 nontype 叁数。
+
+■p415: L13
+原文：以 new 算式配置获得的阵列，其维度可被指定为┅
+更正：以 new 算式配置获得的阵列，其尺度（元素个数）可被指定为┅
+
+■p616: L6
+原文：也应该允许使用者在执行时期设定萤幕的实际维度。
+更正：也应该允许使用者在执行时期设定萤幕的实际尺寸。
+
+■p617: L-14
+原文：使用者决定让所有的 Screen class objects 维度为 80 x 24，
+更正：使用者决定让所有的 Screen class objects 尺寸为 80 x 24，
+
+■p1079: L17
+原文：其中的 bufSize 便是字元阵列 buf 的维度。
+更正：其中的 bufSize 便是字元阵列 buf 的尺度（元素个数）。
+
+■p1079: L22
+原文：如果 buf 的宣告并未指定维度：
+更正：如果 buf 的宣告并未指定尺度（元素个数）：
+
+================================================================
+
+五刷（2001 修订版）更正内容：
+（注意，Lm 表示第 m 行，L-n 表示倒数第 n 行）
+
+■范围：全书
+说明：Associative Containers 被我译为「联合容器」，不甚妥当。
+      我想译为「关联容器」比较好，对比於「关联式资料库」。
+
+■导读p7 L9（错别字）
+原文：以译者的技术能力来抚平可能出现的阅读上的坎  崎岖。
+更正：以译者的技术能力来抚平可能出现的阅读上的坎坷崎岖。
+感谢：whizzkid
+
+■导读 p23, L-6
+原文：以下造成上述 function template 产生出
+      函式实体 func(float, float, int);
+更正：以下造成上述 function template 产生出
+      函式实体 double func(double, double, int);
+
+■前言p.xviii, L9（误译）
+原文：最後我要说，当一个人写了一本书，他决定略去的东西，
+      往往和他决定涵盖的东西一样重要。
+更正：最後我要说，当一个人写了一本书，他决定略去什麽东西，
+      往往和他决定涵盖什麽东西一样重要。
+
+■p35 L13（原书笔误）
+原文：#include <string>;
+更正：#include <string>
+感谢：alberta
+
+■p39 L2（原书笔误）
+原文：{init(rhs.size, rhs.ia);}
+更正：{init(rhs._size,rhs.ia);}
+感谢：chlin, Aua
+
+■p39 L-3（原书笔误）
+原文：assert( index >= 0 && index < size );
+更正：assert( index >= 0 && index < _size );
+感谢：alberta
+
+■p46 中间偏下（中译本笔误）
+原文：（我们将在第17章...
+更正：此段最後请加上小括号
+感谢：黄向阳先生
+
+■p108, L10
+原文：
+如果由右往左阅读上述定义，我们会发现，pi_ref 是个 reference，
+代表一个指标，此指标指向一个型别为 int 的 const object。
+但是我们的 reference 实际上却未被用来代表一个常数，而是被用来
+代表一个非常数指标（该指标指向一个常数 object）。
+
+更正：
+如果由右往左阅读上述定义，我们会发现，pi_ref 是个 reference，
+代表一个指标，此指标指向一个型别为 int 的 const object。
+我们的 reference 代表的不是一个常数指标，而是一个非常数指标，
+指向一个常数 object。
+
+■p125 练习 3.25（原书笔误）
+原文：bool is_equal( const int*ia)
+更正：bool is_equal( const int* ia)    请在 ia 之前加一空格
+感谢：黄向阳先生
+
+■p125 页眉位置
+说明：页眉位置跑掉了
+
+■p155 L6（原书错误）
+原文：while( ix_vec < 10 )
+更正：while( ix_vec < 9 )
+感谢：李俊德先生
+
+■p183 L3（错别字）
+原文：就某种意义而言，这说明了 C++ 语言一个自相矛顿的基础议题。
+更正：就某种意义而言，这说明了 C++ 语言一个自相矛盾的基础议题。
+感谢：whizzkid
+
+■p183 L7（错别字）
+原文：Standard C++ 引入这些转型运算子以强调（鲜明标示出）这个矛顿
+更正：Standard C++ 引入这些转型运算子以强调（鲜明标示出）这个矛盾
+感谢：whizzkid
+
+■p209 练习5.7 (d) 第一行（原书笔误）
+原文：int ival=512 jval=1024, kval=4096;
+更正：int ival=512, jval=1024, kval=4096; （原行少一个逗号）
+
+■p230 L11（原书笔误）
+原文：class ilist_item {
+更正：class ilist {
+感谢：aven
+
+■p242 L-4（笔误）
+原文：...，後面紧跟着一串以中括号为界的叁数。
+更正：...，後面紧跟着一串以角括号为界的叁数。
+感谢：rago
+
+■p468, 第二大段程式码的第五行（注解）出现一个中文乱码
+原文：potentially dangerous depending on i掇 value
+更正：potentially dangerous depending on i's value
+感谢：edward
+
+■p504, L-1
+原文：根据各对应之「函式引数」所推导出来的「template 引数」，结果一定相同。
+更正：根据各对应之「函式引数」所推导出来的「template 引数」，结果必须相同。
+
+■p592, L16（原书笔误）
+原文：Ires = IntNot( Ival1, Ival2 );
+更正：Ires = IntNot( Ival1 );
+说明：logical_not 是一个 unary function object.
+感谢：zychang（张振宇先生）
+
+■p599, L4（中译本笔误）
+原文：其中必须定义有一个 input 运算子（operator<<）
+更正：其中必须定义有一个 input 运算子（operator>>）
+感谢：zychang（张振宇先生）
+
+■p600, L5（原书笔误）
+原文：其中必须定义有一个 output 运算子（operator>>）
+更正：其中必须定义有一个 output 运算子（operator<<）
+感谢：zychang（张振宇先生）
+
+■p694, L6（原书笔误）
+原文：Account *pacct;
+更正：Account *pact;
+
+■p694, L9（原书笔误）
+原文：pact->Acct.Account::Account(
+更正：pact->Account::Account(
+
+■p709, 练习14.8, L4（原书笔误）
+原文：Accout acct;
+更正：Account acct;
+
+■p889, 练习17.1 之前两行（错别字）
+原文：物件导向程式设计的主要形帽便是...
+更正：物件导向程式设计的主要形貌便是...
+
+■p1015~1030（装订颠倒）
+少部份书品在这些页次上装订颠倒。这是装订厂的误失，请向经销点
+重换一册。如经销点不愿配合，请向 service@pearsoned.com.tw 反应，
+或向 http://www.gotop.com.tw 反应。
+
+■p1183, L6（译笔重修）
+原文：传回值 OutputIerator 指向被放进 result 所指之 container 内的
+      最後元素的下一位置。
+更正：传回值 OutputIerator 指向「result 所指之 container」内的
+      最後元素的下一位置。
+
+■p1188, 小标题 swap_range()（原书错误）
+原文：swap_range()
+更正：swap_ranges()
+注意：该小段的函式原型、文字第一行、文字第四行各有一个 swap_range()，
+      皆应改为 swap_ranges()。同时请修改 p.xii 之目录及 p.1235 之索引。
+感谢：zychang（张振宇先生）
+
+
+-- ★★★ 以下是 2000/05/18 後的勘误，改以日期而非页数排序 ★★★ --
+
+■p729, L12 （误译）
+原文：会将 newAcct 的每一个 nonstatic member 一一指派给 oldAcct 的对应 member。
+更正：会将 oldAcct 的每一个 nonstatic member 一一指派给 newAcct 的对应 member。
+感谢：zychang（张振宇先生）
+日期：2000/06/25
+
+■p826, L9  （原书笔误）
+原文：template <int size> Buf { ... };
+更正：template <int size> class Buf { ... };
+感谢：zychang（张振宇先生）
+日期：2000/06/25
+
+■p903, L9  （笔误）
+原文：...必须统统出现於相同的 socpe 内。
+更正：...必须统统出现於相同的 scope 内。
+感谢：zychang（张振宇先生）
+日期：2000/06/25
+
+■p239 L-1（原书笔误）
+原文：init_iter( ilist_item *it = 0 );
+更正：ilist_item* init_iter( ilist_item *it = 0 );
+感谢：Pei-Lun
+日期：2000/07/09
+
+■p1228, 索引右栏 L-10（笔误）
+原文：increment(++) 递减
+更正：increment(++) 递增
+日期：2000/07/24
+
+■p1119, 表20-1 第一行 （笔误）
+原文：Boolalpha
+更正：boolalpha
+日期：2000/07/27
+
+■p91 L-1（原书笔误）
+原文：因此 ip+2 是否导致一个合法...
+更正：因此 pi+2 是否导致一个合法...
+感谢：George Yang
+日期：2000/07/29
+
+■p780 15.9.2 节，L1（重译）
+原文：Class constructor 之中凡使用单一叁数者，例如...
+更正：Class constructor 之中凡能接受单一引数者，例如...
+注：虽然原文是 "taking a single parameter"，但严格说
+    该处应该采用 "argument" 一词才是。遂改之。
+日期：2000/07/30
+
+■p731 L-11（误植1+错字1）
+原文：一般而言，copy constructor 运算子和 copy assignment 运算子
+      应该被视为栾生兄弟。
+更正：一般而言，copy constructor 和 copy assignment 运算子
+      应该被视为孪生兄弟。
+感谢：edward
+日期：2000/08/01
+
+■p991 程式码最後，class MI （原书遗漏）
+原文：class MI : public Derived, public Base2 {
+      public:
+      // ...
+更正：class MI : public Derived, public Base2 {
+      public:
+      void foo(double);     // 注意，新增此行
+      // ...
+注：原书遗漏 void foo(double); 并不一定是表达上的错误。
+    不过，加上去会更清楚些。那就加上吧。
+感谢：edward
+日期：2000/08/05
+
+■4.13 标题
+原文：4.13 优先权（Precedence）
+更正：4.13 优先序（Precedence）
+注：1. precedence 译为优先序，比较不会和 priority（优先权）混淆。
+    2. 请检修整个 4.13 节，并修改目录 4.13 及索引 p1228。
+日期：2000/08/18
+
+■导读 p12, L-4 （笔误）
+原文：以天下兴亡为己任，继个人死生於度外
+更正：以天下兴亡为己任，置个人死生於度外
+感谢：Oliver Chang
+日期：2000/09/07
+
+■导读 p22, L9 （笔误）
+原文：小括弧内称为函式本体（function body）
+更正：大括弧内称为函式本体（function body）
+感谢：Oliver Chang
+日期：2000/09/07
+
+■导读 p23, L21（误植）
+原文：// 使用者自定的转换为行系由┅
+更正：// 使用者自定的转换行为系由┅
+感谢：Oliver Chang
+日期：2000/09/07
+
+■导读 p29, L-2 （笔误）
+原文：┅而不是针对所有的 tempalte 叁数做特殊化┅
+更正：┅而不是针对所有的 template 叁数做特殊化┅
+感谢：Oliver Chang
+日期：2000/09/07
+
+■p46, L-10（误译）
+原文：并被含入於 IntArray.h 表头档中
+更正：并含入 IntArray.h 表头档
+感谢：Oliver Chang
+日期：2000/09/07
+
+■p49, L8 （原书笔误）
+原文：#include <IntArray.h>
+更正：#include "IntArray.h"
+感谢：Oliver Chang
+日期：2000/09/07
+
+■p49, L9（原书笔误）
+原文：#include <IntArrayRC.h>
+更正：#include "IntArrayRC.h"
+感谢：Oliver Chang
+日期：2000/09/07
+
+■p77, L-13（原书错误）
+原文：\14（new line）
+更正：\12（new line）
+感谢：Oliver Chang
+日期：2000/09/07
+
+■p78, L-2（原书题目设计错误）
+原文：(b) 10, 10u, 10L, 10uL, 012, 0xC
+更正：(b) 10, 10u, 10L, 10uL, 012, 0xA
+感谢：Oliver Chang
+日期：2000/09/07
+
+■p118, L-8 後半（原书文字不佳）
+原文：於是存取到 ia 的第三个 row 的第一个元素
+修改：於是获得 ia 第三个 row 第一个元素的位址
+感谢：Oliver Chang
+日期：2000/09/07
+
+■p1027, L9（原书笔误）
+原文：// use re to call programmer::bonus()
+修改：// use rm to call programmer::bonus()
+感谢：Rock
+日期：2000/09/11
+
+■p355, 练习 7.6 (b)（原书笔误）
+原文：operator( matrix );
+修改：operate( matrix );
+感谢：jjhou
+日期：2000/10/10
+
+■p538, L1（制版遗漏）
+原文：    max( &ad[0], size );
+修改：    max( &ad[0], size );
+      }   // 书上少印了这个右大括弧
+感谢：jjhou
+日期：2000/10/11
+
+■p709, 练习14.8 题目（误译）
+原文：以下程式片段唤起 destrocutor 多少次？
+修改：以下程式片段可能在哪些地方唤起 destructor？
+感谢：jjhou
+日期：2000/10/13
+
+■p803, L7（误译）
+原文：宣告於某 namespace 内的「运算子 集」-- 该 namespace 定义有
+      该型别之运算子
+修改：宣告於某 namespace 内的「运算子 集」-- 该 namespace 定义有
+      被使用之运算元型别
+感谢：edward
+日期：2000/10/13
+
+■p1072, 练习 20.1 题目最後一行码（原书笔误）
+原文：complex purei( 0, 7 )
+修改：complex<double> purei( 0, 7 )
+感谢：jjhou
+日期：2000/10/23
+
+■p1143, find_end 文字说明第二行起（补强）
+原文：例如，给予字元序列 Mississippi 和第二序列 ss，
+      find_end() 会传回一个 ForwardIterator 指向
+      第二个 ss 的第一个 s 的位置。
+修改：例如，给予字元序列 Mississippi 和第二序列 ss，
+      find_end() 会传回一个 ForwardIterator 指向
+      Mississippi 中的第二个 ss 的第一个 s 的位置。
+感谢：jjhou
+日期：2000/12/08
+
+■p239, L3（原书错误）
+原文： : _at_front(0), _at_end(0)
+修改： : _at_front(0), _at_end(0), _size(0)
+说明：如果没有这麽做，copy 之後，新的 list 的元素个数会出错
+感谢：jjhou
+日期：2001/01/15
+
+■pxix, L12  （错别字）
+原文： 趋吉避凶
+修改： 趋吉避凶
+感谢： jc_168
+日期：2001/01/19
+
+■p269, L6 （中译本笔误）
+原文：一个以的元素呢？
+修改：一个以上的元素呢？
+感谢：e2487229
+日期：2001/01/28
+
+■p288, L-3 （中译本笔误）
+原文：size_type endPos = name.find_last_off( 'a' );
+更正：size_type endPos = name.find_last_of( 'a' );
+感谢：e2487229
+日期：2001/03/03
+
+■p659, L20 （中译本笔误）
+原文：最大的资料型别是 dval，
+更正：最大的资料型别是 _dval，
+感谢：e2487229
+日期：2001/03/03
+
+■p119, L-12（误译）
+原文：上述对 ia 所作的提领 (deferencing) 动作，会传回阵列中
+      第一个元素的位址；然後再加上 1。
+更正：上述对 ia 所作的提领 (deferencing) 动作，会传回阵列中
+      第一个元素的值；然後再加上 1。
+感谢：e2487229
+日期：2001/03/03
+
+■p710, L-6（原书笔误）
+原文：pooh_pals[1]._name != pooh_pals[2]._name();
+更正：pooh_pals[1]._name != pooh_pals[2]._name;
+感谢：e2487229
+日期：2001/03/03
+
+■p1125, L14 （原书错误）
+说明：这里出现的 times，是某 function object 的旧名称，
+      在 C++ standard 中已改名为 multiplies. 见 p590
+更正：将 times<int> 改为 multiplies<int>
+感谢：jjhou
+日期：2001/03/14
+
+■pix & p825, 16.2.1 标题（误译）
+原文：为非型别叁数（Nontype Parameters）指定 Template 引数
+更正：为 Template 的非型别叁数（Nontype Parameters）指定引数
+感谢：jjhou
+日期：2001/03/25
+
+■p522, 上半部程式码之下的第一段文字的第二行最後（原书错误）
+原文：Type 的 template 引数因而是 int 而非 int*。
+更正：template 引数 Type 因而是 int* 而非 int。
+感谢：jjhou
+日期：2001/03/29
+
+■p522, 上半部程式码之下的第二段文字的第二行最後（中译本错误）
+原文：例如稍早的 T* 和 T，template A（特制体）必须有个叁数能够接受
+      「template B 之对应叁数」所能接受的引数的超集。
+更正：例如稍早的 T* 和 T，template B 必须有个叁数，能够接受
+      「template A（特制体）之对应叁数」所能接受的引数的超集。
+感谢：James Tsao
+日期：2001/03/29
+
+■p532,L-8, p534,L6, p535,L2, p535,L-2, p536,L-16（原书笔误）
+原文：#include <primer.h>
+更正：#include "primer.h"
+感谢：jjhou
+日期：2001/03/29
+
+■p537, L-7（原书笔误）
+原文：#include <exercise.h>
+更正：#include "exercise.h"
+感谢：jjhou
+日期：2001/03/29
+
+■p763, 15.8 标题, pix, 15.8 标题（中译本笔误）
+原文：Operators new 和 Operator delete
+更正：Operator new 和 Operator delete
+感谢：jjhou
+日期：2001/04/06
+
+■p413,L15（错别字）
+原文：聚砂成塔
+更正：聚沙成塔
+感谢：Eric Yu
+日期：2001/05/02
+
+■p739,L17（错别字）
+原文：对内建型别之 obejcts ...
+更正：对内建型别之 objects ...
+感谢：Eric Yu
+日期：2001/05/02
+
+■P243 L8（原书笔误）
+原文: template <class elemenType>
+更正: template <class elemType>
+感谢：Eric Yu
+日期：2001/05/26
+
+■P698 L-11（错别字）
+原文: 导至
+更正: 导致
+感谢：Eric Yu
+日期：2001/05/26
+
+■P879 译注 L2,L3（错别字）
+原文: 延用
+更正: 沿用
+感谢：Eric Yu
+日期：2001/05/26
+
+■P1112 L17（中译本笔误）
+原文: (KERNIGHAN88] 对此有完整的讨论)
+更正: ([KERNIGHAN88] 对此有完整的讨论)
+感谢：Eric Yu
+日期：2001/05/26
+
+■p145, L10（原书笔误）
+原文：例如 12 代表 newline 字元
+更正：例如 10 代表 newline 字元
+感谢：Alfred
+日期：2001/05/26
+
+■p383, L-10（错别字）
+原文：// stopping comdition for recursion
+更正：// stopping condition for recursion
+感谢：Alfred
+日期：2001/05/26
+
+■p403, L7（错别字）
+原文：导至
+更正：导致
+感谢：Alfred
+日期：2001/05/26
+
+■p506, L1（笔误）
+原文：前一节只看个有限的几个型别转换动作
+更正：前一节只看到有限的几个型别转换动作
+感谢：Alfred
+日期：2001/05/26
+
+■p619, L16（修润）
+原文：由於 friends 并非 class「让渡友谊」的成份之一
+更正：由於 friends 并非「让渡友谊之 class」的成员之一
+感谢：Alfred
+日期：2001/05/26
+
+■p693, L-3（修润）
+原文：它会在被唤起时才扩展开来
+更正：它会在被唤起时扩展开来
+感谢：Alfred
+日期：2001/05/26
+
+■p778, L-16（原书错误）
+原文：// error: conversion char* to const char* not allowed
+更正：// error: conversion const char* to char* not allowed
+感谢：Alfred
+日期：2001/05/26
+
+
+■p970, 983（翻译错误）
+endangered 应译为「濒临绝种」。
+以下三处请修改如下：
+p970 L3 : 除了用以表述真实的动物园动物之外，另有其他 classes 封装了
+         各式各样的抽象性，例如「濒临绝种」。我的 Panda class 便是
+         多重继承自 Bear 和 Endangered。
+p983 L-7 : 毕竟，无灭种之虞的动物何必硬扯上一个 Endangered class object呢？
+p983 L-2 : 在我的例子中，只有少数的 ZooAnimal 子型别才有濒临绝种的危险。
+         此外，所谓「濒临绝种」的性质应该是可以取消的（至少理论上如此），
+         因为猫熊或许有一天会因为繁殖而不再有灭种之虞。
+感谢：Alfred
+日期：2001/05/26
+
+
+■p1069, L9（原书笔误）
+原文：'n'
+更正：'\n'
+感谢：Alfred
+日期：2001/05/26
+
+■p1085, L-2（修改并补充）
+原文：另一个函式 gcount() 可以读取某数量的字元
+更正：另一个函式 gcount() 可以传回最近一次 get() 或 getline() 所实际
+      读取的字元数量
+感谢：Alfred
+日期：2001/05/26
+
+■p1109, L-9（中译本处理错误）
+原文：characters input:
+更正：此句多馀，删除
+感谢：Alfred
+日期：2001/05/26
+
+■p692, L-3（误译）
+原文：即使有这样的需求，C++ class 规格也不允许这麽做。要知道，我们的...
+更正：啊呀，class Account 的规格并不允许这麽做（译注：意指不允许「只指定
+      帐户馀额却不指定帐户名称」）。因此，我们的...
+感谢：rex
+日期：2001/07/13
+
+■p291, L12（英文版笔误）
+原文：st[ index ];
+更正：st.at(index);
+感谢：willy
+日期：2001/07/23
+
+--------------------------------
+willy 读者阅读了最新英文版 (3/p) 勘误表，并与中文版比对之後，
+提供以下勘误。感谢 willy。
+
+■p108, L9（英文版勘误）
+原文：const int *&pi_ref = &ival;
+更正：const int *const &pi_ref = &ival;
+日期：2001/07/23
+侯捷注：经网友提醒，以上错误发生於 L15，而非 L9。因此，
+        请将 L9 改回原状：const int *&pi_ref = &ival;
+        并将 L15 由书上的 int *const &pi_ref = &ival;
+        改为：      const int *const &pi_ref = &ival;
+感谢：evil_hby
+日期：2001/10/12
+
+■p131, L-8（英文版勘误）
+原文：paramenter_list
+更正：parameter_list
+日期：2001/07/23
+
+■p137, L13（英文版勘误）
+原文：operator<<( ostream& os, const String &s )
+更正：operator<<( ostream& os, String &s )
+日期：2001/07/23
+
+■p158, L11（英文版勘误）
+原文：cout << cval << 'endl';
+更正：cout << cval << endl;
+日期：2001/07/23
+
+■p170, L-11（英文版勘误）
+原文：// equivalent initialiation as bitvec3
+更正：// equivalent initialization as bitvec3
+日期：2001/07/23
+
+■p186, L2~L6（英文版勘误）
+原文：
+
+如果 _top 等於 0，empty() 传回 true；如果 _top 等於 _stack.size()-1，
+full() 传回 true（上述 -1 是因为 vector 的元素编号和阵列一样，都是
+从 0 开始起算）
+inline bool iStack::empty() { return _top ? false : true; }
+inline bool iStack::full()  {
+               return _top < _stack.size()-1 ? false : true;
+
+更正：
+
+如果 _top 等於 0，empty() 传回 true；如果 _top 等於 _stack.size()，
+full() 传回 true：
+inline bool iStack::empty() { return _top ? false : true; }
+inline bool iStack::full()  {
+               return _top < _stack.size() ? false : true;
+
+日期：2001/07/23
+
+
+■p266, L12（英文版勘误）
+原文：
+if ( *c_iter % 2 )
+     pvec_even->push_back( *c_iter );
+else pvec_odd->push_back( *c_iter );
+更正：
+if ( *c_iter % 2 )
+     pvec_odd->push_back( *c_iter );
+else pvec_even->push_back( *c_iter );
+日期：2001/07/23
+
+■p266, L19（英文版勘误）
+原文：vec->begin()+vec.size()/2;
+更正：vec.begin()+vec.size()/2;
+日期：2001/07/23
+
+■p271, L15（英文版勘误）
+原文：for ( ; iter != buffer.end(); iter++ );
+更正：for ( ; iter != buffer.end(); ++iter );
+日期：2001/07/23
+
+■p271, 6.6.2 节以下，至本页尾（英文版勘误）
+原文：文中多处使用 svec1 和 svec2
+更正：请全部改为 slist1 和 slist2，以便与下一页配合
+日期：2001/07/23
+
+■p282, L-11（英文版勘误）
+原文：string sentence = line1 + line2 + line3;
+更正：string sentence = line1 + ' ' + line2 + ' ' + line3;
+注意：拥有本书题解者，请一并修正。
+日期：2001/07/23
+
+■p289, L1（英文版勘误）
+原文：
+
+注意，第二个 iterator 所指的字元并不涵盖於删除范围之内。
+erase() 的第三型式需要一个 iterator 做为引数，此 iterator 标示出一个
+起始位置，从该位置之後直到字串结束为止的所有字元都会被移除。例如：
+name.erase( name.begin() + 4 );
+会使 name 变成 "Anna"。
+
+更正：
+
+注意，第二个 iterator 所指的字元并不涵盖於删除范围之内。这意味我们
+产生出来的是 Annaabelle 而不是 Annabelle。於是，我使用 erase() 的
+第三型式，以一个 iterator 做为引数，标示出欲移除的字元位置。
+我把 endPos 当做引数，用以删除多馀的第二个 'a'：
+name.erase( endPos );
+现在我们的 name 变成了 "Annabelle"。
+
+日期：2001/07/23
+
+补充：jau_lueng su 指出，以上更正後的叙述有误。
+检讨：的确，lippman 在此处挖东补西，写得不好。
+重新更正：
+  注意，第二个 iterator 所指的字元并不涵盖於删除范围之内。这意味我们
+  产生出来的是 Annaabelle 而不是 Annabelle。於是，我使用 erase() 的
+  第三型式，以一个 iterator 做为引数，标示出欲移除的字元位置。
+  name.erase( name.begin() + 4 );
+  现在我们的 name 变成了 "Annabelle"。
+日期：2001/10/07
+
+
+■p289, L12（英文版勘误）
+原文：string_object.insert( pos+1, 's' );
+更正：string_object.insert( pos+1, "s" );
+日期：2001/07/23
+
+■p289, L-13（英文版勘误）
+原文：posEnd // end position within new_string
+更正：posEnd // number of characters to copy
+日期：2001/07/23
+
+■p289, L-1（英文版勘误）
+原文：s3.assign( s1, 4 );
+更正：s3.assign( s1, 0, 4 );
+日期：2001/07/23
+
+■p290, L6（英文版勘误）
+原文：s3.append( s2, 4 );
+更正：s3.append( s2, 0, 4 );
+日期：2001/07/23
+
+■p290, L8（英文版勘误）
+原文：s3.assign( s1, 4 ).append( ' ' ).append( s2, 4 );
+更正：s3.assign( s1, 0, 4 ).append( ' ' ).append( s2, 0, 4 );
+日期：2001/07/23
+补充：jau_lueng su 指出，append() 只能接受字串而非字元，上式应改为：
+更正：s3.assign( s1, 0, 4 ).append( " " ).append( s2, 0, 4 );
+日期：2001/10/07
+
+■p293, L18（英文版勘误）
+原文：hmm.replace( position, 4, 'x', 4 );
+更正：hmm.replace( position, 4, 4, 'x' );
+日期：2001/07/23
+
+■p325, L-1（英文版勘误）
+原文：inline bool iStack::size() { return _stack.size(); }
+更正：inline int  iStack::size() { return _stack.size(); }
+日期：2001/07/23
+
+■p456, L-6（英文版勘误）
+原文：void main() {
+更正：int  main() {
+日期：2001/07/23
+
+■p463, L-4（英文版勘误）
+原文：void func( int *parm ) {
+更正：int  func( int *parm ) {
+日期：2001/07/23
+
+■p467, L9, L10（英文版勘误）
+原文：format( a1 );  // calls format( int )  译注：a1 请见上一页
+      format( a2 );  // calls format( unsigned int )  译注：a2 请见上一页
+更正：format( e1 );  // calls format( int )  译注：e1 请见上一页
+      format( e2 );  // calls format( unsigned int )  译注：e2 请见上一页
+日期：2001/07/23
+
+■p470, L-10（英文版勘误）
+原文：void func( int *pi, string *ps ) {
+更正：int  func( int *pi, string *ps ) {
+日期：2001/07/23
+
+■p472, L4（英文版勘误）
+原文：void manip( int i1, int i2 ) {
+更正：int  manip( int i1, int i2 ) {
+日期：2001/07/23
+
+■p605, L13（英文版勘误）
+原文：remove_if_copy()
+更正：remove_copy_if()
+日期：2001/07/23
+
+■p616, L17（英文版勘误）
+原文：void checkRange( int, int );
+更正：bool checkRange( int, int );
+日期：2001/07/23
+
+■p870, L-6（英文版勘误）
+原文：for ( ; ix < _size  ++ix )
+更正：for ( ; ix < _size; ++ix )
+日期：2001/07/23
+
+■p1049, L-7（英文版勘误）
+原文：range_error exception
+更正：out_of_range exception
+日期：2001/07/23
+
+■p1102, L16（英文版勘误）
+原文：函式名称中的 g 表示重新指位动作是为了取得（getting）字元
+      （用於 ofstream class object），p 则表示重新指位动作是为了放置
+      （putting）字元（用於 ifstream class object）。
+更正：函式名称中的 g 表示重新指位动作是为了取得（getting）字元
+      （用於 ifstream class object），p 则表示重新指位动作是为了放置
+      （putting）字元（用於 ofstream class object）。
+日期：2001/07/23
+
+
+================================================================
+以上已於五刷（2001 修订版）更正完成。
+
+以下暂请读者自行更正：
+（注意，Lm 表示第 m 行，L-n 表示倒数第 n 行）
+
+■p1087, L-8（英文版错误）
+原文：const lineSize = 1024;
+更正：const int lineSize = 1024;
+感谢：jjhou
+日期：2001/09/25
+
+■p999, L20（补充）
+原文：Panda::Panda( string name, bool onExhibit=true )
+补充：请在行後加上注解： // 有些编译器不允许在此再次设定预设值 true
+感谢：jjhou
+日期：2001/12/22
+
+■p1164, L14（英文版错误）
+原文：stable_sort(...);
+更正：partial_sort(...);
+感谢：jjhou
+日期：2001/12/31
+
+■p1165, L1（英文版错误）
+原文：stable_sort(...);
+更正：partial_sort_copy(...);
+感谢：jjhou
+日期：2001/12/31
+
+■p271, L15（英文版错误）
+原文：for ( ; iter != buffer.end(), ++iter)
+更正：for ( ; iter != buffer.end(); ++iter)
+感谢：Solstice
+日期：2002/01/25
+
+■p561, L4（英文版错误）
+原文：enum EHstate { noErr, zeroOp, negativeOp, severeError };
+更正：enum EHstate { noErr, zeroOp, negativeOp, severeErr };
+感谢：jjhou
+日期：2002/02/15
+
+■p322, L14（中译本处理错误）
+原文：while ( intStack.empty() == false )
+更正：while ( intStack.empty() == false ) {
+感谢：hzm21
+日期：2002/02/15
+
+■p520, L5（英文版误）
+原文：// (introduced in Section 2.4)
+更正：// (introduced in Section 2.5)
+感谢：hzm21
+日期：2002/02/15
+
+■p525, L-5（多一个字）
+原文：此一呼叫并并没有其他候选函式
+更正：此一呼叫并没有其他候选函式
+感谢：hzm21
+日期：2002/02/15
+
+■p611, L5（错别字）
+原文：导至
+更正：导致
+感谢：hzm21
+日期：2002/02/15
+
+■p211, L13（错别字）
+原文：然而冒号（;）不能省略
+更正：然而分号（;）不能省略
+感谢：Uranus
+日期：2002/03/02
+
+■p259, L17（错别字）
+原文：并同时在 vector 中安插 10,000 个元素什时，
+更正：并同时在 vector 中安插 10,000 个元素时，
+感谢：Uranus
+日期：2002/03/28
+
+■p362, 练习 7.12 题目 (易起误会，重新修润)
+原文：请将 factorial() 重写，使它成为一个非递回函式，
+      而是一个迭代（iterative）函式。
+更正：请重写 factorial()，使它不再是个递回（recursive）函式，
+      而成为一个迭代（iterative）函式。
+提醒：如果您有《C++ Primer 题解》，也请一并修正（p142）
+感谢：yeka
+日期：2002/05/23
+
+■p653, L17 (误译)
+原文：我们也可以在 member function 指标型别中宣告函式叁数和传回值型别，
+      还可以指定预设引数。
+原文：我们也可以将 member function 指标型别作为函式宣告中的叁数和传回值型别，
+      还可以指定预设引数。
+感谢：steven guan
+日期：2002/05/31
+
+■p200, L19（中译本处理错误）
+原文：for ( int ix = 0; ix < size; ++ix )
+原文：for ( int ix = 1; ix < size; ++ix )
+感谢：Aaron
+日期：2002/05/31
+
+■p239, L3（原书错误）
+原文： : _at_front(0), _at_end(0)
+修改： : _at_front(0), _at_end(0), _size(0)
+说明：如果没有这麽做，copy 之後，新的 list 的元素个数会出错
+感谢：jjhou
+日期：2001/01/15
+备注：本错误先前已列出，应於第五刷（2001修订版）纸本上修改完成。
+      但疏忽未改，特再次提醒。
+
+■p1000,L13（漏印）
+原文：: ZooAnimal( name, onExhibit, "Bear" )
+更正：: ZooAnimal( name, onExhibit, "Bear" ),
+提示：最後加一个逗点
+感谢：jaulueng
+日期：2002/06/01
+
+■p1000,L-7（英文版笔误）
+原文：Endangered::critical )
+更正：Endangered::critical ),
+提示：最後加一个逗点
+感谢：jaulueng
+日期：2002/06/01
+
+■p260,L-3
+原文：为了定义一个 container object（循序容器），
+更正：为了定义一个循序容器物件本身，
+感谢：Thomas Tam
+日期：2002/06/02
+
+■p589~p592（英文版错误一大堆）
+0. 这四页时而使用 int，时而使用 Int（定义於 p589 的一个 class）。
+   中文版第一刷都是正确的，但後来误加修改，反而不正确了。以下标记出所有
+   用到 Int（而非 int）之处：
+   p589,L-6  Int Ival1, IVal2, Ires;
+   p590,L-7  modulus<Int> IntModulus;
+   p590,L-1  Ires = UnaryFunc( negate<Int>(), Ival1);
+   p591,L-9  less<Int> IntLess;
+   p592,L15  logical_not<Int> IntNot;
+
+1. p589, class Int 应添加以下 member function :
+     operator int() const { return _val; }  // 转换函式
+   这是因为 p590 之模数（Modulus）运算：
+     modulus<Int> IntModulus;
+     Ires = IntModulus(IVal1, IVal2);
+   会唤起 Int::operator%(int), 但叁数 Int IVal2 需先转换为 int 才行。
+   所以需要一个 Int -> int 的转换函式如上。
+
+2. p589,L-8, p590,L-15, p591,L10 各有 complex，应改为诸如 complex<double>
+3. p591 之每一种运算的最後一行均应加上 bind2nd()，例如
+   equal_to<string>(), sval1
+   应改为：
+   bind2nd(equal_to<string>(), sval1)
+   再如：
+   not_equal_to<string>(), sval1
+   应改为：
+   bind2nd(not_equal_to<string>(), sval1)
+   依此类推。
+4. p591 每一种运算中的第一个运算均应传回 bool，例如
+   sres = stringEqual( sval1, sval2);
+   cres = complexNotEqual( cval1, cval2);
+   ires = intGreater( ival1, ival2);
+   ...
+   书上却以 bool 以外的型别来接受运算结果。虽然（也许）可自动转换，但没有意义。
+   我建议最好准备一个 bool 变数：
+   bool bres; // 加在 p589 下方原 6 个变数定义处。
+   然後将上述运算都改为：
+   bres = stringEqual( sval1, sval2);
+   bres = complexNotEqual( cval1, cval2);
+   bres = intGreater( ival1, ival2);
+   ...
+5. p592,L11,L12 之 intSub 应改为 intOr
+6. p592 的 ■Logical Not 运算下面第二行：
+   Ires = IntNot( IVal1, Ival2 );
+   应改为
+   Ires = IntNot( IVal1 );
+7. p592 每一种运算中的第一个运算均应传回 bool，例如
+   ires = intAnd( ival1, ival2 );
+   ires = intOr( ival1, ival2 );
+   Ires = intNot( Ival1 );   // 此式只需一个叁数，见上述第 6 点）
+   ...
+   书上却以 bool 以外的型别来接受运算结果。虽然（也许）可自动转换，但没有意义。
+   我建议最好准备一个 bool 变数（如上述第 4 点），然後将上述运算都改为：
+   bres = intAnd( ival1, ival2 );
+   bres = intOr( ival1, ival2 );
+   bres = intNot( Ival1 );   // 此式只需一个叁数，见上述第 6 点）
+感谢：jjhou
+日期：2002/09/14
+
+■p1102,L14
+
+原文：
+更正：
+感谢：
+日期：2002/06/02
+
+
+--- the end

@@ -1,1 +1,1 @@
-#cpp_study
+# ideal-computing-machine
