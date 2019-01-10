@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="tool" content="leanote-desktop-app">
+<title>Google Mock简介--概念及基础语法</title>
+<style>
+
+*{font-family:"lucida grande","lucida sans unicode",lucida,helvetica,"Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
+
+body {
+  margin: 0;
+}
+
+/*公用文字样式*/
+h1{font-size:30px}h2{font-size:24px}h3{font-size:18px}h4{font-size:14px}
+.note-container{
+    width:850px; 
+    margin:auto;
+    padding: 10px 20px;
+    box-shadow: 1px 1px 10px #eee;
+}
+#title {
+  margin: 0;
+}
+table {
+    margin-bottom: 16px;
+    border-collapse: collapse;
+}
+table th, table td {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+}
+table th {
+    font-weight: bold;
+}
+
+table tr {
+    background-color: none;
+    border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+    background-color: rgb(247, 247, 249);
+}
+.mce-item-table, .mce-item-table td, .mce-item-table th, .mce-item-table caption {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  padding: 6px 13px;
+}
+blockquote {
+  border-left-width:10px;
+  background-color:rgba(128,128,128,0.05);
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+  padding:15px 20px;
+  border-left:5px solid rgba(128,128,128,0.075);
+}
+blockquote p {
+  margin-bottom:1.1em;
+  font-size:1em;
+  line-height:1.45
+}
+blockquote ul:last-child,blockquote ol:last-child {
+  margin-bottom:0
+}
+pre {
+  padding: 18px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 3px;
+  display: block;
+}
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  white-space: nowrap;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+.footnote {
+  vertical-align: top;
+  position: relative;
+  top: -0.5em;
+  font-size: .8em;
+}
+
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+pre {
+  word-break:break-word
+}
+p,pre,pre.prettyprint,blockquote {
+  margin:0 0 1.1em
+}
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+.sequence-diagram,.flow-chart {
+  text-align:center;
+  margin-bottom:1.1em
+}
+.sequence-diagram text,.flow-chart text {
+  font-size:15px !important;
+  font-family:"Source Sans Pro",sans-serif !important
+}
+.sequence-diagram [fill="#ffffff"],.flow-chart [fill="#ffffff"] {
+  fill:#f6f6f6
+}
+.sequence-diagram [stroke="#000000"],.flow-chart [stroke="#000000"] {
+  stroke:#3f3f3f
+}
+.sequence-diagram text[stroke="#000000"],.flow-chart text[stroke="#000000"] {
+  stroke:none
+}
+.sequence-diagram [fill="#000"],.flow-chart [fill="#000"],.sequence-diagram [fill="#000000"],.flow-chart [fill="#000000"],.sequence-diagram [fill="black"],.flow-chart [fill="black"] {
+  fill:#3f3f3f
+}
+ul,ol {
+  margin-bottom:1.1em
+}
+ul ul,ol ul,ul ol,ol ol {
+  margin-bottom:1.1em
+}
+kbd {
+  padding:.1em .6em;
+  border:1px solid rgba(63,63,63,0.25);
+  -webkit-box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  font-size:.7em;
+  font-family:sans-serif;
+  background-color:#fff;
+  color:#333;
+  border-radius:3px;
+  display:inline-block;
+  margin:0 .1em;
+  white-space:nowrap
+}
+.toc ul {
+  list-style-type:none;
+  margin-bottom:15px
+}
+</style>
+<!-- 该css供自定义样式 -->
+<link href="../leanote-html.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<div class="note-container">
+		<h1 class="title" id="leanote-title">Google Mock简介--概念及基础语法</h1>
+		<div class="content-html" id="leanote-content"><h2>一、什么是Google C ++ Mocking Framework？</h2><p>&nbsp; &nbsp;当你写一个原型或测试，往往不能完全的依赖真实对象。一个mock对象实现与一个真实对象相同的接口，但让你在运行时指定它时，如何使用?它应该做什么?（哪些方法将被称为？什么顺序？多少次？有什么参数？他们会返回什么？等）</p><p>注意：很容易混淆伪造对象和模拟对象。fakes和mock在测试驱动开发（TDD）社区中实际上意味着非常不同的东西：</p><ul><li>Fake（伪对象）有工作实现，但通常采取一些捷径（可能使操作更便宜），这使得它们不适合生产。内存中的文件系统将是一个fake的例子。</li><li>Mock（模拟器）是预期编程的对象，它们形成它们期望接收的调用的规范。</li></ul><p>如果所有这些对你来说太抽象了，不要担心 - 最重要的事情要记住是一个模拟允许你检查它自己和调用者之间的交互。一旦你开始使用mock，fake和mock之间的差异将变得更加清晰。</p><p>Google C ++ Mocking框架（或简称为Google Mock）是一个库（有时我们称之为“框架”，以使其声音很酷）用于创建模拟类和使用它们。 它之对于对C ++，就像jMock和EasyMock对于Java。</p><p>使用Google Mock涉及三个基本步骤：</p><ol><li>使用一些简单的宏描述你想要模拟的接口，他们将扩展到你的mock类的实现;</li><li>创建一些模拟对象，并使用直观的语法指定其期望和行为;</li><li>练习使用模拟对象的代码。 Google Mock会在出现任何违反期望的情况时立即处理。</li></ol><h2>二、为什么选择Google Mock？</h2><p>&nbsp; 虽然模拟对象可以帮助你删除测试中不必要的依赖，并使它们快速可靠，在C ++中手动使用mock是很难的：</p><ul><li>有人必须实现Mock。这个工作通常很乏味，容易出错。难怪人们走很远的距离，避免它。</li><li>这些手动写的Mock的质量有点，呃，不可预测。你可能会看到一些真正抛光的，但你也可能看到一些被匆忙的入侵，并有各种各样的临时限制。</li><li>你从使用一个模拟获得的知识不会转移到下一个。</li></ul><p>相比之下，Java和Python程序员有一些精细的模拟框架，自动创建mock。因此，Mock是一种被证明是有效的技术，并在这些社区广泛采用的做法。拥有正确的工具绝对有所不同。</p><p>Google Mock旨在帮助C ++程序员。它的灵感来自jMock和EasyMock，但是设计时考虑了C ++的细节。如果下列任何问题困扰你会很有帮助：</p><ul><li>您的测试很慢，因为它们依赖于太多的库或使用昂贵的资源（例如数据库）。</li><li>你的测试是脆弱的，因为他们使用的一些资源是不可靠的（例如网络）。</li><li>您想要测试代码如何处理失败（例如，文件校验和错误），但不容易造成。</li><li>您需要确保您的模块以正确的方式与其他模块交互，但是很难观察到交互;因此你诉诸于观察行动结束时的副作用，这是最尴尬的。</li><li>你想“模拟出”你的依赖，除了他们没有模拟实现;坦白地说，你对那些手写的嘲笑并不感到兴奋。</li></ul><p>我们建议您使用Google Mock：</p><p>一个设计工具，它可以让你早日经常尝试你的界面设计。更多的迭代导致更好的设计！<br>一个测试工具，用于剪切测试的出站依赖关系，并探测模块与其协作者之间的交互。</p><h2>三、入门</h2><p>使用Google Mock很容易！ 在你的C ++源文件中，只要#include“gtest / gtest.h”和“gmock / gmock.h”，你已经准备好了。</p><h2>四、一个Mock Turtles的案例</h2><p>让我们看一个例子。 假设您正在开发一个基于LOGO的API来绘图的图形程序。 你将如何测试它做正确的事情？ 好吧，你可以运行它，并将屏幕与金色屏幕快照，比较屏幕，但让我们承认：这样的测试运行和脆弱昂贵（如果你刚刚升级到一个闪亮的新显卡有更好的抗锯齿？突然 你必须更新所有的黄金图像。）。 如果所有的测试都是这样的，这将是太痛苦了。 幸运的是，你学习了依赖注入，并且知道正确的事情：不是让应用程序直接与绘图API交互，而是将API封装在一个接口（例如，Turtle）中，并用代码编译该接口：</p><pre id="leanote_ace_1478252014705_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 231px;">class&nbsp;Turtle&nbsp;{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;virtual&nbsp;~Turtle()&nbsp;{}
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;PenUp()&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;PenDown()&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;Forward(int&nbsp;distance)&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;Turn(int&nbsp;degrees)&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;GoTo(int&nbsp;x,&nbsp;int&nbsp;y)&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;int&nbsp;GetX()&nbsp;const&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;int&nbsp;GetY()&nbsp;const&nbsp;=&nbsp;0;
+};</pre><p>（注意，Turtle的析构函数必须是虚拟的，就像你打算继承的所有类的情况一样 - 否则当通过基本指针删除一个对象时，派生类的析构函数不会被调用，你会得到损坏的程序状态，如内存泄漏。）</p><p>您可以使用PenUp（）和PenDown（）控制turtle的运动是否留下轨迹，并使用Forward（），Turn（）和GoTo（）控制其运动。最后，GetX（）和GetY（）告诉你当前位置的turtle。</p><p>你的程序通常会使用这个接口的实际实现。在测试中，您可以使用模拟实现。这允许您轻松地检查您的程序正在调用什么绘图基元，有什么参数，以及顺序。以这种方式编写的测试更强大，更容易读取和维护（测试的意图表示在代码中，而不是在一些二进制图像中）运行得多，快得多。</p><h2>五、编写模拟类</h2><p>如果你幸运，你需要使用的mock已经被一些好的人实现。但是，你发现自己在写一个模拟class，放松- Google Mock将这个任务变成一个有趣的游戏！ （嗯，差不多。）</p><h3>1. 如何定义它</h3><p>使用Turtle界面作为示例，以下是您需要遵循的简单步骤：</p><ol><li>从Turtle派生一个类MockTurtle。</li><li>使用Turtle的虚函数（虽然可以使用模板来模拟非虚方法，但是它更多的涉及）。计算它有多少参数。</li><li>在子类的public：部分，写MOCK_METHODn（）; （或MOCK_CONST_METHODn（）;如果你是一个const方法），其中n是参数的数量;如果你计数错误，产生一个一个编译器错误：shame on you 。</li><li>现在来到有趣的部分：你采取函数签名，剪切和粘贴函数名作为宏的第一个参数，并留下左边的第二个参数（如果你好奇，这是类型的功能）。</li><li>重复，直到您要模拟的所有虚拟功能完成。</li></ol><p>After the process, you should have something like:</p><pre id="leanote_ace_1478253396526_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 252px;">#include&nbsp;"gmock/gmock.h"&nbsp;&nbsp;//&nbsp;Brings&nbsp;in&nbsp;Google&nbsp;Mock.
+class&nbsp;MockTurtle&nbsp;:&nbsp;public&nbsp;Turtle&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;...
+&nbsp;&nbsp;MOCK_METHOD0(PenUp,&nbsp;void());
+&nbsp;&nbsp;MOCK_METHOD0(PenDown,&nbsp;void());
+&nbsp;&nbsp;MOCK_METHOD1(Forward,&nbsp;void(int&nbsp;distance));
+&nbsp;&nbsp;MOCK_METHOD1(Turn,&nbsp;void(int&nbsp;degrees));
+&nbsp;&nbsp;MOCK_METHOD2(GoTo,&nbsp;void(int&nbsp;x,&nbsp;int&nbsp;y));
+&nbsp;&nbsp;MOCK_CONST_METHOD0(GetX,&nbsp;int());
+&nbsp;&nbsp;MOCK_CONST_METHOD0(GetY,&nbsp;int());
+};&nbsp;</pre><p>您不需要在其他地方定义这些模拟方法 - MOCK_METHOD *宏将为您生成定义。 就是这么简单！ Once you get the hang of it, you can pump out mock classes faster than your source-control system can handle your check-ins。</p><p>提示：即使这样做对你来说太多了，你会发现Google Mock的scripts / generator /目录（由cppclean项目提供）中的gmock_gen.py工具很有用。 这个命令行工具需要你安装Python 2.4。 你给它一个C ++文件和它定义的抽象类的名称，它将为你打印模拟类的定义。 由于C ++语言的复杂性，这个脚本可能不总是工作，但它可以很方便。 有关更多详细信息，请阅读&nbsp;<a href="https://github.com/google/googletest/blob/master/googlemock/scripts/generator/README" data-mce-href="https://github.com/google/googletest/blob/master/googlemock/scripts/generator/README">user documentation</a>。&nbsp;</p><h3>2. 在哪里放</h3><p>当你定义一个mock类，你需要决定在哪里放置它的定义。有些人把它放在一个* _test.cc。当被mock的接口（例如，Foo）由同一个人或团队拥有时，这是很好的。否则，当Foo的所有者改变它，你的测试可能会中断。 （你不能真正期望Foo的维护者修复使用Foo的每个测试，你能吗？）</p><p>所以，经验法则是：如果你需要模拟Foo并且它由其他人拥有，在Foo的包中定义模拟类（更好的是，在一个测试子包中，你可以清楚地分离生产代码和测试实用程序），并且把它放在mock_foo.h。然后每个人都可以从它们的测试引用mock_foo.h。如果Foo变化，只有一个MockFoo的副本要更改，只有依赖于更改的方法的测试需要修复。</p><p>另一种方式：你可以在Foo的顶部引入一个薄层FooAdaptor，并将代码引入这个新的接口。由于你拥有FooAdaptor，你可以更容易地吸收Foo的变化。虽然这是最初的工作，仔细选择适配器接口可以使您的代码更容易编写和更加可读性，因为你可以选择FooAdaptor适合你的特定领域比Foo更好。</p><h2>六、在测试中使用模拟器</h2><p>一旦你有一个模拟类，使用它很容易。 典型的工作流程是：</p><ol><li>从测试命名空间导入Google Mock名称，以便您可以使用它们（每个文件只需执行一次。请记住，命名空间是一个好主意，有利于您的健康。）</li><li>创建一些模拟对象。</li><li>指定你对它们的期望（一个方法被调用多少次？有什么参数？它应该做什么等等）。</li><li>练习一些使用mock的代码; 可以使用Google Test断言检查结果。如果一个mock方法被调用超过预期或错误的参数，你会立即得到一个错误。</li><li>当模拟遭到破坏时，Google Mock将自动检查是否满足了对其的所有期望。</li></ol><p>这里有一个例子：</p><pre id="leanote_ace_1478482421933_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 441px;">#include&nbsp;"path/to/mock-turtle.h"
+#include&nbsp;"gmock/gmock.h"
+#include&nbsp;"gtest/gtest.h"
+using&nbsp;::testing::AtLeast;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#1
+
+TEST(PainterTest,&nbsp;CanDrawSomething)&nbsp;{
+&nbsp;&nbsp;MockTurtle&nbsp;turtle;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#2
+&nbsp;&nbsp;EXPECT_CALL(turtle,&nbsp;PenDown())&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#3
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.Times(AtLeast(1));
+
+&nbsp;&nbsp;Painter&nbsp;painter(&amp;turtle);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#4
+
+&nbsp;&nbsp;EXPECT_TRUE(painter.DrawCircle(0,&nbsp;0,&nbsp;10));
+}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#5
+
+int&nbsp;main(int&nbsp;argc,&nbsp;char**&nbsp;argv)&nbsp;{
+&nbsp;&nbsp;//&nbsp;The&nbsp;following&nbsp;line&nbsp;must&nbsp;be&nbsp;executed&nbsp;to&nbsp;initialize&nbsp;Google&nbsp;Mock
+&nbsp;&nbsp;//&nbsp;(and&nbsp;Google&nbsp;Test)&nbsp;before&nbsp;running&nbsp;the&nbsp;tests.
+&nbsp;&nbsp;::testing::InitGoogleMock(&amp;argc,&nbsp;argv);
+&nbsp;&nbsp;return&nbsp;RUN_ALL_TESTS();
+}</pre><p>正如你可能已经猜到的，这个测试检查PenDown（）被调用至少一次。 如果painter对象没有调用此方法，您的测试将失败，并显示如下消息：</p><pre id="leanote_ace_1478482610612_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 84px;">path/to/my_test.cc:119:&nbsp;Failure
+Actual&nbsp;function&nbsp;call&nbsp;count&nbsp;doesn't&nbsp;match&nbsp;this&nbsp;expectation:
+Actually:&nbsp;never&nbsp;called;
+Expected:&nbsp;called&nbsp;at&nbsp;least&nbsp;once.</pre><p>提示1：如果从Emacs缓冲区运行测试，您可以在错误消息中显示的行号上按&lt;Enter&gt;，直接跳到失败的预期。</p><p>提示2：如果你的模拟对象从来没有被删除，最终的验证不会发生。因此，当您在堆上分配mock时，在测试中使用堆泄漏检查器是个好主意。</p><p>重要提示：Google Mock需要在调用mock函数之前设置期望值，否则行为是未定义的。特别是，你不能交错EXPECT_CALL（）和调用mock函数。</p><p>这意味着EXPECT_CALL（）应该被读取为期望call将在未来发生，而不是call已经发生。为什么Google Mock会这样工作？好的，事先指定期望允许Google Mock在上下文（堆栈跟踪等）仍然可用时立即报告违例。这使得调试更容易。</p><p>诚然，这个测试是设计的，没有做太多。您可以轻松实现相同的效果，而无需使用Google Mock。然而，正如我们将很快揭示的，谷歌模拟允许你做更多的mock。</p><h3>1.使用Google Mock与任何测试框架</h3><p>如果您要使用除Google测试（例如CppUnit或CxxTest）之外的其他测试框架作为测试框架，只需将上一节中的main（）函数更改为：</p><pre id="leanote_ace_1478483322744_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 147px;">int&nbsp;main(int&nbsp;argc,&nbsp;char**&nbsp;argv)&nbsp;{
+&nbsp;&nbsp;//&nbsp;The&nbsp;following&nbsp;line&nbsp;causes&nbsp;Google&nbsp;Mock&nbsp;to&nbsp;throw&nbsp;an&nbsp;exception&nbsp;on&nbsp;failure,
+&nbsp;&nbsp;//&nbsp;which&nbsp;will&nbsp;be&nbsp;interpreted&nbsp;by&nbsp;your&nbsp;testing&nbsp;framework&nbsp;as&nbsp;a&nbsp;test&nbsp;failure.
+&nbsp;&nbsp;::testing::GTEST_FLAG(throw_on_failure)&nbsp;=&nbsp;true;
+&nbsp;&nbsp;::testing::InitGoogleMock(&amp;argc,&nbsp;argv);
+&nbsp;&nbsp;...&nbsp;whatever&nbsp;your&nbsp;testing&nbsp;framework&nbsp;requires&nbsp;...
+}</pre><p>这种方法有一个catch：它有时使Google Mock从一个模拟对象的析构器中抛出异常。对于某些编译器，这有时会导致测试程序崩溃。 你仍然可以注意到测试失败了，但它不是一个优雅的失败。</p><p>更好的解决方案是使用Google Test的事件侦听器API来正确地向测试框架报告测试失败。 您需要实现事件侦听器接口的OnTestPartResult（）方法，但它应该是直接的。</p><p>如果这证明是太多的工作，我们建议您坚持使用Google测试，它与Google Mock无缝地工作（实际上，它在技术上是Google Mock的一部分）。 如果您有某个原因无法使用Google测试，请告诉我们。</p><h2>七、设置期望</h2><p>成功使用模拟对象的关键是对它设置正确的期望。 如果你设置的期望太严格，你的测试将失败作为无关的更改的结果。 如果你把它们设置得太松，错误可以通过。 你想做的只是正确的，使你的测试可以捕获到你想要捕获的那种错误。 Google Mock为您提供了必要的方法“恰到好处”。</p><h3>1. 通用语法</h3><p>在Google Mock中，我们使用EXPECT_CALL（）宏来设置模拟方法的期望值。 一般的语法是：</p><pre id="leanote_ace_1478483660586_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 84px;">EXPECT_CALL(mock_object,&nbsp;method(matchers))
+&nbsp;&nbsp;&nbsp;&nbsp;.Times(cardinality)
+&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(action)
+&nbsp;&nbsp;&nbsp;&nbsp;.WillRepeatedly(action);</pre><p>宏有两个参数：首先是mock对象，然后是方法及其参数。 请注意，两者之间用逗号（，）分隔，而不是句点（.）。 （为什么要使用逗号？答案是，这是必要的技术原因。）</p><p>宏之后可以是一些可选的子句，提供有关期望的更多信息。 我们将在下面的章节中讨论每个子句是如何工作的。</p><p>此语法旨在使期望读取如英语。 例如，你可能猜到</p><pre id="leanote_ace_1478483981760_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 126px;">using&nbsp;::testing::Return;...
+EXPECT_CALL(turtle,&nbsp;GetX())
+&nbsp;&nbsp;&nbsp;&nbsp;.Times(5)
+&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(Return(100))
+&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(Return(150))
+&nbsp;&nbsp;&nbsp;&nbsp;.WillRepeatedly(Return(200));</pre><div id="gt-src-c" class="g-unit">&nbsp;<br></div><div id="gt-res-c" class="g-unit"><div id="gt-res-p"><div id="gt-res-data"><div id="gt-res-wrap"><div id="gt-res-content"><div dir="ltr"><span id="result_box" class="" lang="zh-CN"><span class="">&nbsp;turtle对象的GetX（）方法将被调用五次，它将第一次返回100，第二次返回150，然后每次返回200。</span>&nbsp;<span class="">有些人喜欢将这种语法风格称为域特定语言（DSL）。</span><br><br><span class=""><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">注意：</span></strong>为什么我们使用宏来做到这一点？</span>&nbsp;<span class="">它有两个目的：第一，它使预期容易识别（通过grep或由人类读者），其次它允许Google Mock在消息中包括失败的期望的源文件位置，使调试更容易。</span></span></div></div></div></div></div></div><h3>2.Matchers：我们期待什么参数？</h3><p>当一个mock函数接受参数时，我们必须指定我们期望什么参数; 例如：</p><pre id="leanote_ace_1478484197670_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 42px;">//&nbsp;Expects&nbsp;the&nbsp;turtle&nbsp;to&nbsp;move&nbsp;forward&nbsp;by&nbsp;100&nbsp;units.
+EXPECT_CALL(turtle,&nbsp;Forward(100));</pre><div id="gt-src-c" class="g-unit">&nbsp;<br></div><div id="gt-res-c" class="g-unit"><div id="gt-res-p"><div id="gt-res-data"><div id="gt-res-wrap"><div id="gt-res-content"><div dir="ltr"><span id="result_box" class="" lang="zh-CN"><span class="">有时你可能不想太具体（记住，谈论测试太僵硬，超过规范导致脆弱的测试和模糊测试的意图，因此，我们鼓励你只指定必要的 - ）。</span>&nbsp;<span class="">如果你想检查Forward（）将被调用，但对它的实际参数不感兴趣，写 _ 作为参数，这意味着“任何东西”：</span></span></div></div></div></div></div></div><pre id="leanote_ace_1478484326575_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 84px;">using&nbsp;::testing::_;
+...
+//&nbsp;Expects&nbsp;the&nbsp;turtle&nbsp;to&nbsp;move&nbsp;forward.
+EXPECT_CALL(turtle,&nbsp;Forward(_));</pre><p>_ 是我们称为匹配器的实例。 匹配器就像一个谓词，可以测试一个参数是否是我们期望的。 你可以在EXPECT_CALL（）里面使用一个匹配器，只要有一个函数参数。</p><p>内置匹配器的列表可以在<a href="https://github.com/google/googletest/blob/master/googlemock/docs/CheatSheet.md" data-mce-href="https://github.com/google/googletest/blob/master/googlemock/docs/CheatSheet.md">CheatSheet</a>中找到。 例如，这里是Ge（大于或等于）匹配器：</p><pre id="leanote_ace_1478484501951_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 42px;">using&nbsp;::testing::Ge;...
+EXPECT_CALL(turtle,&nbsp;Forward(Ge(100)));&nbsp;</pre><p>这检查，turtle将被告知前进至少100单位。</p><h3>3. cardinality：它会被调用多少次？</h3><p>我们可以在EXPECT_CALL（）之后指定的第一个子句是Times（）。我们把它的参数称为基数，因为它告诉调用应该发生多少次。它允许我们重复一个期望多次，而不实际写多次。更重要的是，一个基数可以是“模糊的”，就像一个匹配器。这允许用户准确地表达测试的意图。</p><p>一个有趣的特殊情况是当我们说Times（0）。你可能已经猜到了 - 这意味着函数不应该使用给定的参数，而且Google Mock会在函数被（错误地）调用时报告一个Google测试失败。</p><p>我们已经看到AtLeast（n）作为模糊基数的一个例子。有关您可以使用的内置基数列表，请参见<a href="https://github.com/google/googletest/blob/master/googlemock/docs/CheatSheet.md" data-mce-href="https://github.com/google/googletest/blob/master/googlemock/docs/CheatSheet.md">CheatSheet</a>。</p><p>Times（）子句可以省略。如果你省略Times（），Google Mock会推断出你的基数。规则很容易记住：</p><ul><li>如果WillOnce（）和WillRepeatedly（）都不在EXPECT_CALL（）中，则推断的基数是Times（1）。</li><li>如果有n个WillOnce（），但没有WillRepeatedly（），其中n&gt; = 1，基数是Times（n）</li><li>如果有n个WillOnce（）和一个WillRepeatedly（），其中n&gt; = 0，基数是Times（AtLeast（n））。</li></ul><p>快速测验：如果一个函数被调用两次，但实际上调用了四次，你认为会发生什么？</p><h3>4.Action：应该怎么办？</h3><p>记住，一个模拟对象实际上没有工作实现？ 我们作为用户必须告诉它当一个方法被调用时该做什么。 这在Google Mock中很容易。</p><p>首先，如果一个模拟函数的返回类型是内置类型或指针，该函数有一个默认动作（一个void函数将返回，一个bool函数将返回false，其他函数将返回0）。此外，在C ++ 11及以上版本中，返回类型为默认可构造（即具有默认构造函数）的模拟函数具有返回默认构造值的默认动作。 如果你不说什么，这个行为将被使用。</p><p>第二，如果模拟函数没有默认动作，或者默认动作不适合你，你可以使用一系列WillOnce（）子句指定每次期望匹配时要采取的动作，后跟一个可选的WillRepeatedly （）。例如，</p><pre id="leanote_ace_1478485510687_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 105px;">using&nbsp;::testing::Return;...
+EXPECT_CALL(turtle,&nbsp;GetX())
+&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(Return(100))
+&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(Return(200))
+&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(Return(300));</pre><p>这说明turtle.GetX（）将被调用三次（Google Mock从我们写的WillOnce（）子句中推断出了这一点，因为我们没有明确写入Times（）），并且会返回100,200， 和300。</p><pre id="leanote_ace_1478485609281_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 105px;">using&nbsp;::testing::Return;...
+EXPECT_CALL(turtle,&nbsp;GetY())
+&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(Return(100))
+&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(Return(200))
+&nbsp;&nbsp;&nbsp;&nbsp;.WillRepeatedly(Return(300));</pre><p>&nbsp;turtle.GetY（）将被调用至少两次（Google Mock知道这一点，因为我们写了两个WillOnce（）子句和一个WillRepeatedly（），没有明确的Times（）），将第一次返回100，200 第二次，300从第三次开始。</p><p>当然，如果你明确写一个Times（），Google Mock不会试图推断cardinality（基数）本身。 如果您指定的数字大于WillOnce（）子句，该怎么办？ 好了，毕竟WillOnce（）已用完，Google Mock每次都会为函数执行<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">默认操作</span></strong>（除非你有WillRepeatedly（）。）。</p><p>除了Return（）之外，我们可以在WillOnce（）中做什么？ 您可以使用ReturnRef（variable）返回引用，或调用预定义函数等。</p><p><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">重要说明</span></strong>：EXPECT_CALL（）语句只<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">评估一次</span></strong>操作子句，即使操作可能执行多次。 因此，您必须小心副作用。 以下可能不会做你想要的：</p><pre id="leanote_ace_1478485930258_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 84px;">int&nbsp;n&nbsp;=&nbsp;100;
+EXPECT_CALL(turtle,&nbsp;GetX())
+.Times(4)
+.WillRepeatedly(Return(n++));</pre><p>不是连续返回100，101，102，...，这个mock函数将总是返回100，因为<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">n ++只被计算一次</span></strong>。 类似地，当执行EXPECT_CALL（）时，Return（new Foo）将创建一个新的Foo对象，并且每次都返回相同的指针。 如果你想要每次都发生副作用，你需要定义一个自定义动作，我们将在&nbsp;<a href="https://github.com/google/googletest/blob/master/googlemock/docs/CookBook.md" data-mce-href="https://github.com/google/googletest/blob/master/googlemock/docs/CookBook.md">CookBook</a>中教授。</p><p>时间另一个测验！ 你认为以下是什么意思？</p><pre id="leanote_ace_1478486132019_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 84px;">using&nbsp;::testing::Return;...
+EXPECT_CALL(turtle,&nbsp;GetY())
+.Times(4)
+.WillOnce(Return(100));</pre><p>显然turtle.GetY（）被期望调用四次。但如果你认为它会每次返回100，三思而后行！请记住，每次调用函数时都将使用一个WillOnce（）子句，然后执行默认操作。所以正确的答案是turtle.GetY（）将第一次返回100，但从第二次返回0，因为<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">返回0是int函数的默认操作</span></strong>。</p><h3>5.使用多个期望</h3><p>到目前为止，我们只列出了你有一个期望的例子。更现实地，你要指定对多个模拟方法的期望，这可能来自多个模拟对象。</p><p>默认情况下，当调用模拟方法时，Google Mock将按照它们定义的<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">相反顺序</span></strong>搜索期望值，并在找到与参数匹配的活动期望时停止（您可以将其视为“新规则覆盖旧的规则“）。如果匹配期望不能再接受任何调用，您将得到一个上限违反的失败。这里有一个例子：</p><pre id="leanote_ace_1478486374844_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 84px;">using&nbsp;::testing::_;...
+EXPECT_CALL(turtle,&nbsp;Forward(_));&nbsp;&nbsp;//&nbsp;#1
+EXPECT_CALL(turtle,&nbsp;Forward(10))&nbsp;&nbsp;//&nbsp;#2
+&nbsp;&nbsp;&nbsp;&nbsp;.Times(2);</pre><p>如果Forward（<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">10</span></strong>）在一行中被调用三次，第三次它将是一个错误，因为最后的匹配期望（＃2）已经饱和。然而，如果第三个Forward（10）被Forward（<span style="color: #ff6600;" data-mce-style="color: #ff6600;">20</span>）替换，则它将是OK，因为现在＃1将是匹配期望。</p><p>附注：Google Mock为什么要以与预期相反的顺序搜寻匹配？原因是，这允许用户在模拟对象的构造函数中设置默认期望，或测试夹具的设置阶段中设置默认期望，然后通过在测试体中写入更具体的期望来定制模拟。所以，如果你对同一个方法有两个期望，你想把一个具有更多的特定的匹配器放在另一个之后，或更具体的规则将被更为一般的规则所覆盖。</p><h3>6.有序和无序呼叫</h3><p>默认情况下，即使未满足较早的期望，期望也可以匹配调用。换句话说，<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">调用不必按照期望被指定的顺序发生</span></strong>。</p><p>有时，您可能希望所有预期的调用以严格的顺序发生。在Google Mock中说这很容易：</p><pre id="leanote_ace_1478486404752_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 252px;">using&nbsp;::testing::InSequence;...
+TEST(FooTest,&nbsp;DrawsLineSegment)&nbsp;{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;InSequence&nbsp;dummy;
+
+&nbsp;&nbsp;&nbsp;&nbsp;EXPECT_CALL(turtle,&nbsp;PenDown());
+&nbsp;&nbsp;&nbsp;&nbsp;EXPECT_CALL(turtle,&nbsp;Forward(100));
+&nbsp;&nbsp;&nbsp;&nbsp;EXPECT_CALL(turtle,&nbsp;PenUp());
+&nbsp;&nbsp;}
+&nbsp;&nbsp;Foo();
+}</pre><p>通过创建类型为InSequence的对象，其范围中的所有期望都被放入序列中，并且必须按顺序发生。因为我们只是依靠这个对象的构造函数和析构函数做实际的工作，它的名字真的无关紧要。</p><p>在这个例子中，我们测试Foo（）按照书写的顺序调用三个期望函数。如果调用是无序的，它将是一个错误。</p><p>（如果你关心一些呼叫的相对顺序，但不是所有的呼叫，你能指定一个任意的部分顺序吗？答案是...是的！如果你不耐烦，细节可以在CookBook中找到。）</p><h3>7. 所有期望都是粘滞的(Sticky)（除非另有说明）</h3><p>现在，让我们做一个快速测验，看看你可以多好地使用这个模拟的东西。你会如何测试，turtle被要求去原点两次（你想忽略任何其他指令）？</p><p>在你提出了你的答案，看看我们的比较的笔记（自己先解决 - 不要欺骗！）：</p><pre id="leanote_ace_1478488272925_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 105px;">using&nbsp;::testing::_;...
+EXPECT_CALL(turtle,&nbsp;GoTo(_,&nbsp;_))&nbsp;&nbsp;//&nbsp;#1
+&nbsp;&nbsp;&nbsp;&nbsp;.Times(AnyNumber());
+EXPECT_CALL(turtle,&nbsp;GoTo(0,&nbsp;0))&nbsp;&nbsp;//&nbsp;#2
+&nbsp;&nbsp;&nbsp;&nbsp;.Times(2);</pre><p>假设turtle.GoTo（0，0）被调用了三次。 第三次，Google Mock将看到参数匹配期望＃2（记住，我们总是选择最后一个匹配期望）。 现在，由于我们说应该只有两个这样的调用，Google Mock会立即报告错误。 这基本上是我们在上面“使用多个期望”部分中告诉你的。</p><p>这个例子表明，Google Mock的期望在<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">默认情况下是“粘性”</span></strong>，即使在我们达到其调用上界之后，它们仍然保持活动。 这是一个重要的规则要记住，因为它影响规范的意义，并且不同于它在许多其他Mock框架中做的（为什么我们这样做？因为我们认为我们的规则使常见的情况更容易表达和 理解。）。</p><p>简单？ 让我们看看你是否真的理解它：下面的代码说什么？</p><pre id="leanote_ace_1478489475254_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 126px;">using&nbsp;::testing::Return;
+...
+for&nbsp;(int&nbsp;i&nbsp;=&nbsp;n;&nbsp;i&nbsp;&gt;&nbsp;0;&nbsp;i--)&nbsp;{
+&nbsp;&nbsp;EXPECT_CALL(turtle,&nbsp;GetX())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(Return(10*i));
+}</pre><p>如果你认为它说，turtle.GetX（）将被调用n次，并将返回10，20，30，...，连续，三思而后行！ 问题是，正如我们所说，期望是粘性的。 所以，第二次turtle.GetX（）被调用，最后（最新）EXPECT_CALL（）语句将匹配，并将立即导致“上限超过(upper bound exceeded)”错误 - 这段代码不是很有用！</p><p>一个正确的说法是turtle.GetX（）将返回10，20，30，...，是明确说，期望是不粘的。 换句话说，他们应该在饱和后尽快退休：</p><pre id="leanote_ace_1478498452050_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 147px;">using&nbsp;::testing::Return;
+...
+for&nbsp;(int&nbsp;i&nbsp;=&nbsp;n;&nbsp;i&nbsp;&gt;&nbsp;0;&nbsp;i--)&nbsp;{
+&nbsp;&nbsp;EXPECT_CALL(turtle,&nbsp;GetX())
+&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(Return(10*i))
+&nbsp;&nbsp;&nbsp;&nbsp;.RetiresOnSaturation();
+}</pre><p>而且，有一个更好的方法：在这种情况下，我们期望调用发生在一个特定的顺序，我们排列动作来匹配顺序。 由于顺序在这里很重要，我们应该显示的使用一个顺序：</p><pre id="leanote_ace_1478498557566_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 252px;">using&nbsp;::testing::InSequence;
+using&nbsp;::testing::Return;
+...
+{
+&nbsp;&nbsp;InSequence&nbsp;s;
+
+&nbsp;&nbsp;for&nbsp;(int&nbsp;i&nbsp;=&nbsp;1;&nbsp;i&nbsp;&lt;=&nbsp;n;&nbsp;i++)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;EXPECT_CALL(turtle,&nbsp;GetX())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(Return(10*i))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.RetiresOnSaturation();
+&nbsp;&nbsp;}
+}</pre><p>顺便说一下，期望可能不粘的其他情况是当它在一个序列 --- 一旦序列中的在他之后的期望已经使用，它自动退休（并且永远不会用于匹配任何调用）。</p><h3>8. 无趣呼叫</h3><p>模拟对象可能有很多方法，并不是所有的都是那么有趣。例如，在一些测试中，我们可能不关心GetX（）和GetY（）被调用多少次。</p><p>在Google Mock中，如果你对一个方法不感兴趣，只是不要说什么。如果调用此方法，您将在测试输出中看到一个警告，但它不会失败。</p><h2>八、现在怎么办？</h2><p>恭喜！您已经学会了足够的Google Mock开始使用它。现在，您可能想要加入googlemock讨论组，并且实际上使用Google Mock编写一些测试 - 这很有趣。嘿，它甚至可以上瘾 - 你已经被警告。</p><p>然后，如果你想增加你的Mock商，你应该移动到&nbsp;<a href="https://github.com/google/googletest/blob/master/googlemock/docs/CookBook.md" data-mce-href="https://github.com/google/googletest/blob/master/googlemock/docs/CookBook.md">CookBook</a>。您可以了解Google Mock的许多高级功能，并提高您的享受和测试幸福的水平。</p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p></div>
+	</div>
+
+<!-- 该js供其它处理 -->
+<script src="../leanote-html.js"></script>
+</body>
+</html>

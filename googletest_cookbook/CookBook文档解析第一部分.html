@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="tool" content="leanote-desktop-app">
+<title>CookBook文档解析</title>
+<style>
+
+*{font-family:"lucida grande","lucida sans unicode",lucida,helvetica,"Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
+
+body {
+  margin: 0;
+}
+
+/*公用文字样式*/
+h1{font-size:30px}h2{font-size:24px}h3{font-size:18px}h4{font-size:14px}
+.note-container{
+    width:850px; 
+    margin:auto;
+    padding: 10px 20px;
+    box-shadow: 1px 1px 10px #eee;
+}
+#title {
+  margin: 0;
+}
+table {
+    margin-bottom: 16px;
+    border-collapse: collapse;
+}
+table th, table td {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+}
+table th {
+    font-weight: bold;
+}
+
+table tr {
+    background-color: none;
+    border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+    background-color: rgb(247, 247, 249);
+}
+.mce-item-table, .mce-item-table td, .mce-item-table th, .mce-item-table caption {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  padding: 6px 13px;
+}
+blockquote {
+  border-left-width:10px;
+  background-color:rgba(128,128,128,0.05);
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+  padding:15px 20px;
+  border-left:5px solid rgba(128,128,128,0.075);
+}
+blockquote p {
+  margin-bottom:1.1em;
+  font-size:1em;
+  line-height:1.45
+}
+blockquote ul:last-child,blockquote ol:last-child {
+  margin-bottom:0
+}
+pre {
+  padding: 18px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 3px;
+  display: block;
+}
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  white-space: nowrap;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+.footnote {
+  vertical-align: top;
+  position: relative;
+  top: -0.5em;
+  font-size: .8em;
+}
+
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+pre {
+  word-break:break-word
+}
+p,pre,pre.prettyprint,blockquote {
+  margin:0 0 1.1em
+}
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+.sequence-diagram,.flow-chart {
+  text-align:center;
+  margin-bottom:1.1em
+}
+.sequence-diagram text,.flow-chart text {
+  font-size:15px !important;
+  font-family:"Source Sans Pro",sans-serif !important
+}
+.sequence-diagram [fill="#ffffff"],.flow-chart [fill="#ffffff"] {
+  fill:#f6f6f6
+}
+.sequence-diagram [stroke="#000000"],.flow-chart [stroke="#000000"] {
+  stroke:#3f3f3f
+}
+.sequence-diagram text[stroke="#000000"],.flow-chart text[stroke="#000000"] {
+  stroke:none
+}
+.sequence-diagram [fill="#000"],.flow-chart [fill="#000"],.sequence-diagram [fill="#000000"],.flow-chart [fill="#000000"],.sequence-diagram [fill="black"],.flow-chart [fill="black"] {
+  fill:#3f3f3f
+}
+ul,ol {
+  margin-bottom:1.1em
+}
+ul ul,ol ul,ul ol,ol ol {
+  margin-bottom:1.1em
+}
+kbd {
+  padding:.1em .6em;
+  border:1px solid rgba(63,63,63,0.25);
+  -webkit-box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  font-size:.7em;
+  font-family:sans-serif;
+  background-color:#fff;
+  color:#333;
+  border-radius:3px;
+  display:inline-block;
+  margin:0 .1em;
+  white-space:nowrap
+}
+.toc ul {
+  list-style-type:none;
+  margin-bottom:15px
+}
+</style>
+<!-- 该css供自定义样式 -->
+<link href="../leanote-html.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<div class="note-container">
+		<h1 class="title" id="leanote-title">CookBook文档解析</h1>
+		<div class="content-html" id="leanote-content"><p><span style="font-size: 12pt;" data-mce-style="font-size: 12pt;">本文及后续的&nbsp;CookBook系列都翻译自：<a href="https://github.com/google/googletest/blob/master/googlemock/docs/CookBook.md" data-mce-href="https://github.com/google/googletest/blob/master/googlemock/docs/CookBook.md">https://github.com/google/googletest/blob/master/googlemock/docs/CookBook.md</a>&nbsp;<span data-mce-type="bookmark" id="mce_33_end" data-mce-style="overflow:hidden;line-height:0px" style="overflow:hidden;line-height:0px">﻿</span></span></p><h2>一、创建模拟类</h2><p>代码：GoogleMockTest\MockClassTest</p><h3>1.模拟私有或受保护的方法</h3><p>您必须总是在mock类的public：部分中放置一个mock方法定义（MOCK_METHOD *），而不管在基类中被mock的方法是public，protected还是private。 这允许ON_CALL和EXPECT_CALL从模拟类外部引用模拟函数。 （<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">C ++允许子类改变基类中虚拟函数的访问级别</span></strong>。）示例：</p><pre id="leanote_ace_1478745051867_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 462px;">class&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;...
+&nbsp;&nbsp;virtual&nbsp;bool&nbsp;Transform(Gadget*&nbsp;g)&nbsp;=&nbsp;0;
+
+&nbsp;protected:
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;Resume();
+
+&nbsp;private:
+&nbsp;&nbsp;virtual&nbsp;int&nbsp;GetTimeOut();
+};
+
+class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;...
+&nbsp;&nbsp;MOCK_METHOD1(Transform,&nbsp;bool(Gadget*&nbsp;g));
+
+&nbsp;&nbsp;//&nbsp;The&nbsp;following&nbsp;must&nbsp;be&nbsp;in&nbsp;the&nbsp;public&nbsp;section,&nbsp;even&nbsp;though&nbsp;the
+&nbsp;&nbsp;//&nbsp;methods&nbsp;are&nbsp;protected&nbsp;or&nbsp;private&nbsp;in&nbsp;the&nbsp;base&nbsp;class.
+&nbsp;&nbsp;MOCK_METHOD0(Resume,&nbsp;void());
+&nbsp;&nbsp;MOCK_METHOD0(GetTimeOut,&nbsp;int());
+};</pre><h3>2. 模拟重载方法</h3><p>你可以想平常一样模拟重载方法，没有特别注意的地方：</p><pre id="leanote_ace_1478745819336_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 483px;">class&nbsp;Foo&nbsp;{
+&nbsp;&nbsp;...
+
+&nbsp;&nbsp;//&nbsp;Must&nbsp;be&nbsp;virtual&nbsp;as&nbsp;we'll&nbsp;inherit&nbsp;from&nbsp;Foo.
+&nbsp;&nbsp;virtual&nbsp;~Foo();
+
+&nbsp;&nbsp;//&nbsp;Overloaded&nbsp;on&nbsp;the&nbsp;types&nbsp;and/or&nbsp;numbers&nbsp;of&nbsp;arguments.
+&nbsp;&nbsp;virtual&nbsp;int&nbsp;Add(Element&nbsp;x);
+&nbsp;&nbsp;virtual&nbsp;int&nbsp;Add(int&nbsp;times,&nbsp;Element&nbsp;x);
+
+&nbsp;&nbsp;//&nbsp;Overloaded&nbsp;on&nbsp;the&nbsp;const-ness&nbsp;of&nbsp;this&nbsp;object.
+&nbsp;&nbsp;virtual&nbsp;Bar&amp;&nbsp;GetBar();
+&nbsp;&nbsp;virtual&nbsp;const&nbsp;Bar&amp;&nbsp;GetBar()&nbsp;const;
+};
+
+class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;MOCK_METHOD1(Add,&nbsp;int(Element&nbsp;x));
+&nbsp;&nbsp;MOCK_METHOD2(Add,&nbsp;int(int&nbsp;times,&nbsp;Element&nbsp;x);
+
+&nbsp;&nbsp;MOCK_METHOD0(GetBar,&nbsp;Bar&amp;());
+&nbsp;&nbsp;MOCK_CONST_METHOD0(GetBar,&nbsp;const&nbsp;Bar&amp;());
+};</pre><p><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">注意：</span></strong>如果你不模仿所有版本的重载方法，编译器将给你一个关于在隐藏的基类中的一些方法的警告。 要解决这个问题，请使用using来使它们在范围内：</p><pre id="leanote_ace_1478746212463_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 147px;">class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;using&nbsp;Foo::Add;
+&nbsp;&nbsp;MOCK_METHOD1(Add,&nbsp;int(Element&nbsp;x));
+&nbsp;&nbsp;//&nbsp;We&nbsp;don't&nbsp;want&nbsp;to&nbsp;mock&nbsp;int&nbsp;Add(int&nbsp;times,&nbsp;Element&nbsp;x);
+&nbsp;&nbsp;...
+};</pre><h3>3. 模拟类模板</h3><h3>模拟类模板，在MOCK_*宏后边加_T:</h3><pre id="leanote_ace_1478746750336_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 336px;">template&nbsp;&lt;typename&nbsp;Elem&gt;
+class&nbsp;StackInterface&nbsp;{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;//&nbsp;Must&nbsp;be&nbsp;virtual&nbsp;as&nbsp;we'll&nbsp;inherit&nbsp;from&nbsp;StackInterface.
+&nbsp;&nbsp;virtual&nbsp;~StackInterface();
+
+&nbsp;&nbsp;virtual&nbsp;int&nbsp;GetSize()&nbsp;const&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;Push(const&nbsp;Elem&amp;&nbsp;x)&nbsp;=&nbsp;0;
+};
+
+template&nbsp;&lt;typename&nbsp;Elem&gt;
+class&nbsp;MockStack&nbsp;:&nbsp;public&nbsp;StackInterface&lt;Elem&gt;&nbsp;{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;MOCK_CONST_METHOD0_T(GetSize,&nbsp;int());
+&nbsp;&nbsp;MOCK_METHOD1_T(Push,&nbsp;void(const&nbsp;Elem&amp;&nbsp;x));
+};</pre><h3>4. 模拟非虚拟方法</h3><p>代码： GMockClassTest\MockNonvirtual</p><p>Google Mock可以模拟非虚函数，用于我们所谓的hi-perf依赖注入。</p><p>在这种情况下，不是与实际类共享一个公共基类，而是你的模拟类和实际类是不相关的，但是包含具有相同签名的方法。 用于mock非虚拟方法的语法与mock虚拟方法相同：</p><pre id="leanote_ace_1478747855272_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 357px;">//&nbsp;A&nbsp;simple&nbsp;packet&nbsp;stream&nbsp;class.&nbsp;&nbsp;None&nbsp;of&nbsp;its&nbsp;members&nbsp;is&nbsp;virtual.
+class&nbsp;ConcretePacketStream&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;void&nbsp;AppendPacket(Packet*&nbsp;new_packet);
+&nbsp;&nbsp;const&nbsp;Packet*&nbsp;GetPacket(size_t&nbsp;packet_number)&nbsp;const;
+&nbsp;&nbsp;size_t&nbsp;NumberOfPackets()&nbsp;const;
+&nbsp;&nbsp;...
+};
+
+//&nbsp;A&nbsp;mock&nbsp;packet&nbsp;stream&nbsp;class.&nbsp;&nbsp;It&nbsp;inherits&nbsp;from&nbsp;no&nbsp;other,&nbsp;but&nbsp;defines
+//&nbsp;GetPacket()&nbsp;and&nbsp;NumberOfPackets().
+class&nbsp;MockPacketStream&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;MOCK_CONST_METHOD1(GetPacket,&nbsp;const&nbsp;Packet*(size_t&nbsp;packet_number));
+&nbsp;&nbsp;MOCK_CONST_METHOD0(NumberOfPackets,&nbsp;size_t());
+&nbsp;&nbsp;...
+};&nbsp;</pre><p><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">注意</span></strong>，mock类不定义AppendPacket（），与实际类不同。 只要测试不需要调用它就没问题。</p><p>接下来，你需要一种方法来说明你想在生产代码中使用ConcretePacketStream，并在测试中使用MockPacketStream。 由于函数不是虚拟的，并且两个类是不相关的，因此必须在编译时指定您的选择（而不是运行时）。</p><p>一种方法是模板化需要使用数据包流的代码。 更具体地说，您将为您的代码提供数据包流类型的模板类型参数。 在生产中，您将使用ConcretePacketStream作为类型参数来实例化您的模板。 在测试中，您将使用MockPacketStream实例化相同的模板。 例如，您可以写：</p><pre id="leanote_ace_1478748268450_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 168px;">template&nbsp;&lt;class&nbsp;PacketStream&gt;
+void&nbsp;CreateConnection(PacketStream*&nbsp;stream)&nbsp;{&nbsp;...&nbsp;}
+
+template&nbsp;&lt;class&nbsp;PacketStream&gt;
+class&nbsp;PacketReader&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;void&nbsp;ReadPackets(PacketStream*&nbsp;stream,&nbsp;size_t&nbsp;packet_num);
+};</pre><p>然后你可以在生产代码中使用CreateConnection &lt;ConcretePacketStream&gt;（）和PacketReader &lt;ConcretePacketStream&gt;，并在测试中使用CreateConnection &lt;MockPacketStream&gt;（）和PacketReader &lt;MockPacketStream&gt;。</p><pre id="leanote_ace_1478748420366_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 105px;">MockPacketStream&nbsp;mock_stream;
+EXPECT_CALL(mock_stream,&nbsp;...)...;
+..&nbsp;set&nbsp;more&nbsp;expectations&nbsp;on&nbsp;mock_stream&nbsp;...
+PacketReader&lt;MockPacketStream&gt;&nbsp;reader(&amp;mock_stream);
+...&nbsp;exercise&nbsp;reader&nbsp;...</pre><h3>5. 模拟自由功能</h3><p>可以使用Google Mock模拟自由功能（即C风格函数或静态方法）。 你只需要重写你的代码来使用一个接口（抽象类）。</p><p>而不是直接调用一个自由函数（比如说，OpenFile），为它引入一个接口，并有一个具体的子类，调用free函数：</p><pre id="leanote_ace_1478748671620_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 273px;">class&nbsp;FileInterface&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;...
+&nbsp;&nbsp;virtual&nbsp;bool&nbsp;Open(const&nbsp;char*&nbsp;path,&nbsp;const&nbsp;char*&nbsp;mode)&nbsp;=&nbsp;0;
+};
+
+class&nbsp;File&nbsp;:&nbsp;public&nbsp;FileInterface&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;...
+&nbsp;&nbsp;virtual&nbsp;bool&nbsp;Open(const&nbsp;char*&nbsp;path,&nbsp;const&nbsp;char*&nbsp;mode)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;OpenFile(path,&nbsp;mode);
+&nbsp;&nbsp;}
+};</pre><p>就是封装成类。</p><p>您的代码应该与FileInterface交谈以打开文件。 现在很容易模拟出功能。</p><p>这可能看起来很麻烦，但在实践中，你经常有多个相关的函数，你可以放在同一个接口，所以每个函数的语法开销将会低得多。</p><p>如果您担心虚拟函数带来的性能开销，并且性能分析确认了您的担心，您可以将其与用于mock非虚拟方法的配方相结合<a href="https://github.com/google/googletest/blob/master/googlemock/docs/CookBook.md#mocking-nonvirtual-methods" data-mce-href="https://github.com/google/googletest/blob/master/googlemock/docs/CookBook.md#mocking-nonvirtual-methods">mocking non-virtual methods</a>。</p><h3>6.The Nice, the Strict, and the Naggy</h3><p>如果模拟方法没有EXPECT_CALL规范，但被调用，Google Mock将打印关于“uninteresting call”的警告。 理由是：</p><ul><li>在写入测试之后，可以将新方法添加到接口。 我们不应该失败一个测试，只是因为它不知道的方法被调用。</li><li>但是，这也可能意味着测试中有一个错误，所以Google Mock也不应该沉默。 如果用户认为这些调用无害，他可以添加一个EXPECT_CALL（）来抑制警告。</li></ul><p>然而，有时你可能想要抑制所有“uninteresting call”警告，而有时你可能想要相反，即把它们作为错误。 Google Mock允许您根据每个模拟对象做出决定。</p><p>假设你的测试使用模拟类MockFoo：</p><pre id="leanote_ace_1478757582260_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 105px;">TEST(...)&nbsp;{
+&nbsp;&nbsp;MockFoo&nbsp;mock_foo;
+&nbsp;&nbsp;EXPECT_CALL(mock_foo,&nbsp;DoThis());
+&nbsp;&nbsp;...&nbsp;code&nbsp;that&nbsp;uses&nbsp;mock_foo&nbsp;...
+}</pre><p>如果调用mock_foo中的除DoThis（）之外的方法，它将被Google Mock报告为警告。 但是，如果您改写测试使用NiceMock &lt;MockFoo&gt;，警告将会消失，导致更清晰的测试输出：</p><pre id="leanote_ace_1478757710113_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 147px;">using&nbsp;::testing::NiceMock;
+
+TEST(...)&nbsp;{
+&nbsp;&nbsp;NiceMock&lt;MockFoo&gt;&nbsp;mock_foo;
+&nbsp;&nbsp;EXPECT_CALL(mock_foo,&nbsp;DoThis());
+&nbsp;&nbsp;...&nbsp;code&nbsp;that&nbsp;uses&nbsp;mock_foo&nbsp;...
+}</pre><p>NiceMock &lt;MockFoo&gt;是MockFoo的子类，因此它可以在任何MockFoo被接受的地方使用。</p><p>如果MockFoo的构造函数接受一些参数，也没问题，因为NiceMock &lt;MockFoo&gt;“继承”MockFoo的构造函数：</p><pre id="leanote_ace_1478757783052_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 147px;">using&nbsp;::testing::NiceMock;
+
+TEST(...)&nbsp;{
+&nbsp;&nbsp;NiceMock&lt;MockFoo&gt;&nbsp;mock_foo(5,&nbsp;"hi");&nbsp;&nbsp;//&nbsp;Calls&nbsp;MockFoo(5,&nbsp;"hi").
+&nbsp;&nbsp;EXPECT_CALL(mock_foo,&nbsp;DoThis());
+&nbsp;&nbsp;...&nbsp;code&nbsp;that&nbsp;uses&nbsp;mock_foo&nbsp;...
+}</pre><p>StrictMock的使用是类似的，除了它使所有不感兴趣的呼叫失败：</p><pre id="leanote_ace_1478757840733_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 210px;">using&nbsp;::testing::StrictMock;
+
+TEST(...)&nbsp;{
+&nbsp;&nbsp;StrictMock&lt;MockFoo&gt;&nbsp;mock_foo;
+&nbsp;&nbsp;EXPECT_CALL(mock_foo,&nbsp;DoThis());
+&nbsp;&nbsp;...&nbsp;code&nbsp;that&nbsp;uses&nbsp;mock_foo&nbsp;...
+
+&nbsp;&nbsp;//&nbsp;The&nbsp;test&nbsp;will&nbsp;fail&nbsp;if&nbsp;a&nbsp;method&nbsp;of&nbsp;mock_foo&nbsp;other&nbsp;than&nbsp;DoThis()
+&nbsp;&nbsp;//&nbsp;is&nbsp;called.
+}</pre><p>有一些<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">注意事项</span></strong>（我不喜欢他们只是下一个人，但可悲的是他们是C ++的限制的副作用）：</p><p>&nbsp; &nbsp; 1. NiceMock &lt;MockFoo&gt;和StrictMock &lt;MockFoo&gt;仅适用于在MockFoo类中直接使用MOCK_METHOD *系列宏定义的模拟方法。如果在MockFoo的基类中定义了一个mock方法，那么“nice”或“strict”修饰符可能不会影响它，具体取决于编译器。特别地，<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">不支持嵌套NiceMock和StrictMock</span></strong>（例如NiceMock &lt;StrictMock &lt;MockFoo&gt;&gt;）。<br>&nbsp; &nbsp; 2. 模拟基类（MockFoo）的构造函数不能具有通过非const引用传递的参数，这恰巧被Google C ++风格指南禁止。<br>&nbsp; &nbsp; 3. 在MockFoo的构造函数或析构函数中，模拟对象不好或不严格。如果构造函数或析构函数调用此对象上的模拟方法，这可能会导致意外。 （然而，这种行为与C ++的一般规则是一致的：如果构造函数或析构函数调用此对象的虚方法，那么该方法将被视为非虚函数。换句话说，对于基类的构造函数或析构函数，像一个基类的实例，而不是派生类这个规则是安全的，否则一个基类构造函数可以在初始化之前使用派生类的成员，或者一个基类析构函数可以使用派生类的成员已被销毁。）<br>最后，你应该非常谨慎何时使用naggystrict的mock，因为他们往往使测试更脆弱，更难以维护。当重构代码而不改变其外部可见行为时，理想情况下，您不需要更新任何测试。然而，如果你的代码与一个笨拙的模拟交互，你可能开始收到垃圾邮件，警告作为你的更改的结果。更糟的是，如果你的代码与严格的模拟交互，你的测试可能会开始失败，你将被迫修复它们。我们的一般建议是在大多数时候使用漂亮的mock（尚未默认），在开发或调试测试时使用naggy mocks（当前默认），并且仅使用严格的mock作为最后的手段。</p><p>&nbsp;</p><h3>7. 简化接口而不破坏现有代码</h3><p>代码：MockClassTest/TestSimplifyingInterface.cpp</p><p>有时一个方法有很长的参数列表，大多是无趣的。 例如，</p><pre id="leanote_ace_1478758333766_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 168px;">class&nbsp;LogSink&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;...
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;send(LogSeverity&nbsp;severity,&nbsp;const&nbsp;char*&nbsp;full_filename,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;char*&nbsp;base_filename,&nbsp;int&nbsp;line,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;struct&nbsp;tm*&nbsp;tm_time,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;char*&nbsp;message,&nbsp;size_t&nbsp;message_len)&nbsp;=&nbsp;0;
+};</pre><p>这个方法的参数列表很长，很难使用（假设消息参数不是0终止的）。 如果我们模仿它，使用模拟将是尴尬的。 但是，如果我们尝试简化此接口，我们需要根据它来修复所有客户端，这通常是不可行的。</p><p>诀窍是在mock类中重新分派方法：</p><pre id="leanote_ace_1478758497112_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 399px;">class&nbsp;ScopedMockLog&nbsp;:&nbsp;public&nbsp;LogSink&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;...
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;send(LogSeverity&nbsp;severity,&nbsp;const&nbsp;char*&nbsp;full_filename,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;char*&nbsp;base_filename,&nbsp;int&nbsp;line,&nbsp;const&nbsp;tm*&nbsp;tm_time,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;char*&nbsp;message,&nbsp;size_t&nbsp;message_len)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;We&nbsp;are&nbsp;only&nbsp;interested&nbsp;in&nbsp;the&nbsp;log&nbsp;severity,&nbsp;full&nbsp;file&nbsp;name,&nbsp;and
+&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;log&nbsp;message.
+&nbsp;&nbsp;&nbsp;&nbsp;Log(severity,&nbsp;full_filename,&nbsp;std::string(message,&nbsp;message_len));
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;//&nbsp;Implements&nbsp;the&nbsp;mock&nbsp;method:
+&nbsp;&nbsp;//
+&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;void&nbsp;Log(LogSeverity&nbsp;severity,
+&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;string&amp;&nbsp;file_path,
+&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;string&amp;&nbsp;message);
+&nbsp;&nbsp;MOCK_METHOD3(Log,&nbsp;void(LogSeverity&nbsp;severity,&nbsp;const&nbsp;string&amp;&nbsp;file_path,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;string&amp;&nbsp;message));
+};</pre><p>通过定义一个带有修整参数列表的新模拟方法，我们使得模拟类更加友好。</p><h3>8. 替代Mocking Concrete类（Alternative to Mocking Concrete Classes）</h3><p>通常你可能会发现自己使用的类不实现接口。为了测试你使用这样的类的代码（我们称之为Concrete），&nbsp;you may be tempted to make the methods of&nbsp;<code>Concrete</code>&nbsp;virtual and then mock it（你可能会试图使Concrete虚拟的方法，然后mock它）。</p><p>尽量不要这样做。</p><p>使非虚拟功能虚拟是一个很大的决定。它创建一个扩展点，子类可以调整你的类的行为。这削弱了你对类的控制，因为现在很难维护类的不变量。你应该使一个函数虚拟只有当有一个有效的原因子类覆盖它。</p><p>直接模拟具体类是有问题的，因为它在类和测试之间建立了紧密的耦合 - 类的任何小的改变都会使你的测试无效，并使测试维护变得很痛苦。</p><p>为了避免这样的问题，许多程序员一直在实践“编码接口”：而不是与Concrete类交谈，你的代码将定义一个接口并与之通信。然后将该接口实现为混凝土顶部的适配器。在测试中，您可以轻松地模拟该接口，观察代码的运行情况。</p><p>这种技术带来一些开销：</p><p>你支付虚拟函数调用的成本（通常不是问题）。<br>有更多的抽象为程序员学习。<br>然而，它还可以带来显着的好处，除了更好的可测试性：</p><p>。。。。。。。。//太多了，需要在看</p><p>9.Delegating Calls to a Fake&nbsp;将调用委派给fake</p><p>代码： GMockClassTest\DelegatingToFake</p><p>有些时候，你有一个非平凡的伪接口实现。例如：</p><pre id="leanote_ace_1478760715970_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 378px;">class&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;virtual&nbsp;~Foo()&nbsp;{}
+&nbsp;&nbsp;virtual&nbsp;char&nbsp;DoThis(int&nbsp;n)&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;DoThat(const&nbsp;char*&nbsp;s,&nbsp;int*&nbsp;p)&nbsp;=&nbsp;0;
+};
+
+class&nbsp;FakeFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;virtual&nbsp;char&nbsp;DoThis(int&nbsp;n)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(n&nbsp;&gt;&nbsp;0)&nbsp;?&nbsp;'+'&nbsp;:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(n&nbsp;&lt;&nbsp;0)&nbsp;?&nbsp;'-'&nbsp;:&nbsp;'0';
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;DoThat(const&nbsp;char*&nbsp;s,&nbsp;int*&nbsp;p)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;*p&nbsp;=&nbsp;strlen(s);
+&nbsp;&nbsp;}
+};</pre><p>现在你想模拟这个接口，使你可以设置期望。 然而，你也想使用FakeFoo的默认行为，因为在mock对象复制它是很好的。</p><p>当您使用Google Mock定义模拟类时，可以使用此模式将其默认操作委托给您已拥有的假类：</p><pre id="leanote_ace_1478760943350_0" class="ace-tomorrow brush:c_cpp" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 420px;">using&nbsp;::testing::_;
+using&nbsp;::testing::Invoke;
+
+class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;//&nbsp;Normal&nbsp;mock&nbsp;method&nbsp;definitions&nbsp;using&nbsp;Google&nbsp;Mock.
+&nbsp;&nbsp;MOCK_METHOD1(DoThis,&nbsp;char(int&nbsp;n));
+&nbsp;&nbsp;MOCK_METHOD2(DoThat,&nbsp;void(const&nbsp;char*&nbsp;s,&nbsp;int*&nbsp;p));
+
+&nbsp;&nbsp;//&nbsp;Delegates&nbsp;the&nbsp;default&nbsp;actions&nbsp;of&nbsp;the&nbsp;methods&nbsp;to&nbsp;a&nbsp;FakeFoo&nbsp;object.
+&nbsp;&nbsp;//&nbsp;This&nbsp;must&nbsp;be&nbsp;called&nbsp;*before*&nbsp;the&nbsp;custom&nbsp;ON_CALL()&nbsp;statements.
+&nbsp;&nbsp;void&nbsp;DelegateToFake()&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;ON_CALL(*this,&nbsp;DoThis(_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillByDefault(Invoke(&amp;fake_,&nbsp;&amp;FakeFoo::DoThis));
+&nbsp;&nbsp;&nbsp;&nbsp;ON_CALL(*this,&nbsp;DoThat(_,&nbsp;_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillByDefault(Invoke(&amp;fake_,&nbsp;&amp;FakeFoo::DoThat));
+&nbsp;&nbsp;}
+&nbsp;private:
+&nbsp;&nbsp;FakeFoo&nbsp;fake_;&nbsp;&nbsp;//&nbsp;Keeps&nbsp;an&nbsp;instance&nbsp;of&nbsp;the&nbsp;fake&nbsp;in&nbsp;the&nbsp;mock.
+};</pre><p>这样，你可以像往常一样在测试中使用MockFoo。 只要记住，如果你没有在ON_CALL（）和EXPECT_CALL（）中显式地设置一个动作，那么就会调用这个伪造的函数：</p><pre id="leanote_ace_1478761461979_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 357px;">using&nbsp;::testing::_;
+
+TEST(AbcTest,&nbsp;Xyz)&nbsp;{
+&nbsp;&nbsp;MockFoo&nbsp;foo;
+&nbsp;&nbsp;foo.DelegateToFake();&nbsp;//&nbsp;Enables&nbsp;the&nbsp;fake&nbsp;for&nbsp;delegation.
+
+&nbsp;&nbsp;//&nbsp;Put&nbsp;your&nbsp;ON_CALL(foo,&nbsp;...)s&nbsp;here,&nbsp;if&nbsp;any.
+
+&nbsp;&nbsp;//&nbsp;No&nbsp;action&nbsp;specified,&nbsp;meaning&nbsp;to&nbsp;use&nbsp;the&nbsp;default&nbsp;action.
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThis(5));
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThat(_,&nbsp;_));
+
+&nbsp;&nbsp;int&nbsp;n&nbsp;=&nbsp;0;
+&nbsp;&nbsp;EXPECT_EQ('+',&nbsp;foo.DoThis(5));&nbsp;&nbsp;//&nbsp;FakeFoo::DoThis()&nbsp;is&nbsp;invoked.
+&nbsp;&nbsp;foo.DoThat("Hi",&nbsp;&amp;n);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;FakeFoo::DoThat()&nbsp;is&nbsp;invoked.
+&nbsp;&nbsp;EXPECT_EQ(2,&nbsp;n);
+}</pre><p><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">一些技巧：</span></strong></p><ul><li>如果需要，您仍然可以通过提供自己的ON_CALL（）或在EXPECT_CALL（）中使用.WillOnce（）/ .WillRepeatedly（）来覆盖默认操作。</li><li>在DelegateToFake（）中，您只需要委托想要使用其伪实现的方法。</li><li>这里讨论的一般技术适用于重载方法，但你需要告诉编译器你的意思是哪个版本。要消除模拟函数（在ON_CALL（）的括号内指定的模拟函数），请参阅本页上的“Selecting Between Overloaded Functions”部分;要消除一个假的函数（你放在Invoke（）中），使用static_cast指定函数的类型。例如，如果类Foo有方法char DoThis（int n）和bool DoThis（double x）const，并且你想调用后者，你需要写Invoke（＆fake_，static_cast &lt;bool（FakeFoo :: *） ）const&gt;（＆FakeFoo :: DoThis））而不是Invoke（＆fake_，＆FakeFoo :: DoThis）（static_cast的尖括号内的奇怪的东西是第二个DoThis（）方法的函数指针的类型。</li><li>不得不混合模拟和假的通常是一个错误的迹象。也许你还没有习惯于基于交互的测试方式。或者你的界面承担太多的角色，应该拆分。因此，不要滥用此。我们只推荐在重构代码时作为一个中间步骤。</li></ul><p>关于混合模拟和假的提示，这里有一个例子，为什么它可能是一个坏的标志：假设你有一个类系统的低级系统操作。特别是，它执行文件和I / O操作。并假设你想测试你的代码如何使用System来做I / O，你只是希望文件操作正常工作。如果你模拟整个系统类，你必须为文件操作部分提供一个假的实现，这表明系统承担了太多的角色。</p><p>相反，您可以定义FileOps接口和IOOps接口并将系统的功能分为两个。然后你可以模拟IOOps而不模拟FileOps。</p><h3>9. 将调用委派给真实对象</h3><p>当使用测试双打（mock，fakes，stubs等）时，有时它们的行为将不同于真实对象的行为。 这种差异可能是有意的（如在模拟错误，以便您可以测试错误处理代码）或无意的。 如果你的mock与错误的对象具有不同的行为，你可能会遇到通过测试但在生产中失败的代码。</p><p>您可以使用<em>delegating-to-real&nbsp;</em>技术来确保您的模拟具有与真实对象相同的行为，同时保留验证调用的能力。 这种技术非常类似于delegating-to-fake&nbsp;技术，区别在于我们使用真实的对象而不是假的。 这里有一个例子：</p><pre id="leanote_ace_1478762355450_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 609px;">using&nbsp;::testing::_;
+using&nbsp;::testing::AtLeast;
+using&nbsp;::testing::Invoke;
+
+class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;MockFoo()&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;By&nbsp;default,&nbsp;all&nbsp;calls&nbsp;are&nbsp;delegated&nbsp;to&nbsp;the&nbsp;real&nbsp;object.
+&nbsp;&nbsp;&nbsp;&nbsp;ON_CALL(*this,&nbsp;DoThis())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillByDefault(Invoke(&amp;real_,&nbsp;&amp;Foo::DoThis));
+&nbsp;&nbsp;&nbsp;&nbsp;ON_CALL(*this,&nbsp;DoThat(_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillByDefault(Invoke(&amp;real_,&nbsp;&amp;Foo::DoThat));
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;}
+&nbsp;&nbsp;MOCK_METHOD0(DoThis,&nbsp;...);
+&nbsp;&nbsp;MOCK_METHOD1(DoThat,&nbsp;...);
+&nbsp;&nbsp;...
+&nbsp;private:
+&nbsp;&nbsp;Foo&nbsp;real_;
+};
+...
+
+&nbsp;&nbsp;MockFoo&nbsp;mock;
+
+&nbsp;&nbsp;EXPECT_CALL(mock,&nbsp;DoThis())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.Times(3);
+&nbsp;&nbsp;EXPECT_CALL(mock,&nbsp;DoThat("Hi"))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.Times(AtLeast(1));
+&nbsp;&nbsp;...&nbsp;use&nbsp;mock&nbsp;in&nbsp;test&nbsp;...</pre><p>这样，Google Mock将验证您的代码是否正确调用（使用正确的参数，按正确的顺序，调用正确的次数等），一个真实的对象将回应调用（因此行为将与生产中相同）。</p><h3>10. 将调用委派给父类</h3><p>理想情况下，你应该编写接口，其方法都是纯虚拟的。 在现实中，有时你需要模拟一个不纯的虚方法（即它已经有一个实现）。 例如：</p><pre id="leanote_ace_1478762521251_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 315px;">class&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;virtual&nbsp;~Foo();
+
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;Pure(int&nbsp;n)&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;int&nbsp;Concrete(const&nbsp;char*&nbsp;str)&nbsp;{&nbsp;...&nbsp;}
+};
+
+class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;//&nbsp;Mocking&nbsp;a&nbsp;pure&nbsp;method.
+&nbsp;&nbsp;MOCK_METHOD1(Pure,&nbsp;void(int&nbsp;n));
+&nbsp;&nbsp;//&nbsp;Mocking&nbsp;a&nbsp;concrete&nbsp;method.&nbsp;&nbsp;Foo::Concrete()&nbsp;is&nbsp;shadowed.
+&nbsp;&nbsp;MOCK_METHOD1(Concrete,&nbsp;int(const&nbsp;char*&nbsp;str));
+};</pre><p>有时你可能想调用Foo :: Concrete（），而不是MockFoo :: Concrete（）。 也许你想做一个stub动作的一部分，或者你的测试不需要模拟Concrete（）（但必须定义一个新的模拟类，每当你不 需要模拟其中的一种方法）。</p><p>诀窍是在你的模拟类中留下一个后门来访问基类中的真正的方法：</p><pre id="leanote_ace_1478762727062_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 210px;">class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;//&nbsp;Mocking&nbsp;a&nbsp;pure&nbsp;method.
+&nbsp;&nbsp;MOCK_METHOD1(Pure,&nbsp;void(int&nbsp;n));
+&nbsp;&nbsp;//&nbsp;Mocking&nbsp;a&nbsp;concrete&nbsp;method.&nbsp;&nbsp;Foo::Concrete()&nbsp;is&nbsp;shadowed.
+&nbsp;&nbsp;MOCK_METHOD1(Concrete,&nbsp;int(const&nbsp;char*&nbsp;str));
+
+&nbsp;&nbsp;//&nbsp;Use&nbsp;this&nbsp;to&nbsp;call&nbsp;Concrete()&nbsp;defined&nbsp;in&nbsp;Foo.
+&nbsp;&nbsp;int&nbsp;FooConcrete(const&nbsp;char*&nbsp;str)&nbsp;{&nbsp;return&nbsp;Foo::Concrete(str);&nbsp;}
+};</pre><p>Now, you can call&nbsp;<code>Foo::Concrete()</code>&nbsp;inside an action by:</p><pre id="leanote_ace_1478762765420_0" class="ace-tomorrow brush:c_cpp" data-mce-style="line-height: 1.5; font-size: 14px; height: 105px;">using&nbsp;::testing::_;
+using&nbsp;::testing::Invoke;
+...
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;Concrete(_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(Invoke(&amp;foo,&nbsp;&amp;MockFoo::FooConcrete));</pre><p>or tell the mock object that you don't want to mock&nbsp;<code>Concrete()</code>:</p><pre id="leanote_ace_1478762767155_0" class="ace-tomorrow brush:c_cpp" data-mce-style="line-height: 1.5; font-size: 14px; height: 84px;">using&nbsp;::testing::Invoke;
+...
+&nbsp;&nbsp;ON_CALL(foo,&nbsp;Concrete(_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillByDefault(Invoke(&amp;foo,&nbsp;&amp;MockFoo::FooConcrete));﻿​</pre><p>（为什么我们不写入Invoke（＆foo，＆Foo :: Concrete）？如果你这样做，MockFoo :: Concrete（）将被调用（并引起无限递归），因为Foo :: Concrete是virtual修饰的 。）</p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p></div>
+	</div>
+
+<!-- 该js供其它处理 -->
+<script src="../leanote-html.js"></script>
+</body>
+</html>

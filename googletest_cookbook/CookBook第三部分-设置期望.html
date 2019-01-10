@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="tool" content="leanote-desktop-app">
+<title>CookBook第三部分-设置期望</title>
+<style>
+
+*{font-family:"lucida grande","lucida sans unicode",lucida,helvetica,"Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
+
+body {
+  margin: 0;
+}
+
+/*公用文字样式*/
+h1{font-size:30px}h2{font-size:24px}h3{font-size:18px}h4{font-size:14px}
+.note-container{
+    width:850px; 
+    margin:auto;
+    padding: 10px 20px;
+    box-shadow: 1px 1px 10px #eee;
+}
+#title {
+  margin: 0;
+}
+table {
+    margin-bottom: 16px;
+    border-collapse: collapse;
+}
+table th, table td {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+}
+table th {
+    font-weight: bold;
+}
+
+table tr {
+    background-color: none;
+    border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+    background-color: rgb(247, 247, 249);
+}
+.mce-item-table, .mce-item-table td, .mce-item-table th, .mce-item-table caption {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  padding: 6px 13px;
+}
+blockquote {
+  border-left-width:10px;
+  background-color:rgba(128,128,128,0.05);
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+  padding:15px 20px;
+  border-left:5px solid rgba(128,128,128,0.075);
+}
+blockquote p {
+  margin-bottom:1.1em;
+  font-size:1em;
+  line-height:1.45
+}
+blockquote ul:last-child,blockquote ol:last-child {
+  margin-bottom:0
+}
+pre {
+  padding: 18px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 3px;
+  display: block;
+}
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  white-space: nowrap;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+.footnote {
+  vertical-align: top;
+  position: relative;
+  top: -0.5em;
+  font-size: .8em;
+}
+
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+pre {
+  word-break:break-word
+}
+p,pre,pre.prettyprint,blockquote {
+  margin:0 0 1.1em
+}
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+.sequence-diagram,.flow-chart {
+  text-align:center;
+  margin-bottom:1.1em
+}
+.sequence-diagram text,.flow-chart text {
+  font-size:15px !important;
+  font-family:"Source Sans Pro",sans-serif !important
+}
+.sequence-diagram [fill="#ffffff"],.flow-chart [fill="#ffffff"] {
+  fill:#f6f6f6
+}
+.sequence-diagram [stroke="#000000"],.flow-chart [stroke="#000000"] {
+  stroke:#3f3f3f
+}
+.sequence-diagram text[stroke="#000000"],.flow-chart text[stroke="#000000"] {
+  stroke:none
+}
+.sequence-diagram [fill="#000"],.flow-chart [fill="#000"],.sequence-diagram [fill="#000000"],.flow-chart [fill="#000000"],.sequence-diagram [fill="black"],.flow-chart [fill="black"] {
+  fill:#3f3f3f
+}
+ul,ol {
+  margin-bottom:1.1em
+}
+ul ul,ol ul,ul ol,ol ol {
+  margin-bottom:1.1em
+}
+kbd {
+  padding:.1em .6em;
+  border:1px solid rgba(63,63,63,0.25);
+  -webkit-box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  font-size:.7em;
+  font-family:sans-serif;
+  background-color:#fff;
+  color:#333;
+  border-radius:3px;
+  display:inline-block;
+  margin:0 .1em;
+  white-space:nowrap
+}
+.toc ul {
+  list-style-type:none;
+  margin-bottom:15px
+}
+</style>
+<!-- 该css供自定义样式 -->
+<link href="../leanote-html.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<div class="note-container">
+		<h1 class="title" id="leanote-title">CookBook第三部分-设置期望</h1>
+		<div class="content-html" id="leanote-content"><h1>设置期望</h1><h2>一、Knowing When to Expect</h2><p>ON_CALL可能是Google Mock中最缺乏利用的结构。</p><h3>1.ON_CALL和EXPECT_CALL的区别？</h3><p>&nbsp;基本上有两个结构用于定义模拟对象的行为：ON_CALL和EXPECT_CALL。</p><p><span style="color: #ff6600;" data-mce-style="color: #ff6600;">区别？</span> ON_CALL定义当调用mock方法时发生的情况，但不暗示对所调用的方法的任何期望。 EXPECT_CALL不仅定义了行为，<span style="color: #ff6600;" data-mce-style="color: #ff6600;">而且设置了一个期望</span>，即用给定的参数调用该方法，给定的次数（以及在指定顺序时按给定的顺序）。</p><p>EXPECT_CALL不比ON_CALL好。每个EXPECT_CALL都会对被测代码的行为添加一个约束。具有比需要的的更多的约束是很不好的 - 甚至比没有足够的约束更糟糕。</p><h3>&nbsp; 2. 那哪个好？</h3><p>答案在于测试应该验证什么。<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">一个好的测试验证代码的约定</span></strong>。如果测试过度指定，它不会留下足够的自由实现。因此，改变实现而不违反约定（例如重构和优化），这应该是完全正常的，可以打破这种测试。然后你必须花时间修复他们，只有看到他们再次破碎下次实施改变。</p><p>&nbsp; &nbsp;请记住，在一个测试中不必验证多个属性。事实上，在一个测试中验证只有一件事是一种好的风格。如果你这样做，一个错误很可能只打破一两个测试，而不是几十个（这种情况下你还愿调试吗？）。如果你也习惯于给测试描述性的名字，告诉他们验证什么，你通常可以从测试日志本身很容易猜到什么是错误的。</p><p>&nbsp; &nbsp; 因此，默认情况下使用ON_CALL，并且只有在实际打算验证调用时才使用EXPECT_CALL。例如，您可能在测试夹具中有一堆ON_CALL，以设置同一组中所有测试共享的公共模拟行为，并在不同的TEST_F中编写（几乎不）不同的EXPECT_CALL以验证代码行为的不同方面。与每个TEST具有许多EXPECT_CALL的风格相比，这导致测试对实现性更改更有弹性（因此不太可能需要维护），并使测试的意图更明显（因此，当您执行时，它们更容易维护需要维护它们）。</p><p>如果您在调用没有EXPECT_CALL的模拟方法时打印的“无趣的模拟函数调用”消息打扰，则可以使用NiceMock代替抑制mock对象的所有此类消息，或通过添加EXPECT_CALL来抑制特定方法的消息（...）。Times（AnyNumber（））。不要通过盲目地添加一个EXPECT_CALL（...）来抑制它，否则你将有一个很难维护的测试。</p><h2>二、忽略不感兴趣的呼叫</h2><p>如果你对如何调用一个模拟方法不感兴趣。在这种情况下，如果该方法被调用，Google Mock将执行其默认操作，以允许测试程序继续。如果您对Google Mock采取的默认操作不满意，您可以使用DefaultValue &lt;T&gt; :: Set（）（本文档稍后介绍）或ON_CALL（）覆盖它。</p><p>。。。。。。。。</p><h2>三、禁止意外调用&nbsp;Disallowing Unexpected Calls</h2><p>如果一个模拟方法不应该被调用，明确地说：</p><pre id="leanote_ace_1478848864334_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 84px;">using&nbsp;::testing::_;
+...
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;Bar(_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.Times(0);</pre><p>如果允许对方法的一些调用，但其余的不是，只是列出所有预期的调用：</p><pre id="leanote_ace_1478848908387_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 126px;">using&nbsp;::testing::AnyNumber;
+using&nbsp;::testing::Gt;
+...
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;Bar(5));
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;Bar(Gt(10)))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.Times(AnyNumber());</pre><p>A call to&nbsp;<code>foo.Bar()</code>&nbsp;that doesn't match any of the&nbsp;<code>EXPECT_CALL()</code>&nbsp;statements will be an error.</p><p>&nbsp;<br></p><h2>四、了解不感兴趣与意外调用</h2><p>不感兴趣的调用和意外调用是Google Mock中不同的概念。 非常不一样。</p><h3>&nbsp;1.无趣与意外调用的定义</h3><p>&nbsp; &nbsp;如果没有一个EXPECT_CALL（x，Y（...））集合，调用x.Y（...）是无趣的。 换句话说，测试对x.Y（）方法不感兴趣，显而易见的是测试不关心它。</p><p>&nbsp; &nbsp;如果设置了一些EXPECT_CALL（x，Y（...）），但调用x.Y（...）是意外的，但它们都不匹配调用。 换句话说，测试对x.Y（）方法感兴趣（因此它显式地设置一些EXPECT_CALL来验证它是如何被调用的）。 然而，验证失败，因为测试不希望此特定呼叫发生。</p><p>&nbsp;意外的调用总是一个错误，因为被测试的代码的行为不匹配测试期望的行为。</p><p>&nbsp; 2. 默认情况下，不感兴趣的调用不是错误，因为它没有违反测试指定的约束。 （Google Mock的哲学是说，没有什么意味着没有约束。）然而，它导致一个警告，因为它可能指示一个问题（例如测试作者可能已经忘记指定一个约束）。</p><p>。。。。。//太多感兴趣再看</p><p>&nbsp;<br></p><h2>&nbsp;<br></h2><h2>五、期望有序调用</h2><p>代码：GoogleMockTest\ExpectationOrder&nbsp; &nbsp;</p><p>虽然先前定义的EXPECT_CALL（）语句优先于Google Mock尝试匹配具有期望的函数调用，但默认调用不必按照EXPECT_CALL（）语句写入的顺序发生。 例如，如果参数匹配第三个EXPECT_CALL（）中的匹配器，但不匹配前两个中的匹配器，则将使用第三个期望值。</p><p>如果希望所有调用按期望的顺序发生，请在定义了InSequence类型的变量的块中放置EXPECT_CALL（）语句：</p><pre id="leanote_ace_1478849453184_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 231px;">using&nbsp;::testing::_;
+&nbsp;&nbsp;using&nbsp;::testing::InSequence;
+
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;InSequence&nbsp;s;
+
+&nbsp;&nbsp;&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThis(5));
+&nbsp;&nbsp;&nbsp;&nbsp;EXPECT_CALL(bar,&nbsp;DoThat(_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.Times(2);
+&nbsp;&nbsp;&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThis(6));
+&nbsp;&nbsp;}</pre><p>在这个例子中，我们期望调用foo.DoThis（5），然后是对bar.DoThat（）的两次调用，其中参数可以是任何东西，后面是对foo.DoThis（6）的调用。 如果调用发生无序，Google Mock将报告错误。</p><h2>六、期望部分顺序调用</h2><p>有时要求一切以预定顺序发生可能导致脆性测试。 例如，我们可能关心A发生在B和C之前，但是对B和C的相对顺序不感兴趣。在这种情况下，测试应该反映我们的真实意图，而不是过度约束。</p><p>Google Mock允许您对调用强加任意DAG（有向无环图）。 表达DAG的一种方法是使用EXPECT_CALL的After子句。</p><p>另一种方式是通过InSequence（）子句（与InSequence类不同），我们从jMock 2中借用它。它不如After（）灵活，但是当你有长的顺序调用链时更方便，因为它' 不要求你为链中的期望提出不同的名字。 以下是它的工作原理：</p><p>如果我们将EXPECT_CALL（）语句视为图中的节点，从节点A到节点B加一条边，则A必须在B之前，我们可以得到DAG。 我们使用术语“序列”来表示该DAG中的有向路径。 现在，如果我们将DAG分解为序列，我们只需要知道每个EXPECT_CALL（）属于哪些序列，以便能够重建原始DAG。</p><p>因此，要指定部分顺序的期望，我们需要做两件事情：</p><p>&nbsp; &nbsp; &nbsp;1.&nbsp;定义一些Sequence对象，然后为每个EXPECT_CALL（）说它是哪个Sequence对象的一部 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 分。</p><p>&nbsp; &nbsp; &nbsp;2. 同一序列中的期望必须按照它们被写入的顺序发生。 例如，</p><pre id="leanote_ace_1478850522670_0" class="brush:c_cpp ace-tomorrow">&nbsp;using&nbsp;::testing::Sequence;
+
+&nbsp;&nbsp;Sequence&nbsp;s1,&nbsp;s2;
+
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;A())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.InSequence(s1,&nbsp;s2);
+&nbsp;&nbsp;EXPECT_CALL(bar,&nbsp;B())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.InSequence(s1);
+&nbsp;&nbsp;EXPECT_CALL(bar,&nbsp;C())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.InSequence(s2);
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;D())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.InSequence(s2);&nbsp;</pre><p>&nbsp;specifies the following DAG (where&nbsp;<code>s1</code>&nbsp;is&nbsp;<code>A -&gt; B</code>, and&nbsp;<code>s2</code>&nbsp;is&nbsp;<code>A -&gt; C -&gt; D</code>):<br></p><p>+---&gt; B<br> |<br> A ---|<br> |<br> +---&gt; C ---&gt; D﻿​</p><p>&nbsp;这意味着A必须出现在B和C之前，C必须出现在D之前。对这些以外的顺序没有限制。</p><h2>七、期望停止时控制</h2><p>当调用模拟方法时，Google Mock仅考虑仍然有效的期望。 期望在创建时处于活动状态，并且在已发生稍后发生的调用时变为不活动（也称为停用）。 例如，in</p><pre id="leanote_ace_1478851024572_0" class="brush:c_cpp ace-tomorrow" draggable="false">using&nbsp;::testing::_;
+&nbsp;&nbsp;using&nbsp;::testing::Sequence;
+
+&nbsp;&nbsp;Sequence&nbsp;s1,&nbsp;s2;
+
+&nbsp;&nbsp;EXPECT_CALL(log,&nbsp;Log(WARNING,&nbsp;_,&nbsp;"File&nbsp;too&nbsp;large."))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.Times(AnyNumber())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.InSequence(s1,&nbsp;s2);
+&nbsp;&nbsp;EXPECT_CALL(log,&nbsp;Log(WARNING,&nbsp;_,&nbsp;"Data&nbsp;set&nbsp;is&nbsp;empty."))&nbsp;&nbsp;//&nbsp;#2
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.InSequence(s1);
+&nbsp;&nbsp;EXPECT_CALL(log,&nbsp;Log(WARNING,&nbsp;_,&nbsp;"User&nbsp;not&nbsp;found."))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#3
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.InSequence(s2);&nbsp;</pre><p>一旦＃2或＃3匹配，＃1将退出。 如果出现警告“文件太大"是在这之后记录的，它会是一个错误。</p><p>请注意，期望在饱和时不会自动退出。 例如，</p><pre id="leanote_ace_1478851171188_0" class="brush:c_cpp ace-tomorrow">using&nbsp;::testing::_;
+...
+&nbsp;&nbsp;EXPECT_CALL(log,&nbsp;Log(WARNING,&nbsp;_,&nbsp;_));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#1
+&nbsp;&nbsp;EXPECT_CALL(log,&nbsp;Log(WARNING,&nbsp;_,&nbsp;"File&nbsp;too&nbsp;large."));&nbsp;&nbsp;//&nbsp;#2</pre><p>上面说，只有一个警告消息“文件太大”。 如果第二个警告也包含此消息，＃2将再次匹配，并导致上限违例错误。</p><p>如果这不是你想要的，你可以要求期望退休，一旦它饱和：</p><pre id="leanote_ace_1478851242417_0" class="brush:c_cpp ace-tomorrow">using&nbsp;::testing::_;
+...
+&nbsp;&nbsp;EXPECT_CALL(log,&nbsp;Log(WARNING,&nbsp;_,&nbsp;_));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#1
+&nbsp;&nbsp;EXPECT_CALL(log,&nbsp;Log(WARNING,&nbsp;_,&nbsp;"File&nbsp;too&nbsp;large."))&nbsp;&nbsp;//&nbsp;#2
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.RetiresOnSaturation();</pre><p>&nbsp;这里＃2只能使用一次，所以如果你有两个警告消息“文件太大”，第一个将匹配＃2，第二个将匹配＃1 - 将没有错误。</p><p>&nbsp;<br></p></div>
+	</div>
+
+<!-- 该js供其它处理 -->
+<script src="../leanote-html.js"></script>
+</body>
+</html>

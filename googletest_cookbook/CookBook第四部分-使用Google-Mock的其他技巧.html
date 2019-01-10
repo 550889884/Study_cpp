@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="tool" content="leanote-desktop-app">
+<title>CookBook第四部分-使用Google Mock的其他技巧</title>
+<style>
+
+*{font-family:"lucida grande","lucida sans unicode",lucida,helvetica,"Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
+
+body {
+  margin: 0;
+}
+
+/*公用文字样式*/
+h1{font-size:30px}h2{font-size:24px}h3{font-size:18px}h4{font-size:14px}
+.note-container{
+    width:850px; 
+    margin:auto;
+    padding: 10px 20px;
+    box-shadow: 1px 1px 10px #eee;
+}
+#title {
+  margin: 0;
+}
+table {
+    margin-bottom: 16px;
+    border-collapse: collapse;
+}
+table th, table td {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+}
+table th {
+    font-weight: bold;
+}
+
+table tr {
+    background-color: none;
+    border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+    background-color: rgb(247, 247, 249);
+}
+.mce-item-table, .mce-item-table td, .mce-item-table th, .mce-item-table caption {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  padding: 6px 13px;
+}
+blockquote {
+  border-left-width:10px;
+  background-color:rgba(128,128,128,0.05);
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+  padding:15px 20px;
+  border-left:5px solid rgba(128,128,128,0.075);
+}
+blockquote p {
+  margin-bottom:1.1em;
+  font-size:1em;
+  line-height:1.45
+}
+blockquote ul:last-child,blockquote ol:last-child {
+  margin-bottom:0
+}
+pre {
+  padding: 18px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 3px;
+  display: block;
+}
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  white-space: nowrap;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+.footnote {
+  vertical-align: top;
+  position: relative;
+  top: -0.5em;
+  font-size: .8em;
+}
+
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+pre {
+  word-break:break-word
+}
+p,pre,pre.prettyprint,blockquote {
+  margin:0 0 1.1em
+}
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+.sequence-diagram,.flow-chart {
+  text-align:center;
+  margin-bottom:1.1em
+}
+.sequence-diagram text,.flow-chart text {
+  font-size:15px !important;
+  font-family:"Source Sans Pro",sans-serif !important
+}
+.sequence-diagram [fill="#ffffff"],.flow-chart [fill="#ffffff"] {
+  fill:#f6f6f6
+}
+.sequence-diagram [stroke="#000000"],.flow-chart [stroke="#000000"] {
+  stroke:#3f3f3f
+}
+.sequence-diagram text[stroke="#000000"],.flow-chart text[stroke="#000000"] {
+  stroke:none
+}
+.sequence-diagram [fill="#000"],.flow-chart [fill="#000"],.sequence-diagram [fill="#000000"],.flow-chart [fill="#000000"],.sequence-diagram [fill="black"],.flow-chart [fill="black"] {
+  fill:#3f3f3f
+}
+ul,ol {
+  margin-bottom:1.1em
+}
+ul ul,ol ul,ul ol,ol ol {
+  margin-bottom:1.1em
+}
+kbd {
+  padding:.1em .6em;
+  border:1px solid rgba(63,63,63,0.25);
+  -webkit-box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  font-size:.7em;
+  font-family:sans-serif;
+  background-color:#fff;
+  color:#333;
+  border-radius:3px;
+  display:inline-block;
+  margin:0 .1em;
+  white-space:nowrap
+}
+.toc ul {
+  list-style-type:none;
+  margin-bottom:15px
+}
+</style>
+<!-- 该css供自定义样式 -->
+<link href="../leanote-html.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<div class="note-container">
+		<h1 class="title" id="leanote-title">CookBook第四部分-使用Google Mock的其他技巧</h1>
+		<div class="content-html" id="leanote-content"><h2>使用Google Mock的其他技巧</h2><h2>一、使用仅移动类型的模拟方法</h2><p>C ++ 11引入了只移动类型。 仅移动类型的值可以从一个对象移动到另一个对象，但不能复制。 std :: unique_ptr &lt;T&gt;可能是最常用的move-only类型。</p><p>模拟一个接受和/或返回只移动类型的方法提出了一些挑战，但没有什么不可逾越的。 这个方法教你如何做到。</p><p>假设我们正在开发一个虚构的项目，允许一个帖子和共享片段称为“buzzes”。 您的代码使用以下类型：</p><pre id="leanote_ace_1479193011203_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 315px;">enum&nbsp;class&nbsp;AccessLevel&nbsp;{&nbsp;kInternal,&nbsp;kPublic&nbsp;};
+
+class&nbsp;Buzz&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;explicit&nbsp;Buzz(AccessLevel&nbsp;access)&nbsp;{&nbsp;…&nbsp;}
+&nbsp;&nbsp;...
+};
+
+class&nbsp;Buzzer&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;virtual&nbsp;~Buzzer()&nbsp;{}
+&nbsp;&nbsp;virtual&nbsp;std::unique_ptr&lt;Buzz&gt;&nbsp;MakeBuzz(const&nbsp;std::string&amp;&nbsp;text)&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;bool&nbsp;ShareBuzz(std::unique_ptr&lt;Buzz&gt;&nbsp;buzz,&nbsp;Time&nbsp;timestamp)&nbsp;=&nbsp;0;
+&nbsp;&nbsp;...
+};</pre><p>、、、、、//<span style="color: #ff6600;" data-mce-style="color: #ff6600;">不理解</span><em><span style="color: #ff6600;" data-mce-style="color: #ff6600;">move-only types</span>，了解完再回来看。</em></p><p>&nbsp;<br></p><h2>二、使编译更快</h2><p>不管你相信还是不相信，编译一个模拟类所花费的绝大部分时间是生成它的构造函数和析构函数，因为它们执行不重要的任务（例如验证期望）。 此外，具有不同签名的模拟方法具有不同的类型，因此它们的构造器/析构器需要由编译器单独生成。 因此，如果你模拟许多不同类型的方法，编译你的模拟类真的很慢。</p><p>如果你正在经历缓慢的编译，你可以将你的mock类的构造函数和析构函数的定义从类体中移动到.cpp文件中。 这样，即使你在N个文件中包含你的mock类，编译器只需要生成一次它的构造函数和析构函数，这样就可以更快地编译。</p><p>让我们用一个例子来说明这个想法。 这里是一个mock类的定义在应用它之前：</p><pre id="leanote_ace_1479193339666_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 252px;">//&nbsp;File&nbsp;mock_foo.h.
+...
+class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;//&nbsp;Since&nbsp;we&nbsp;don't&nbsp;declare&nbsp;the&nbsp;constructor&nbsp;or&nbsp;the&nbsp;destructor,
+&nbsp;&nbsp;//&nbsp;the&nbsp;compiler&nbsp;will&nbsp;generate&nbsp;them&nbsp;in&nbsp;every&nbsp;translation&nbsp;unit
+&nbsp;&nbsp;//&nbsp;where&nbsp;this&nbsp;mock&nbsp;class&nbsp;is&nbsp;used.
+
+&nbsp;&nbsp;MOCK_METHOD0(DoThis,&nbsp;int());
+&nbsp;&nbsp;MOCK_METHOD1(DoThat,&nbsp;bool(const&nbsp;char*&nbsp;str));
+&nbsp;&nbsp;...&nbsp;more&nbsp;mock&nbsp;methods&nbsp;...
+};</pre><p>After the change, it would look like:</p><pre id="leanote_ace_1479193357106_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 252px;">//&nbsp;File&nbsp;mock_foo.h.
+...
+class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;//&nbsp;The&nbsp;constructor&nbsp;and&nbsp;destructor&nbsp;are&nbsp;declared,&nbsp;but&nbsp;not&nbsp;defined,&nbsp;here.
+&nbsp;&nbsp;MockFoo();
+&nbsp;&nbsp;virtual&nbsp;~MockFoo();
+
+&nbsp;&nbsp;MOCK_METHOD0(DoThis,&nbsp;int());
+&nbsp;&nbsp;MOCK_METHOD1(DoThat,&nbsp;bool(const&nbsp;char*&nbsp;str));
+&nbsp;&nbsp;...&nbsp;more&nbsp;mock&nbsp;methods&nbsp;...
+};</pre><p>and</p><pre id="leanote_ace_1479193370405_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 168px;">//&nbsp;File&nbsp;mock_foo.cpp.
+#include&nbsp;"path/to/mock_foo.h"
+
+//&nbsp;The&nbsp;definitions&nbsp;may&nbsp;appear&nbsp;trivial,&nbsp;but&nbsp;the&nbsp;functions&nbsp;actually&nbsp;do&nbsp;a
+//&nbsp;lot&nbsp;of&nbsp;things&nbsp;through&nbsp;the&nbsp;constructors/destructors&nbsp;of&nbsp;the&nbsp;member
+//&nbsp;variables&nbsp;used&nbsp;to&nbsp;implement&nbsp;the&nbsp;mock&nbsp;methods.
+MockFoo::MockFoo()&nbsp;{}
+MockFoo::~MockFoo()&nbsp;{}</pre><p>&nbsp;<br></p><h2>三、强制验证</h2><p>当它被destoyed，你友好的模拟对象将自动验证其所有的期望是否已经满足，如果没有将生成Google测试失败。 这是方便的，因为它给你一个少的事情担心。 也就是说，除非你不确定你的模拟对象将被destoyed。</p><p>你的模拟对象怎样最终不会被销毁呢？ 嗯，它可能在堆上创建，并由您测试的代码拥有。 假设在该代码中有一个错误，并且它没有正确删除模拟对象 - 当有实际的错误时，你可能会得到一个合格的测试。</p><p>使用堆检查器是一个好主意，可以减轻关注，但其实现可能不是100％可靠。 所以，有时你想强制谷歌模拟器验证一个模拟对象在它被destructed之前。 你可以这样做与Mock :: VerifyAndClearExpectations（＆mock_object）：</p><pre id="leanote_ace_1479194132080_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 315px;">TEST(MyServerTest,&nbsp;ProcessesRequest)&nbsp;{
+&nbsp;&nbsp;using&nbsp;::testing::Mock;
+
+&nbsp;&nbsp;MockFoo*&nbsp;const&nbsp;foo&nbsp;=&nbsp;new&nbsp;MockFoo;
+&nbsp;&nbsp;EXPECT_CALL(*foo,&nbsp;...)...;
+&nbsp;&nbsp;//&nbsp;...&nbsp;other&nbsp;expectations&nbsp;...
+
+&nbsp;&nbsp;//&nbsp;server&nbsp;now&nbsp;owns&nbsp;foo.
+&nbsp;&nbsp;MyServer&nbsp;server(foo);
+&nbsp;&nbsp;server.ProcessRequest(...);
+
+&nbsp;&nbsp;//&nbsp;In&nbsp;case&nbsp;that&nbsp;server's&nbsp;destructor&nbsp;will&nbsp;forget&nbsp;to&nbsp;delete&nbsp;foo,
+&nbsp;&nbsp;//&nbsp;this&nbsp;will&nbsp;verify&nbsp;the&nbsp;expectations&nbsp;anyway.
+&nbsp;&nbsp;Mock::VerifyAndClearExpectations(foo);
+}&nbsp;&nbsp;//&nbsp;server&nbsp;is&nbsp;destroyed&nbsp;when&nbsp;it&nbsp;goes&nbsp;out&nbsp;of&nbsp;scope&nbsp;here.</pre><p><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">提示</span></strong>：&nbsp;The&nbsp;<code>Mock::VerifyAndClearExpectations()</code>&nbsp;function returns a&nbsp;<code>bool</code>&nbsp;to indicate whether the verification was successful (<code>true</code>&nbsp;for yes), so you can wrap that function call inside a&nbsp;<code>ASSERT_TRUE()</code>&nbsp;if there is no point going further when the verification has failed.</p><h2>四、使用检查点</h2><p>有时你可能想要在你的测试中的各个检查点“重置”一个模拟对象：在每个检查点，你验证模拟对象上的所有现有期望已经满足，然后你设置一些新的期望，如果它新创建。这允许你使用一个模拟对象在“阶段”，其大小都是可管理的。</p><p>一个这样的场景是，在你的测试的SetUp（）函数中，你可能想要把你正在测试的对象放到一个特定的状态，借助一个模拟对象的帮助。一旦在所需的状态，你想在mock对象中清除所有的期望，使在TEST_F体，你可以设置新的期望。</p><p>正如你可能已经想到的，我们在前面看到的Mock :: VerifyAndClearExpectations（）函数可以帮助你。或者，如果你使用ON_CALL（）在mock对象上设置默认操作，并且想要清除默认操作，那么改用Mock :: VerifyAndClear（＆mock_object）。这个函数做什么Mock :: VerifyAndClearExpectations（＆mock_object），并返回相同的bool，加上它清除了mock_object上的ON_CALL（）语句。</p><p>另一个可以用来实现相同效果的技巧是将期望置于序列中，并在特定位置插入对虚拟“检查点”函数的调用。然后你可以验证模拟函数调用确实在正确的时间发生。例如，如果你正在练习代码：</p><pre id="leanote_ace_1479194752333_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 63px;">Foo(1);
+Foo(2);
+Foo(3);</pre><p>。。。。。。。</p><p>。。。。。。。</p><h2>五、模拟析构函数</h2><p>有时你想确保一个模拟对象在正确的时间被破坏，例如。 在调用bar-&gt; A（）之后，但调用bar-&gt; B（）之前。 我们已经知道你可以对mock函数调用的顺序指定约束，所以我们需要做的就是模拟mock函数的析构函数。</p><p>这听起来很简单，除了一个问题：析构函数是一个特殊的语法和特殊语义的函数，MOCK_METHOD0宏不工作：</p><p>&nbsp;<br></p><p>。。。。。</p><h2>六、使用Google Mock和线程</h2><p><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">重要说明：我们在本方法中描述的仅在Google Mock是线程安全的平台上才是真的。</span></strong> 目前这些只是支持pthreads库（这包括Linux和Mac）的平台。 为了使它在其他平台上线程安全，我们只需要在“gtest / internal / gtest-port.h”中实现一些同步操作。</p><p>在单元测试中，最好是在单线程上下文中隔离和测试一段代码。 这避免竞争条件和死锁，并使调试测试更容易。</p><p>然而，许多程序是多线程的，有时候测试我们需要从多个线程敲击它的东西。 Google Mock也为此目的工作。</p><p>记住使用mock的步骤：</p><ol><li>创建一个模拟对象foo。</li><li>使用<code>ON_CALL()</code>&nbsp;and&nbsp;<code>EXPECT_CALL()</code>设置动作和期望。</li><li>测试代码调用foo的方法。</li><li>可选，验证并重置模拟。</li><li>销毁你自己的模拟，或让被测代码摧毁它。 析构函数将自动验证它。</li></ol><p>。。。。。。//需要时再看。</p><h2>七、控制Google Mock打印的多少信息</h2><p>当Google Mock看到有可能成为错误的东西（例如，没有期望的模拟功能被调用，也许是一个无趣的调用，这是允许的，但也许你忘了明确禁止调用），它会打印一些警告消息，包括 函数的参数和返回值。 希望这将提醒你看看是否确实有问题。</p><p>有时你相信你的测试是正确的，可能不喜欢这样友好的信息。 还有一些时候，你正在调试你的测试或者学习你正在测试的代码的行为，并希望你可以观察发生的每个mock调用（包括参数值和返回值）。 显然，一个尺寸不适合所有。</p><p>您可以控制Google Mock使用--gmock_verbose = LEVEL命令行标记的情况，其中LEVEL是具有三个可能值的字符串：</p><ul><li>info：Google Mock将打印所有信息性消息，警告和错误（最冗长）。 在此设置下，Google Mock还会记录对ON_CALL / EXPECT_CALL个宏的任何调用。</li><li>warning：Google Mock将同时打印警告和错误（不太详细）。 这是默认值。</li><li>error：Google Mock只会打印错误（冗长）。</li></ul><p>或者，您可以在测试中调整该标志的值，如：</p><pre id="leanote_ace_1479197144659_0" class="ace-tomorrow brush:c_cpp" data-mce-style="line-height: 1.5; font-size: 14px; height: 21px;">::testing::FLAGS_gmock_verbose = "error";﻿​</pre><p>现在，明智地使用正确的标志启用Google Mock为您更好的服务！</p><h2>八、Gaining Super Vision into Mock Calls</h2><p>您使用Google Mock进行测试。 它失败：Google Mock告诉你，一些期望不令人满意。 但是，你不知道为什么：在匹配器中有某个地方有打字错误？ 你弄乱了EXPECT_CALL的顺序吗？ 还是被测代码做错了什么？ 如何找出原因？</p><p>如果你有X射线视觉，并且实际上可以看到所有EXPECT_CALLs和mock方法调用的跟踪，它们不会是很好吗？ 对于每个调用，您想查看其实际参数值，以及EXPECT_CALL Google Mock认为它匹配吗？</p><p>您可以通过使用--gmock_verbose = info标志运行测试来解锁此权限。 例如，给定测试程序：</p><pre id="leanote_ace_1479197293413_0" class="brush:c_cpp ace-tomorrow">using testing::_;
+using testing::HasSubstr;
+using testing::Return;
+
+class MockFoo {
+ public:
+  MOCK_METHOD2(F, void(const string&amp; x, const string&amp; y));
+};
+
+TEST(Foo, Bar) {
+  MockFoo mock;
+  EXPECT_CALL(mock, F(_, _)).WillRepeatedly(Return());
+  EXPECT_CALL(mock, F("a", "b"));
+  EXPECT_CALL(mock, F("c", HasSubstr("d")));
+
+  mock.F("a", "good");
+  mock.F("a", "b");
+}</pre><p>if you run it with&nbsp;<code>--gmock_verbose=info</code>, you will see this output:</p><pre id="leanote_ace_1479197310864_0" class="brush:c_cpp ace-tomorrow">[ RUN      ] Foo.Bar
+
+foo_test.cc:14: EXPECT_CALL(mock, F(_, _)) invoked
+foo_test.cc:15: EXPECT_CALL(mock, F("a", "b")) invoked
+foo_test.cc:16: EXPECT_CALL(mock, F("c", HasSubstr("d"))) invoked
+foo_test.cc:14: Mock function call matches EXPECT_CALL(mock, F(_, _))...
+    Function call: F(@0x7fff7c8dad40"a", @0x7fff7c8dad10"good")
+foo_test.cc:15: Mock function call matches EXPECT_CALL(mock, F("a", "b"))...
+    Function call: F(@0x7fff7c8dada0"a", @0x7fff7c8dad70"b")
+foo_test.cc:16: Failure
+Actual function call count doesn't match EXPECT_CALL(mock, F("c", HasSubstr("d")))...
+         Expected: to be called once
+           Actual: never called - unsatisfied and active
+[  FAILED  ] Foo.Bar</pre><p>假设错误是第三个EXPECT_CALL中的“c”是拼写错误，应该实际上是“a”。 使用上面的消息，你应该看到实际的F（“a”，“好”）调用由第一个EXPECT_CALL匹配，而不是你想的第三个。 由此可见，第三个EXPECT_CALL写入错误。 案例解决。</p><h2>九、在Emacs中运行测试</h2><p>如果您在Emacs中构建和运行测试，Google Mock和Google测试错误的源文件位置将突出显示。 只要在其中一个上按&lt;Enter&gt;，您就会被带到违规行。 或者，你可以只键入C-x`跳到下一个错误。</p><p>为了使它更容易，你可以添加以下行到〜/ .emacs文件：</p><pre id="leanote_ace_1479197418531_0" class="brush:c_cpp ace-tomorrow">(global-set-key "\M-m"   'compile)  ; m is for make
+(global-set-key [M-down] 'next-error)
+(global-set-key [M-up]   '(lambda () (interactive) (next-error -1)))</pre><p>然后可以键入M-m开始构建，或者M-up / M-down在错误之间来回移动。</p><h2>十、融合Google模拟器源文件</h2><p>Google Mock的实现包括几十个文件（不包括自己的测试）。 有时你可能希望它们被打包在较少的文件，以便你可以轻松地将它们复制到一个新的机器，并开始黑客。 为此，我们在scripts /目录中提供了一个实验性的Python脚本fuse_gmock_files.py（从1.2.0开始）。 假设你在你的机器上安装了Python 2.4或更高版本，只需去那个目录并运行</p><p>。。。。。。//不重要，需要时再看</p><p><br data-mce-bogus="1"></p><p>&nbsp;<br></p><p>&nbsp;</p></div>
+	</div>
+
+<!-- 该js供其它处理 -->
+<script src="../leanote-html.js"></script>
+</body>
+</html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="tool" content="leanote-desktop-app">
+<title>CookBook第三部分-使用动作</title>
+<style>
+
+*{font-family:"lucida grande","lucida sans unicode",lucida,helvetica,"Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
+
+body {
+  margin: 0;
+}
+
+/*公用文字样式*/
+h1{font-size:30px}h2{font-size:24px}h3{font-size:18px}h4{font-size:14px}
+.note-container{
+    width:850px; 
+    margin:auto;
+    padding: 10px 20px;
+    box-shadow: 1px 1px 10px #eee;
+}
+#title {
+  margin: 0;
+}
+table {
+    margin-bottom: 16px;
+    border-collapse: collapse;
+}
+table th, table td {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+}
+table th {
+    font-weight: bold;
+}
+
+table tr {
+    background-color: none;
+    border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+    background-color: rgb(247, 247, 249);
+}
+.mce-item-table, .mce-item-table td, .mce-item-table th, .mce-item-table caption {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  padding: 6px 13px;
+}
+blockquote {
+  border-left-width:10px;
+  background-color:rgba(128,128,128,0.05);
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+  padding:15px 20px;
+  border-left:5px solid rgba(128,128,128,0.075);
+}
+blockquote p {
+  margin-bottom:1.1em;
+  font-size:1em;
+  line-height:1.45
+}
+blockquote ul:last-child,blockquote ol:last-child {
+  margin-bottom:0
+}
+pre {
+  padding: 18px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 3px;
+  display: block;
+}
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  white-space: nowrap;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+.footnote {
+  vertical-align: top;
+  position: relative;
+  top: -0.5em;
+  font-size: .8em;
+}
+
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+pre {
+  word-break:break-word
+}
+p,pre,pre.prettyprint,blockquote {
+  margin:0 0 1.1em
+}
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+.sequence-diagram,.flow-chart {
+  text-align:center;
+  margin-bottom:1.1em
+}
+.sequence-diagram text,.flow-chart text {
+  font-size:15px !important;
+  font-family:"Source Sans Pro",sans-serif !important
+}
+.sequence-diagram [fill="#ffffff"],.flow-chart [fill="#ffffff"] {
+  fill:#f6f6f6
+}
+.sequence-diagram [stroke="#000000"],.flow-chart [stroke="#000000"] {
+  stroke:#3f3f3f
+}
+.sequence-diagram text[stroke="#000000"],.flow-chart text[stroke="#000000"] {
+  stroke:none
+}
+.sequence-diagram [fill="#000"],.flow-chart [fill="#000"],.sequence-diagram [fill="#000000"],.flow-chart [fill="#000000"],.sequence-diagram [fill="black"],.flow-chart [fill="black"] {
+  fill:#3f3f3f
+}
+ul,ol {
+  margin-bottom:1.1em
+}
+ul ul,ol ul,ul ol,ol ol {
+  margin-bottom:1.1em
+}
+kbd {
+  padding:.1em .6em;
+  border:1px solid rgba(63,63,63,0.25);
+  -webkit-box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  font-size:.7em;
+  font-family:sans-serif;
+  background-color:#fff;
+  color:#333;
+  border-radius:3px;
+  display:inline-block;
+  margin:0 .1em;
+  white-space:nowrap
+}
+.toc ul {
+  list-style-type:none;
+  margin-bottom:15px
+}
+</style>
+<!-- 该css供自定义样式 -->
+<link href="../leanote-html.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<div class="note-container">
+		<h1 class="title" id="leanote-title">CookBook第三部分-使用动作</h1>
+		<div class="content-html" id="leanote-content"><h1>使用操作</h1><h2>一、从Mock方法返回引用</h2><p>如果一个mock函数的返回类型是一个引用，你需要使用ReturnRef（）而不是Return（）来返回一个结果：</p><pre id="leanote_ace_1478851538481_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 252px;">using&nbsp;::testing::ReturnRef;
+
+class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;MOCK_METHOD0(GetBar,&nbsp;Bar&amp;());
+};
+...
+
+&nbsp;&nbsp;MockFoo&nbsp;foo;
+&nbsp;&nbsp;Bar&nbsp;bar;
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;GetBar())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(ReturnRef(bar));</pre><h2>二、从Mock方法返回实时值</h2><p>当创建操作时，Return（x）操作保存x的副本，并且始终在执行时返回相同的值。有时您可能想要返回x的实值（即在执行操作时的值）。</p><p>如果模拟函数的返回类型是一个引用，你可以使用ReturnRef（x），如上一个技巧（“从Mock方法返回引用”）所示。 但是，Google Mock不允许在返回类型不是引用的mock函数中使用ReturnRef（），因为这通常表示用户错误。 所以，你该怎么办？</p><p>你可能会试着尝试ByRef（）：</p><pre id="leanote_ace_1478851757185_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 294px;">using&nbsp;testing::ByRef;
+using&nbsp;testing::Return;
+
+class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;MOCK_METHOD0(GetValue,&nbsp;int());
+};
+...
+&nbsp;&nbsp;int&nbsp;x&nbsp;=&nbsp;0;
+&nbsp;&nbsp;MockFoo&nbsp;foo;
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;GetValue())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillRepeatedly(Return(ByRef(x)));
+&nbsp;&nbsp;x&nbsp;=&nbsp;42;
+&nbsp;&nbsp;EXPECT_EQ(42,&nbsp;foo.GetValue());</pre><div id="gt-src-c" class="g-unit">&nbsp;<br></div><div id="gt-res-c" class="g-unit"><div id="gt-res-p"><div id="gt-res-data"><div id="gt-res-wrap"><div id="gt-res-content"><div dir="ltr"><span id="result_box" class="short_text" lang="zh-CN">不幸的是，它不工作在这里。&nbsp;<span class="">上面的代码将失败，出现错误：</span></span></div></div></div></div></div></div><pre id="leanote_ace_1478851892005_0" class="ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 63px;">Value&nbsp;of:&nbsp;foo.GetValue()
+&nbsp;&nbsp;Actual:&nbsp;0
+Expected:&nbsp;42﻿​</pre><p>&nbsp; 原因是在创建操作时，而不是在执行操作时，Return(value) 将值转换为mock函数的实际返回类型。 （当值是引用一些临时对象的代理对象时，选择此行为是为了安全）。因此，当期望设置时，ByRef（x）将转换为int值（而不是const int＆） ，Return（ByRef(x)）将总是返回0。</p><p>提供ReturnPointee（指针）来具体解决这个问题。 它返回执行动作时指针指向的值：</p><pre id="leanote_ace_1478853833374_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 168px;">using&nbsp;testing::ReturnPointee;
+...
+&nbsp;&nbsp;int&nbsp;x&nbsp;=&nbsp;0;
+&nbsp;&nbsp;MockFoo&nbsp;foo;
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;GetValue())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillRepeatedly(ReturnPointee(&amp;x));&nbsp;&nbsp;//&nbsp;Note&nbsp;the&nbsp;&amp;&nbsp;here.
+&nbsp;&nbsp;x&nbsp;=&nbsp;42;
+&nbsp;&nbsp;EXPECT_EQ(42,&nbsp;foo.GetValue());&nbsp;&nbsp;//&nbsp;This&nbsp;will&nbsp;succeed&nbsp;now.</pre><h2>三、组合操作</h2><p>当一个函数被调用时想要做一件以上的事情？ 没关系。 DoAll（）允许你每次都做一系列的动作。 只使用序列中最后一个操作的返回值。</p><pre id="leanote_ace_1478854112542_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 273px;">using&nbsp;::testing::DoAll;
+
+class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;MOCK_METHOD1(Bar,&nbsp;bool(int&nbsp;n));
+};
+...
+
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;Bar(_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(DoAll(action_1,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action_2,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action_n));</pre><h2>四、Mock副作用</h2><p>有时一种方法的效果不是通过返回值而是通过副作用。 例如，它可以更改某些全局状态或修改输出参数。 为了模拟副作用，通常可以通过实现:: testing :: ActionInterface来定义自己的动作。</p><p>如果所有您需要做的是更改输出参数，内置的SetArgPointee（）操作是方便的：</p><pre id="leanote_ace_1478854396734_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 252px;">using&nbsp;::testing::SetArgPointee;
+
+class&nbsp;MockMutator&nbsp;:&nbsp;public&nbsp;Mutator&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;MOCK_METHOD2(Mutate,&nbsp;void(bool&nbsp;mutate,&nbsp;int*&nbsp;value));
+&nbsp;&nbsp;...
+};
+...
+
+&nbsp;&nbsp;MockMutator&nbsp;mutator;
+&nbsp;&nbsp;EXPECT_CALL(mutator,&nbsp;Mutate(true,&nbsp;_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(SetArgPointee&lt;1&gt;(5));//将5赋值给第N个参数指向的值</pre><p>在这个例子中，当mutator.Mutate（）被调用时，我们将5赋值给参数＃1（基于0）指向的int变量。</p><p>SetArgPointee()方便地为您传递给它的值的设置内部副本，消除了将值保持在范围和活动状态的需要。 然而，这意味着值必须具有复制构造函数和赋值运算符。</p><p>如果mock方法也需要返回一个值，你可以用Return（）使用DoAll（）链接SetArgPointee（）：</p><pre id="leanote_ace_1478854934932_0" class="brush:c_cpp ace-tomorrow ace_focus" data-mce-style="line-height: 1.5; font-size: 14px; height: 315px;">using&nbsp;::testing::_;
+using&nbsp;::testing::Return;
+using&nbsp;::testing::SetArgPointee;
+
+class&nbsp;MockMutator&nbsp;:&nbsp;public&nbsp;Mutator&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;...
+&nbsp;&nbsp;MOCK_METHOD1(MutateInt,&nbsp;bool(int*&nbsp;value));
+};
+...
+
+&nbsp;&nbsp;MockMutator&nbsp;mutator;
+&nbsp;&nbsp;EXPECT_CALL(mutator,&nbsp;MutateInt(_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(DoAll(SetArgPointee&lt;0&gt;(5),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return(true)));</pre><p>如果输出参数是数组，请改用SetArrayArgument &lt;N&gt;（first，last）操作。 它将源范围[first，last）中的元素复制到第N（基于0）参数指向的数组：</p><pre id="leanote_ace_1479188357279_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 294px;">using&nbsp;::testing::NotNull;
+using&nbsp;::testing::SetArrayArgument;
+
+class&nbsp;MockArrayMutator&nbsp;:&nbsp;public&nbsp;ArrayMutator&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;MOCK_METHOD2(Mutate,&nbsp;void(int*&nbsp;values,&nbsp;int&nbsp;num_values));
+&nbsp;&nbsp;...
+};
+...
+
+&nbsp;&nbsp;MockArrayMutator&nbsp;mutator;
+&nbsp;&nbsp;int&nbsp;values[5]&nbsp;=&nbsp;{&nbsp;1,&nbsp;2,&nbsp;3,&nbsp;4,&nbsp;5&nbsp;};
+&nbsp;&nbsp;EXPECT_CALL(mutator,&nbsp;Mutate(NotNull(),&nbsp;5))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(SetArrayArgument&lt;0&gt;(values,&nbsp;values&nbsp;+&nbsp;5));</pre><p>&nbsp;This also works when the argument is an output iterator:<br></p><pre id="leanote_ace_1479188371963_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 357px;">using&nbsp;::testing::_;
+using&nbsp;::testing::SeArrayArgument;
+
+class&nbsp;MockRolodex&nbsp;:&nbsp;public&nbsp;Rolodex&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;MOCK_METHOD1(GetNames,&nbsp;void(std::back_insert_iterator&lt;vector&lt;string&gt;&nbsp;&gt;));
+&nbsp;&nbsp;...
+};
+...
+
+&nbsp;&nbsp;MockRolodex&nbsp;rolodex;
+&nbsp;&nbsp;vector&lt;string&gt;&nbsp;names;
+&nbsp;&nbsp;names.push_back("George");
+&nbsp;&nbsp;names.push_back("John");
+&nbsp;&nbsp;names.push_back("Thomas");
+&nbsp;&nbsp;EXPECT_CALL(rolodex,&nbsp;GetNames(_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(SetArrayArgument&lt;0&gt;(names.begin(),&nbsp;names.end()));</pre><h2>五、基于状态更改模拟对象的行为</h2><p>如果你期望一个调用改变一个mock对象的行为，你可以使用:: testing :: InSequence来指定调用前后的不同行为：</p><pre id="leanote_ace_1479188479588_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 273px;">using&nbsp;::testing::InSequence;
+using&nbsp;::testing::Return;
+
+...
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;InSequence&nbsp;seq;
+&nbsp;&nbsp;&nbsp;&nbsp;EXPECT_CALL(my_mock,&nbsp;IsDirty())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillRepeatedly(Return(true));
+&nbsp;&nbsp;&nbsp;&nbsp;EXPECT_CALL(my_mock,&nbsp;Flush());
+&nbsp;&nbsp;&nbsp;&nbsp;EXPECT_CALL(my_mock,&nbsp;IsDirty())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillRepeatedly(Return(false));
+&nbsp;&nbsp;}
+&nbsp;&nbsp;my_mock.FlushIfDirty();</pre><p>&nbsp;这使得my_mock.IsDirty（）在调用my_mock.Flush（）之前返回true，之后返回false。</p><p>如果行为更改更复杂，您可以将效果存储在变量中，并使mock方法从该变量获取其返回值：</p><pre id="leanote_ace_1479188760280_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 252px;">using ::testing::_;
+using ::testing::SaveArg;
+using ::testing::Return;
+
+ACTION_P(ReturnPointee, p) { return *p; }
+...
+  int previous_value = 0;
+  EXPECT_CALL(my_mock, GetPrevValue())
+      .WillRepeatedly(ReturnPointee(&amp;previous_value));
+  EXPECT_CALL(my_mock, UpdateValue(_))
+      .WillRepeatedly(SaveArg&lt;0&gt;(&amp;previous_value));
+  my_mock.DoSomethingToUpdateValue();</pre><p>&nbsp;这里my_mock.GetPrevValue（）将总是返回最后一个UpdateValue（）调用的参数。</p><h2>六、设置返回类型的默认值</h2><p>如果一个mock方法的返回类型是一个内置的C ++类型或指针，默认情况下它将返回0。 此外，在C ++ 11及以上版本中，默认情况下，返回类型具有默认构造函数的mock方法将返回默认构造的值。 如果此默认值不适用于您，则只需指定操作。</p><p>有时，您可能想要更改此默认值，或者您可能想要为Google Mock不知道的类型指定默认值。 你可以使用:: testing :: DefaultValue类模板：</p><pre id="leanote_ace_1479189064282_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 420px;">class MockFoo : public Foo {
+ public:
+  MOCK_METHOD0(CalculateBar, Bar());
+};
+...
+
+  Bar default_bar;
+  // Sets the default return value for type Bar.
+  DefaultValue&lt;Bar&gt;::Set(default_bar);
+
+  MockFoo foo;
+
+  // We don't need to specify an action here, as the default
+  // return value works for us.
+  EXPECT_CALL(foo, CalculateBar());
+
+  foo.CalculateBar();  // This should return default_bar.
+
+  // Unsets the default return value.
+  DefaultValue&lt;Bar&gt;::Clear();&nbsp;</pre><div id="gt-src-c" class="g-unit"><div id="gt-src-p"><div id="gt-src-wrap" class=""></div></div></div><div id="gt-res-c" class="g-unit"><div id="gt-res-p"><div id="gt-res-data"><div id="gt-res-wrap"><div id="gt-res-content"><div dir="ltr"><span id="result_box" class="" lang="zh-CN">请注意，更改类型的默认值可能会使您难以理解测试。&nbsp;我们建议您慎重使用此功能。&nbsp;<span class="">例如，您可能需要确保Set（）和Clear（）调用在您的使用mock类的代码旁边。</span></span></div></div></div></div></div></div><h2>七、设置Mock方法的默认操作</h2><p>您已学习如何更改给定类型的默认值。 但是，这可能太粗糙为您的目的：也许你有两个模拟方法与相同的返回类型，你希望他们有不同的行为。 ON_CALL（）宏允许你在方法级别自定义你的模拟行为：<br></p><pre id="leanote_ace_1479189383436_0" class="ace-tomorrow brush:c_cpp" data-mce-style="line-height: 1.5; font-size: 14px; height: 378px;">using ::testing::_;
+using ::testing::AnyNumber;
+using ::testing::Gt;
+using ::testing::Return;
+...
+  ON_CALL(foo, Sign(_))
+      .WillByDefault(Return(-1));
+  ON_CALL(foo, Sign(0))
+      .WillByDefault(Return(0));
+  ON_CALL(foo, Sign(Gt(0)))
+      .WillByDefault(Return(1));
+
+  EXPECT_CALL(foo, Sign(_))
+      .Times(AnyNumber());
+
+  foo.Sign(5);   // This should return 1.
+  foo.Sign(-9);  // This should return -1.
+  foo.Sign(0);   // This should return 0.﻿​</pre><p>&nbsp;。。。/未完，需要在看。<br></p><p>&nbsp;</p><h2>八、使用函数/方法/ Functor作为操作</h2><p>如果内置操作不适合您，您可以轻松地使用现有的函数，方法或函子作为操作：</p><pre id="leanote_ace_1479189465657_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 546px;">using ::testing::_;
+using ::testing::Invoke;
+
+class MockFoo : public Foo {
+ public:
+  MOCK_METHOD2(Sum, int(int x, int y));
+  MOCK_METHOD1(ComplexJob, bool(int x));
+};
+
+int CalculateSum(int x, int y) { return x + y; }
+
+class Helper {
+ public:
+  bool ComplexJob(int x);
+};
+...
+
+  MockFoo foo;
+  Helper helper;
+  EXPECT_CALL(foo, Sum(_, _))
+      .WillOnce(Invoke(CalculateSum));
+  EXPECT_CALL(foo, ComplexJob(_))
+      .WillOnce(Invoke(&amp;helper, &amp;Helper::ComplexJob));
+
+  foo.Sum(5, 6);       // Invokes CalculateSum(5, 6).
+  foo.ComplexJob(10);  // Invokes helper.ComplexJob(10);&nbsp;</pre><p><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">&nbsp;唯一的要求</span></strong>是函数的类型等必须与mock函数的签名兼容，这意味着后者(Sum)的参数可以隐式转换为前者(CalculateSum)的相应参数，前者的返回类型可以隐式转换为 后者的。 所以，你可以调用类型与mock函数不完全相同的东西，只要它是安全的.<br></p><h2>九、调用没有参数的函数/方法/函数</h2><p>Invoke（）对于执行更复杂的操作非常有用。 它将模拟函数的参数传递给被调用（真实的）的函数或函子，以使被调用者具有调用的完整上下文。 如果被调用的函数对某些或所有参数不感兴趣，它可以简单地忽略它们。</p><p>然而，一个常见的模式是测试作者想调用没有模拟函数的参数的函数。Invoke（）允许她使用一个包装函数，在调用下划线空函数之前抛弃参数。 不用说，这可能是乏味的，并且掩盖了测试的意图。</p><p>InvokeWithoutArgs（）解决这个问题。 它类似于Invoke（），除了它不将模拟函数的参数传递给被调用者。 这里有一个例子：</p><pre id="leanote_ace_1479190189976_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 336px;">using ::testing::_;
+using ::testing::InvokeWithoutArgs;
+
+class MockFoo : public Foo {
+ public:
+  MOCK_METHOD1(ComplexJob, bool(int n));
+};
+
+bool Job1() { ... }
+...
+
+  MockFoo foo;
+  EXPECT_CALL(foo, ComplexJob(_))
+      .WillOnce(InvokeWithoutArgs(Job1));
+
+  foo.ComplexJob(10);  // Invokes Job1().&nbsp;</pre><h2>十、调用模拟函数的参数</h2><p>有时，模拟函数将接收<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">函数指针</span></strong>或函子（换句话说，“可调用”）作为参数，例如。</p><pre id="leanote_ace_1479190346903_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 84px;">class MockFoo : public Foo {
+ public:
+  MOCK_METHOD2(DoThis, bool(int n, bool (*fp)(int)));
+};</pre><p>and you may want to invoke this callable argument:</p><pre id="leanote_ace_1479190362695_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 147px;">using ::testing::_;
+...
+  MockFoo foo;
+  EXPECT_CALL(foo, DoThis(_, _))
+      .WillOnce(...);
+  // Will execute (*fp)(5), where fp is the
+  // second argument DoThis() receives.</pre><p>你需要引用一个mock函数参数，但C ++没有lambda，所以你必须定义自己的动作。Google Mock有一个操作来解决这个问题：</p><pre id="leanote_ace_1479190742245_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 21px;"> InvokeArgument&lt;N&gt;(arg_1, arg_2, ..., arg_m)</pre><p>将调用mock函数接收的第N个（0为基础）参数，arg_1, arg_2, ..., arg_m就被作为参数传入。 无论参数是函数指针还是functor，Google Mock都会处理它们。</p><p>有了这个，你可以写：</p><pre id="leanote_ace_1479190938018_0" class="brush:c_cpp ace-tomorrow">using ::testing::_;
+using ::testing::InvokeArgument;
+...
+  EXPECT_CALL(foo, DoThis(_, _))
+      .WillOnce(InvokeArgument&lt;1&gt;(5));
+  // Will execute (*fp)(5), where fp is the
+  // second argument DoThis() receives.</pre><p>如果callable通过引用接受参数怎么办？ 没问题 - 只是换行ByRef（）：</p><pre id="leanote_ace_1479191001414_0" class="brush:c_cpp ace-tomorrow">...
+  MOCK_METHOD1(Bar, bool(bool (*fp)(int, const Helper&amp;)));
+...
+using ::testing::_;
+using ::testing::ByRef;
+using ::testing::InvokeArgument;
+...
+
+  MockFoo foo;
+  Helper helper;
+  ...
+  EXPECT_CALL(foo, Bar(_))
+      .WillOnce(InvokeArgument&lt;0&gt;(5, ByRef(helper)));
+  // ByRef(helper) guarantees that a reference to helper, not a copy of it,
+  // will be passed to the callable.</pre><p>如果callable通过引用接受一个参数，而我们不在ByRef（）中包装参数呢？ 然后InvokeArgument（）将创建参数的副本，并将引用传递给可调用的副本，而不是对原始值的引用。 <strong><span style="color: rgb(255, 102, 0);">当参数是临时值时</span></strong>，这是特别方便的：</p><pre id="leanote_ace_1479191892997_0" class="brush:c_cpp ace-tomorrow">...
+  MOCK_METHOD1(DoThat, bool(bool (*f)(const double&amp; x, const string&amp; s)));
+...
+using ::testing::_;
+using ::testing::InvokeArgument;
+...
+
+  MockFoo foo;
+  ...
+  EXPECT_CALL(foo, DoThat(_))
+      .WillOnce(InvokeArgument&lt;0&gt;(5.0, string("Hi")));
+  // Will execute (*f)(5.0, string("Hi")), where f is the function pointer
+  // DoThat() receives.  Note that the values 5.0 and string("Hi") are
+  // temporary and dead once the EXPECT_CALL() statement finishes.  Yet
+  // it's fine to perform this action later, since a copy of the values
+  // are kept inside the InvokeArgument action.</pre><h2>十 一、忽略动作的结果</h2><p>有时你有一个动作返回一些东西，但是你需要一个返回void的动作（也许你想在一个返回void的mock函数中使用它，或者需要在DoAll（）中使用它，它不是最后一个 列表）。 IgnoreResult（）允许你这样做。 例如：</p><pre id="leanote_ace_1479192010838_0" class="brush:c_cpp ace-tomorrow">using ::testing::_;
+using ::testing::Invoke;
+using ::testing::Return;
+
+int Process(const MyData&amp; data);
+string DoSomething();
+
+class MockFoo : public Foo {
+ public:
+  MOCK_METHOD1(Abc, void(const MyData&amp; data));
+  MOCK_METHOD0(Xyz, bool());
+};
+...
+
+  MockFoo foo;
+  EXPECT_CALL(foo, Abc(_))
+  // .WillOnce(Invoke(Process));
+  // The above line won't compile as Process() returns int but Abc() needs
+  // to return void.
+      .WillOnce(IgnoreResult(Invoke(Process)));
+
+  EXPECT_CALL(foo, Xyz())
+      .WillOnce(DoAll(IgnoreResult(Invoke(DoSomething)),
+      // Ignores the string DoSomething() returns.
+                      Return(true)));</pre><p><strong><span style="color: rgb(255, 102, 0);">请注意</span></strong>，您不能对已经返回void的操作使用IgnoreResult（）。 这样做会导致丑陋的编译器错误。</p><h2>十二、选择动作的参数</h2><p>假设你有一个带有七个参数的模拟函数Foo（），并且你有一个自定义动作，当你调用Foo（）时调用这个动作。 麻烦的是，自定义动作只需要三个参数：</p><pre id="leanote_ace_1479192361173_0" class="brush:c_cpp ace-tomorrow">using ::testing::_;
+using ::testing::Invoke;
+...
+  MOCK_METHOD7(Foo, bool(bool visible, const string&amp; name, int x, int y,
+                         const map&lt;pair&lt;int, int&gt;, double&gt;&amp; weight,
+                         double min_weight, double max_wight));
+...
+
+bool IsVisibleInQuadrant1(bool visible, int x, int y) {
+  return visible &amp;&amp; x &gt;= 0 &amp;&amp; y &gt;= 0;
+}
+...
+
+  EXPECT_CALL(mock, Foo(_, _, _, _, _, _, _))
+      .WillOnce(Invoke(IsVisibleInQuadrant1));  // Uh, won't compile. :-(</pre><p>。。。。。//用到时再来整理。</p><h2>十三、忽略操作函数中的参数</h2><p>选择动作的参数配方给了我们一个方法来做一个模拟函数和一个动作与不兼容的参数列表适配。 缺点是包装Action中的WithArgs &lt;...&gt;（）可以让编写测试的人很乏味。</p><p>如果你正在定义一个用于Invoke *（）的函数，方法或functor，并且你对它的一些参数不感兴趣，那么WithArgs的一个替代方法是将不感兴趣的参数声明为Unused。 这使得定义不那么混乱，并且在不感兴趣的参数的类型改变的情况下不那么脆弱。 它也可以增加动作函数可以重复使用的机会。 例如，给定</p><pre id="leanote_ace_1479192624498_0" class="brush:c_cpp ace-tomorrow">MOCK_METHOD3(Foo, double(const string&amp; label, double x, double y));
+MOCK_METHOD3(Bar, double(int index, double x, double y));</pre><p>instead of</p><pre id="leanote_ace_1479192639747_0" class="brush:c_cpp ace-tomorrow">using ::testing::_;
+using ::testing::Invoke;
+
+double DistanceToOriginWithLabel(const string&amp; label, double x, double y) {
+  return sqrt(x*x + y*y);
+}
+
+double DistanceToOriginWithIndex(int index, double x, double y) {
+  return sqrt(x*x + y*y);
+}
+...
+
+  EXEPCT_CALL(mock, Foo("abc", _, _))
+      .WillOnce(Invoke(DistanceToOriginWithLabel));
+  EXEPCT_CALL(mock, Bar(5, _, _))
+      .WillOnce(Invoke(DistanceToOriginWithIndex));</pre><p>you could write</p><pre id="leanote_ace_1479192671364_0" class="brush:c_cpp ace-tomorrow">using ::testing::_;
+using ::testing::Invoke;
+using ::testing::Unused;
+
+double DistanceToOrigin(Unused, double x, double y) {
+  return sqrt(x*x + y*y);
+}
+...
+
+  EXEPCT_CALL(mock, Foo("abc", _, _))
+      .WillOnce(Invoke(DistanceToOrigin));
+  EXEPCT_CALL(mock, Bar(5, _, _))
+      .WillOnce(Invoke(DistanceToOrigin));</pre><h2>十四、共享操作</h2><p>就像匹配器一样，Google Mock动作对象包含一个指向ref计数的实现对象的指针。 因此，复制动作也是允许和非常有效的。 当引用实现对象的最后一个操作失败时，实现对象将被删除。</p><p>如果你有一些复杂的操作，你想一次又一次地使用，你可能不必每次从头开始构建它。 如果操作没有内部状态（即如果它总是做同样的事情，无论它被调用了多少次），你可以将它分配给一个操作变量并重复使用该变量。 例如：</p><pre id="leanote_ace_1479192763574_0" class="brush:c_cpp ace-tomorrow"> Action&lt;bool(int*)&gt; set_flag = DoAll(SetArgPointee&lt;0&gt;(5),
+                                      Return(true));
+  ... use set_flag in .WillOnce() and .WillRepeatedly() ...</pre><p>。。。。/需要时再看</p><p><br data-mce-bogus="1"></p><p><br data-mce-bogus="1"></p><p><br data-mce-bogus="1"></p><p><br data-mce-bogus="1"></p><p><br data-mce-bogus="1"></p><p><br data-mce-bogus="1"></p></div>
+	</div>
+
+<!-- 该js供其它处理 -->
+<script src="../leanote-html.js"></script>
+</body>
+</html>

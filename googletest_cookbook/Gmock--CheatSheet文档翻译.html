@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="tool" content="leanote-desktop-app">
+<title>CheatSheet文档翻译</title>
+<style>
+
+*{font-family:"lucida grande","lucida sans unicode",lucida,helvetica,"Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
+
+body {
+  margin: 0;
+}
+
+/*公用文字样式*/
+h1{font-size:30px}h2{font-size:24px}h3{font-size:18px}h4{font-size:14px}
+.note-container{
+    width:850px; 
+    margin:auto;
+    padding: 10px 20px;
+    box-shadow: 1px 1px 10px #eee;
+}
+#title {
+  margin: 0;
+}
+table {
+    margin-bottom: 16px;
+    border-collapse: collapse;
+}
+table th, table td {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+}
+table th {
+    font-weight: bold;
+}
+
+table tr {
+    background-color: none;
+    border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+    background-color: rgb(247, 247, 249);
+}
+.mce-item-table, .mce-item-table td, .mce-item-table th, .mce-item-table caption {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  padding: 6px 13px;
+}
+blockquote {
+  border-left-width:10px;
+  background-color:rgba(128,128,128,0.05);
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+  padding:15px 20px;
+  border-left:5px solid rgba(128,128,128,0.075);
+}
+blockquote p {
+  margin-bottom:1.1em;
+  font-size:1em;
+  line-height:1.45
+}
+blockquote ul:last-child,blockquote ol:last-child {
+  margin-bottom:0
+}
+pre {
+  padding: 18px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 3px;
+  display: block;
+}
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  white-space: nowrap;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+.footnote {
+  vertical-align: top;
+  position: relative;
+  top: -0.5em;
+  font-size: .8em;
+}
+
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+pre {
+  word-break:break-word
+}
+p,pre,pre.prettyprint,blockquote {
+  margin:0 0 1.1em
+}
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+.sequence-diagram,.flow-chart {
+  text-align:center;
+  margin-bottom:1.1em
+}
+.sequence-diagram text,.flow-chart text {
+  font-size:15px !important;
+  font-family:"Source Sans Pro",sans-serif !important
+}
+.sequence-diagram [fill="#ffffff"],.flow-chart [fill="#ffffff"] {
+  fill:#f6f6f6
+}
+.sequence-diagram [stroke="#000000"],.flow-chart [stroke="#000000"] {
+  stroke:#3f3f3f
+}
+.sequence-diagram text[stroke="#000000"],.flow-chart text[stroke="#000000"] {
+  stroke:none
+}
+.sequence-diagram [fill="#000"],.flow-chart [fill="#000"],.sequence-diagram [fill="#000000"],.flow-chart [fill="#000000"],.sequence-diagram [fill="black"],.flow-chart [fill="black"] {
+  fill:#3f3f3f
+}
+ul,ol {
+  margin-bottom:1.1em
+}
+ul ul,ol ul,ul ol,ol ol {
+  margin-bottom:1.1em
+}
+kbd {
+  padding:.1em .6em;
+  border:1px solid rgba(63,63,63,0.25);
+  -webkit-box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  font-size:.7em;
+  font-family:sans-serif;
+  background-color:#fff;
+  color:#333;
+  border-radius:3px;
+  display:inline-block;
+  margin:0 .1em;
+  white-space:nowrap
+}
+.toc ul {
+  list-style-type:none;
+  margin-bottom:15px
+}
+</style>
+<!-- 该css供自定义样式 -->
+<link href="../leanote-html.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<div class="note-container">
+		<h1 class="title" id="leanote-title">CheatSheet文档翻译</h1>
+		<div class="content-html" id="leanote-content"><h2>一、定义一个模拟类</h2><h3>1. 模拟一个正常的类，就是接口类</h3><p>&nbsp; 给：</p><pre id="leanote_ace_1478567376936_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 168px;">class&nbsp;Foo&nbsp;{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;virtual&nbsp;~Foo();
+&nbsp;&nbsp;virtual&nbsp;int&nbsp;GetSize()&nbsp;const&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;string&nbsp;Describe(const&nbsp;char*&nbsp;name)&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;string&nbsp;Describe(int&nbsp;type)&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;bool&nbsp;Process(Bar&nbsp;elem,&nbsp;int&nbsp;count)&nbsp;=&nbsp;0;
+};</pre><p>(note that&nbsp;<code>~Foo()</code>&nbsp;must&nbsp;be virtual) we can define its mock as，定义模拟类。</p><pre id="leanote_ace_1478567406960_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 168px;">#include&nbsp;"gmock/gmock.h"
+
+class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;&nbsp;MOCK_CONST_METHOD0(GetSize,&nbsp;int());
+&nbsp;&nbsp;MOCK_METHOD1(Describe,&nbsp;string(const&nbsp;char*&nbsp;name));
+&nbsp;&nbsp;MOCK_METHOD1(Describe,&nbsp;string(int&nbsp;type));
+&nbsp;&nbsp;MOCK_METHOD2(Process,&nbsp;bool(Bar&nbsp;elem,&nbsp;int&nbsp;count));
+};</pre><p>创建一个“nice”模拟对象忽略所有无趣的调用，或一个“strict”模拟对象，将它们视为失败：</p><pre id="leanote_ace_1478567594850_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 42px;">NiceMock&lt;MockFoo&gt;&nbsp;nice_foo;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;The&nbsp;type&nbsp;is&nbsp;a&nbsp;subclass&nbsp;of&nbsp;MockFoo.
+StrictMock&lt;MockFoo&gt;&nbsp;strict_foo;&nbsp;//&nbsp;The&nbsp;type&nbsp;is&nbsp;a&nbsp;subclass&nbsp;of&nbsp;MockFoo.</pre><p>&nbsp;<br></p><h3>2. 模拟一个类模板</h3><p>To mock：</p><pre id="leanote_ace_1478567648894_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 168px;">template&nbsp;&lt;typename&nbsp;Elem&gt;
+class&nbsp;StackInterface&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;...
+&nbsp;&nbsp;virtual&nbsp;~StackInterface();
+&nbsp;&nbsp;virtual&nbsp;int&nbsp;GetSize()&nbsp;const&nbsp;=&nbsp;0;
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;Push(const&nbsp;Elem&amp;&nbsp;x)&nbsp;=&nbsp;0;
+};</pre><p>(note that&nbsp;<code>~StackInterface()</code>&nbsp;must&nbsp;be virtual) just append&nbsp;<code>_T</code>&nbsp;to the&nbsp;<code>MOCK_*</code>&nbsp;macros:</p><pre id="leanote_ace_1478567700782_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 147px;">template&nbsp;&lt;typename&nbsp;Elem&gt;
+class&nbsp;MockStack&nbsp;:&nbsp;public&nbsp;StackInterface&lt;Elem&gt;&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;...
+&nbsp;&nbsp;MOCK_CONST_METHOD0_T(GetSize,&nbsp;int());
+&nbsp;&nbsp;MOCK_METHOD1_T(Push,&nbsp;void(const&nbsp;Elem&amp;&nbsp;x));
+};</pre><h3>3. 指定模拟函数的调用约定</h3><p>如果您的mock函数<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">不使用默认调用约定</span></strong>，您可以通过将_WITH_CALLTYPE附加到前两个部分中描述的任何宏并指定调用约定作为宏的第一个参数来指定它。例如，</p><pre id="leanote_ace_1478567934172_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 63px;">MOCK_METHOD_1_WITH_CALLTYPE（STDMETHODCALLTYPE，Foo，bool（int&nbsp;n））;
+MOCK_CONST_METHOD2_WITH_CALLTYPE（STDMETHODCALLTYPE，Bar，int（double&nbsp;x，double&nbsp;y））;﻿​</pre><p>其中STDMETHODCALLTYPE由Windows上的&lt;objbase.h&gt;定义。</p><h2>二、在测试中使用模拟器</h2><p>典型的流程是：</p><ol><li>导入您需要使用的Google Mock名称。所有Google Mock名称都位于测试命名空间中，除非它们是宏或其他注释。</li><li>创建模拟对象。</li><li>（可选）设置模拟对象的默认操作。</li><li>设置你对模拟对象的期望（他们怎么叫？他们做什么？）。</li><li>使用模拟对象的练习代码;如有必要，请使用Google Test断言检查结果。</li><li>当模拟对象被破坏时，Google Mock会自动验证所有对其的期望是否满足。</li></ol><p>这里是一个例子：</p><pre id="leanote_ace_1478568135218_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 336px;">using&nbsp;::testing::Return;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#1
+
+TEST(BarTest,&nbsp;DoesThis)&nbsp;{
+&nbsp;&nbsp;MockFoo&nbsp;foo;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#2
+
+&nbsp;&nbsp;ON_CALL(foo,&nbsp;GetSize())&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#3
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillByDefault(Return(1));
+&nbsp;&nbsp;//&nbsp;...&nbsp;other&nbsp;default&nbsp;actions&nbsp;...
+
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;Describe(5))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#4
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.Times(3)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillRepeatedly(Return("Category&nbsp;5"));
+&nbsp;&nbsp;//&nbsp;...&nbsp;other&nbsp;expectations&nbsp;...
+
+&nbsp;&nbsp;EXPECT_EQ("good",&nbsp;MyProductionFunction(&amp;foo));&nbsp;&nbsp;//&nbsp;#5
+}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;#6</pre><h2>三、设置默认操作</h2><p>Google Mock对任何返回<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">void，bool，数值或指针</span></strong>的函数都有一个内置的默认动作。</p><p>要为<span style="color: #ff6600;" data-mce-style="color: #ff6600;">全局</span>返回类型T的函数自定义默认操作：</p><pre id="leanote_ace_1478568507643_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 210px;">using&nbsp;::testing::DefaultValue;
+
+//&nbsp;Sets&nbsp;the&nbsp;default&nbsp;value&nbsp;to&nbsp;be&nbsp;returned.&nbsp;T&nbsp;must&nbsp;be&nbsp;CopyConstructible.
+DefaultValue&lt;T&gt;::Set(value);
+//&nbsp;Sets&nbsp;a&nbsp;factory.&nbsp;Will&nbsp;be&nbsp;invoked&nbsp;on&nbsp;demand.&nbsp;T&nbsp;must&nbsp;be&nbsp;MoveConstructible.
+//&nbsp;&nbsp;&nbsp;T&nbsp;MakeT();
+DefaultValue&lt;T&gt;::SetFactory(&amp;MakeT);
+//&nbsp;...&nbsp;use&nbsp;the&nbsp;mocks&nbsp;...
+//&nbsp;Resets&nbsp;the&nbsp;default&nbsp;value.
+DefaultValue&lt;T&gt;::Clear();</pre><p>要自定义<span style="color: #ff6600;" data-mce-style="color: #ff6600;">特定方法</span>的默认操作，请使用ON_CALL（）：</p><pre id="leanote_ace_1478568536885_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 63px;">ON_CALL(mock_object,&nbsp;method(matchers))
+&nbsp;&nbsp;&nbsp;&nbsp;.With(multi_argument_matcher)&nbsp;&nbsp;?
+&nbsp;&nbsp;&nbsp;&nbsp;.WillByDefault(action);</pre><h2>四、设置期望</h2><p><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">EXPECT_CALL（）</span></strong>在模拟方法上设置期望（如何调用它？它会做什么？）：</p><pre id="leanote_ace_1478568798088_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 168px;">EXPECT_CALL(mock_object,&nbsp;method(matchers))
+&nbsp;&nbsp;&nbsp;&nbsp;.With(multi_argument_matcher)&nbsp;&nbsp;?
+&nbsp;&nbsp;&nbsp;&nbsp;.Times(cardinality)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?
+&nbsp;&nbsp;&nbsp;&nbsp;.InSequence(sequences)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*
+&nbsp;&nbsp;&nbsp;&nbsp;.After(expectations)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*
+&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(action)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*
+&nbsp;&nbsp;&nbsp;&nbsp;.WillRepeatedly(action)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?
+&nbsp;&nbsp;&nbsp;&nbsp;.RetiresOnSaturation();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?</pre><p>如果省略Times（），则基数假定为：</p><ul><li>Times（1）当没有WillOnce（）和WillRepeatedly（）;</li><li>当有n个WillOnce（）但没有WillRepeatedly（）时，Times（n），其中n&gt; = 1; 要么</li><li>当有n个WillOnce（）和WillRepeatedly（），其中n&gt; = 0时,Times（AtLeast（n））。</li></ul><p>没有EXPECT_CALL（）的方法可以被任意调用多次，并且每次都将采取默认操作。</p><h2>五、匹配</h2><p>匹配器匹配单个参数。 您可以在ON_CALL（）或EXPECT_CALL（）中使用它，或使用它直接验证值：</p><table class="mce-item-table"><thead><tr><th align="left"><code>EXPECT_THAT(value, matcher)</code></th><th align="left">Asserts that&nbsp;<code>value</code>&nbsp;matches&nbsp;<code>matcher</code>.</th></tr></thead><tbody><tr><td align="left"><code>ASSERT_THAT(value, matcher)</code></td><td align="left">The same as&nbsp;<code>EXPECT_THAT(value, matcher)</code>, except that it generates a&nbsp;fatal&nbsp;failure.</td></tr></tbody></table><p>内置的匹配（其中参数是函数参数）分为几类：</p><h3>1. 通配符</h3><table class="mce-item-table" data-mce-selected="1"><thead><tr><th align="left"><code>_</code></th><th align="left"><code>argument</code>&nbsp;can be any value of the correct type可以代表任意类型.</th></tr></thead><tbody><tr><td align="left"><code>A&lt;type&gt;()</code>&nbsp;or&nbsp;<code>An&lt;type&gt;()</code></td><td align="left"><code>argument</code>&nbsp;can be any value of type<code>可以是type类型的任意值</code>.</td></tr></tbody></table><h3>2. 一般比较</h3><div class="context"><table class="mce-item-table" cellspacing="0" cellpadding="0"><tbody><tr><td>Eq(value) 或者 value</td><td>argument == value，method中的形参必须是value</td></tr><tr><td>Ge(value)</td><td>argument &gt;= value，method中的形参必须大于等于value</td></tr><tr><td>Gt(value)</td><td>argument &gt; value</td></tr><tr><td>Le(value)</td><td>argument &lt;= value</td></tr><tr><td>Lt(value)</td><td>argument &lt; value</td></tr><tr><td>Ne(value)</td><td>argument != value</td></tr><tr><td>IsNull()</td><td>method的形参必须是NULL指针</td></tr><tr><td>NotNull()</td><td>argument is a non-null pointer</td></tr><tr><td>Ref(variable)</td><td>形参是variable的引用</td></tr><tr><td>TypedEq&lt;type&gt;(value)</td><td>形参的类型必须是type类型，而且值必须是value。当模拟函数被重载你可能需要它而不是Eq(vlaue)</td></tr></tbody></table><p><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">注意**</span></strong> 除了Ref（）之外，这些匹配器会创建一个值的副本，以备日后修改或销毁。 如果编译器抱怨该值没有公共副本构造函数，请尝试将其包装在ByRef（）中，例如。 Eq（ByRef（non_copyable_value））。 如果你这样做，请确保non_copyable_value之后不改变，否则你的匹配器的含义将被改变。</p></div><h3>3. 浮点数的比较</h3><table class="mce-item-table" cellspacing="0" cellpadding="0"><tbody><tr><td>DoubleEq(a_double)</td><td>形参是一个double类型，比如值近似于a_double，两个NaN是不相等的</td></tr><tr><td>FloatEq(a_float)</td><td>同上，只不过类型是float</td></tr><tr><td>NanSensitiveDoubleEq(a_double)</td><td>形参是一个double类型，比如值近似于a_double，两个NaN是相等的，这个是用户所希望的方式</td></tr><tr><td>NanSensitiveFloatEq(a_float)</td><td>同上，只不过形参是float</td></tr></tbody></table><p>上述匹配器使用基于ULP的比较（与Google Test中使用的比较相同）。 它们根据期望值的绝对值自动选择合理的误差界限。 DoubleEq（）和FloatEq（）符合IEEE标准，这需要比较两个NaNs的相等性返回false。 NanSensitive *版本将两个NaNs相等，这通常是用户想要的。</p><table class="mce-item-table"><thead><tr><th align="left"><code>DoubleNear(a_double, max_abs_error)</code></th><th align="left"><code>argument</code>&nbsp;is a&nbsp;<code>double</code>&nbsp;value close to&nbsp;<code>a_double</code>&nbsp;(absolute error &lt;=&nbsp;<code>max_abs_error</code>), treating two NaNs as unequal.</th></tr></thead><tbody><tr><td align="left"><code>FloatNear(a_float, max_abs_error)</code></td><td align="left"><code>argument</code>&nbsp;is a&nbsp;<code>float</code>&nbsp;value close to&nbsp;<code>a_float</code>&nbsp;(absolute error &lt;=&nbsp;<code>max_abs_error</code>), treating two NaNs as unequal.</td></tr><tr><td align="left"><code>NanSensitiveDoubleNear(a_double, max_abs_error)</code></td><td align="left"><code>argument</code>&nbsp;is a&nbsp;<code>double</code>&nbsp;value close to&nbsp;<code>a_double</code>&nbsp;(absolute error &lt;=&nbsp;<code>max_abs_error</code>), treating two NaNs as equal.</td></tr><tr><td align="left"><code>NanSensitiveFloatNear(a_float, max_abs_error)</code></td><td align="left"><code>argument</code>&nbsp;is a&nbsp;<code>float</code>&nbsp;value close to&nbsp;<code>a_float</code>&nbsp;(absolute error &lt;=&nbsp;<code>max_abs_error</code>), treating two NaNs as equal.</td></tr></tbody></table><h3>4. String Matchers</h3><p>这里的字符串即可以是C风格的字符串，也可以是C++风格的。</p><div class="context"><table class="mce-item-table" cellspacing="0" cellpadding="0" data-mce-selected="1"><tbody><tr><td>ContainsRegex(string)</td><td>形参匹配给定的正则表达式</td></tr><tr><td>EndsWith(suffix)</td><td>形参以suffix截尾</td></tr><tr><td>HasSubstr(string)</td><td>形参有string这个子串</td></tr><tr><td>MatchesRegex(string)</td><td>从第一个字符到最后一个字符都完全匹配给定的正则表达式.</td></tr><tr><td>StartsWith(prefix)</td><td>形参以prefix开始</td></tr><tr><td>StrCaseEq(string)</td><td>参数等于string，并且忽略大小写</td></tr><tr><td>StrCaseNe(string)</td><td>参数不是string，并且忽略大小写</td></tr><tr><td>StrEq(string)</td><td>参数等于string</td></tr><tr><td>StrNe(string)</td><td>参数不等于string</td></tr></tbody></table></div><h3>5. 容器的匹配</h3><p>很多STL的容器的比较都支持==这样的操作，对于这样的容器可以使用上述的Eq（expected_container）来比较或者只是expect_container来完全匹配容器。但如果你想写得更为灵活，可以使用下面的这些容器匹配方法：</p><table class="mce-item-table"><thead><tr><th align="left"><code>ContainerEq(container)</code></th><th align="left">The same as&nbsp;<code>Eq(container)</code>&nbsp;except that the failure message also includes which elements are in one container but not the other.</th></tr></thead><tbody><tr><td align="left"><code>Contains(e)</code></td><td align="left"><code>argument</code>&nbsp;contains an element that matches&nbsp;<code>e</code>, which can be either a value or a matcher.</td></tr><tr><td align="left"><code>Each(e)</code></td><td align="left"><code>argument</code>&nbsp;is a container where&nbsp;<em>every</em>&nbsp;element matches&nbsp;<code>e</code>, which can be either a value or a matcher.</td></tr><tr><td align="left"><code>ElementsAre(e0, e1, ..., en)</code></td><td align="left"><code>argument</code>&nbsp;has&nbsp;<code>n + 1</code>&nbsp;elements, where the i-th element matches&nbsp;<code>ei</code>, which can be a value or a matcher. 0 to 10 arguments are allowed.</td></tr><tr><td align="left"><code>ElementsAreArray({ e0, e1, ..., en })</code>,&nbsp;<code>ElementsAreArray(array)</code>, or&nbsp;<code>ElementsAreArray(array, count)</code></td><td align="left">The same as&nbsp;<code>ElementsAre()</code>&nbsp;except that the expected element values/matchers come from an initializer list, STL-style container, or C-style array.</td></tr><tr><td align="left"><code>IsEmpty()</code></td><td align="left"><code>argument</code>&nbsp;is an empty container (<code>container.empty()</code>).</td></tr><tr><td align="left"><code>Pointwise(m, container)</code></td><td align="left"><code>argument</code>&nbsp;contains the same number of elements as in&nbsp;<code>container</code>, and for all i, (the i-th element in&nbsp;<code>argument</code>, the i-th element in&nbsp;<code>container</code>) match&nbsp;<code>m</code>, which is a matcher on 2-tuples. E.g.&nbsp;<code>Pointwise(Le(), upper_bounds)</code>&nbsp;verifies that each element in&nbsp;<code>argument</code>&nbsp;doesn't exceed the corresponding element in&nbsp;<code>upper_bounds</code>. See more detail below.</td></tr><tr><td align="left"><code>SizeIs(m)</code></td><td align="left"><code>argument</code>&nbsp;is a container whose size matches&nbsp;<code>m</code>. E.g.&nbsp;<code>SizeIs(2)</code>&nbsp;or&nbsp;<code>SizeIs(Lt(2))</code>.</td></tr><tr><td align="left"><code>UnorderedElementsAre(e0, e1, ..., en)</code></td><td align="left"><code>argument</code>&nbsp;has&nbsp;<code>n + 1</code>&nbsp;elements, and under some permutation each element matches an&nbsp;<code>ei</code>&nbsp;(for a different&nbsp;<code>i</code>), which can be a value or a matcher. 0 to 10 arguments are allowed.</td></tr><tr><td align="left"><code>UnorderedElementsAreArray({ e0, e1, ..., en })</code>,&nbsp;<code>UnorderedElementsAreArray(array)</code>, or&nbsp;<code>UnorderedElementsAreArray(array, count)</code></td><td align="left">The same as&nbsp;<code>UnorderedElementsAre()</code>&nbsp;except that the expected element values/matchers come from an initializer list, STL-style container, or C-style array.</td></tr><tr><td align="left"><code>WhenSorted(m)</code></td><td align="left">When&nbsp;<code>argument</code>&nbsp;is sorted using the&nbsp;<code>&lt;</code>&nbsp;operator, it matches container matcher&nbsp;<code>m</code>. E.g.&nbsp;<code>WhenSorted(UnorderedElementsAre(1, 2, 3))</code>&nbsp;verifies that&nbsp;<code>argument</code>&nbsp;contains elements&nbsp;<code>1</code>,&nbsp;<code>2</code>, and&nbsp;<code>3</code>, ignoring order.</td></tr><tr><td align="left"><code>WhenSortedBy(comparator, m)</code></td><td align="left">The same as&nbsp;<code>WhenSorted(m)</code>, except that the given comparator instead of&nbsp;<code>&lt;</code>&nbsp;is used to sort&nbsp;<code>argument</code>. E.g.&nbsp;<code>WhenSortedBy(std::greater&lt;int&gt;(), ElementsAre(3, 2, 1))</code>.</td></tr></tbody></table><p>注意：</p><ul><li><p>这些匹配器也可以匹配：</p><p>&nbsp;i. 通过引用传递的本地数组（例如在Foo（const int（＆a）[5]）中）和</p><p>&nbsp;ii. 作为指针和计数传递的数组（例如，在Bar（const T * buffer，int len） - 参见&nbsp;<a href="https://github.com/google/googletest/blob/master/googlemock/docs/CheatSheet.md#Multiargument_Matchers.md" data-mce-href="https://github.com/google/googletest/blob/master/googlemock/docs/CheatSheet.md#Multiargument_Matchers.md">Multi-argument Matchers</a>）。</p></li><li><p>匹配的数组可以是多维的（即其元素可以是数组）。</p></li><li><p>在Pointwise（m，...）中的m应该是:: testing :: tuple &lt;T，U&gt;的匹配器，其中T和U分别是实际容器和预期容器的元素类型。 例如，要比较两个Foo容器，其中Foo不支持operator ==但是有一个Equals（）方法，可以写：</p></li></ul><pre id="leanote_ace_1478570537315_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 126px;">using&nbsp;::testing::get;
+MATCHER(FooEq,&nbsp;"")&nbsp;{
+&nbsp;&nbsp;return&nbsp;get&lt;0&gt;(arg).Equals(get&lt;1&gt;(arg));
+}
+...
+EXPECT_THAT(actual_foos,&nbsp;Pointwise(FooEq(),&nbsp;expected_foos));</pre><h3>6. 成员匹配器</h3><table class="mce-item-table"><thead><tr><th align="left"><code>Field(&amp;class::field, m)</code></th><th align="left"><code>argument.field</code>&nbsp;(or&nbsp;<code>argument-&gt;field</code>&nbsp;when&nbsp;<code>argument</code>&nbsp;is a plain pointer) matches matcher&nbsp;<code>m</code>, where&nbsp;<code>argument</code>&nbsp;is an object of type&nbsp;<em>class</em>.</th></tr></thead><tbody><tr><td align="left"><code>Key(e)</code></td><td align="left"><code>argument.first</code>&nbsp;matches&nbsp;<code>e</code>, which can be either a value or a matcher. E.g.&nbsp;<code>Contains(Key(Le(5)))</code>&nbsp;can verify that a&nbsp;<code>map</code>&nbsp;contains a key&nbsp;<code>&lt;= 5</code>.</td></tr><tr><td align="left"><code>Pair(m1, m2)</code></td><td align="left"><code>argument</code>&nbsp;is an&nbsp;<code>std::pair</code>&nbsp;whose&nbsp;<code>first</code>&nbsp;field matches&nbsp;<code>m1</code>&nbsp;and&nbsp;<code>second</code>&nbsp;field matches&nbsp;<code>m2</code>.</td></tr><tr><td align="left"><code>Property(&amp;class::property, m)</code></td><td align="left"><code>argument.property()</code>&nbsp;(or&nbsp;<code>argument-&gt;property()</code>&nbsp;when&nbsp;<code>argument</code>&nbsp;is a plain pointer) matches matcher&nbsp;<code>m</code>, where&nbsp;<code>argument</code>&nbsp;is an object of type&nbsp;<em>class</em>.</td></tr></tbody></table><h3>7.&nbsp;匹配函数或函数的结果</h3><table class="mce-item-table"><thead><tr><th align="left"><code>ResultOf(f, m)</code></th><th align="left"><code>f(argument)</code>&nbsp;matches matcher&nbsp;<code>m</code>, where&nbsp;<code>f</code>&nbsp;is a function or functor.</th></tr></thead></table><h3>&nbsp;8.&nbsp;指针匹配</h3><table class="mce-item-table" width="691" style="height: 121px;" data-mce-style="height: 121px;"><thead><tr><th align="left"><p><code>Pointee(m)</code></p></th><th align="left"><p><code>argument</code>&nbsp;(either a smart pointer or a raw pointer) points to a value that matches matcher&nbsp;<code>m</code>.</p></th></tr></thead><tbody><tr><td align="left"><p><code>WhenDynamicCastTo&lt;T&gt;(m)</code></p></td><td align="left"><p>when&nbsp;<code>argument</code>&nbsp;is passed through&nbsp;<code>dynamic_cast&lt;T&gt;()</code>, it matches matcher&nbsp;<code>m</code>.</p></td></tr></tbody></table><h3>&nbsp;9.&nbsp;多参数匹配器</h3><p>从技术上讲，完全匹配器匹配单个值。 “多参数”匹配器只是匹配元组的匹配器。 以下匹配器可用于匹配元组（x，y）：</p><table class="mce-item-table"><thead><tr><th align="left"><code>Eq()</code></th><th align="left"><code>x == y</code></th></tr></thead><tbody><tr><td align="left"><code>Ge()</code></td><td align="left"><code>x &gt;= y</code></td></tr><tr><td align="left"><code>Gt()</code></td><td align="left"><code>x &gt; y</code></td></tr><tr><td align="left"><code>Le()</code></td><td align="left"><code>x &lt;= y</code></td></tr><tr><td align="left"><code>Lt()</code></td><td align="left"><code>x &lt; y</code></td></tr><tr><td align="left"><code>Ne()</code></td><td align="left"><code>x != y</code></td></tr></tbody></table><p>您可以使用以下选择器来选择参数的子集（或对其重新排序）以参与匹配：</p><table class="mce-item-table"><thead><tr><th align="left"><code>AllArgs(m)</code></th><th align="left">Equivalent to&nbsp;<code>m</code>. Useful as syntactic sugar in&nbsp;<code>.With(AllArgs(m))</code>.</th></tr></thead><tbody><tr><td align="left"><code>Args&lt;N1, N2, ..., Nk&gt;(m)</code></td><td align="left">The tuple of the&nbsp;<code>k</code>&nbsp;selected (using 0-based indices) arguments matches&nbsp;<code>m</code>, e.g.&nbsp;<code>Args&lt;1, 2&gt;(Eq())</code>.</td></tr></tbody></table><h3>10. 复合匹配</h3><p>你可以从一个或多个其他匹配器做一个匹配器：</p><table class="mce-item-table"><thead><tr><th align="left"><code>AllOf(m1, m2, ..., mn)</code></th><th align="left"><code>argument</code>&nbsp;matches all of the matchers&nbsp;<code>m1</code>&nbsp;to&nbsp;<code>mn</code>.</th></tr></thead><tbody><tr><td align="left"><code>AnyOf(m1, m2, ..., mn)</code></td><td align="left"><code>argument</code>&nbsp;matches at least one of the matchers&nbsp;<code>m1</code>&nbsp;to&nbsp;<code>mn</code>.</td></tr><tr><td align="left"><code>Not(m)</code></td><td align="left"><code>argument</code>&nbsp;doesn't match matcher&nbsp;<code>m</code>.</td></tr></tbody></table><h3>11.&nbsp;Adapters for Matchers</h3><table class="mce-item-table"><thead><tr><th align="left"><code>MatcherCast&lt;T&gt;(m)</code></th><th align="left">casts matcher&nbsp;<code>m</code>&nbsp;to type&nbsp;<code>Matcher&lt;T&gt;</code>.</th></tr></thead><tbody><tr><td align="left"><code>SafeMatcherCast&lt;T&gt;(m)</code></td><td align="left"><a href="https://github.com/google/googletest/blob/master/googlemock/docs/CookBook.md#casting-matchers" data-mce-href="https://github.com/google/googletest/blob/master/googlemock/docs/CookBook.md#casting-matchers">safely casts</a>&nbsp;matcher&nbsp;<code>m</code>&nbsp;to type&nbsp;<code>Matcher&lt;T&gt;</code>.</td></tr><tr><td align="left"><code>Truly(predicate)</code></td><td align="left"><code>predicate(argument)</code>&nbsp;returns something considered by C++ to be true, where&nbsp;<code>predicate</code>&nbsp;is a function or functor.</td></tr></tbody></table><h3>12 .匹配作为谓词(Matchers as Predicates)</h3><table class="mce-item-table"><thead><tr><th align="left"><code>Matches(m)(value)</code></th><th align="left">evaluates to&nbsp;<code>true</code>&nbsp;if&nbsp;<code>value</code>&nbsp;matches&nbsp;<code>m</code>. You can use&nbsp;<code>Matches(m)</code>&nbsp;alone as a unary functor.</th></tr></thead><tbody><tr><td align="left"><code>ExplainMatchResult(m, value, result_listener)</code></td><td align="left">evaluates to&nbsp;<code>true</code>&nbsp;if&nbsp;<code>value</code>&nbsp;matches&nbsp;<code>m</code>, explaining the result to&nbsp;<code>result_listener</code>.</td></tr><tr><td align="left"><code>Value(value, m)</code></td><td align="left">evaluates to&nbsp;<code>true</code>&nbsp;if&nbsp;<code>value</code>&nbsp;matches&nbsp;<code>m</code>.</td></tr></tbody></table><h3>13. 定义匹配</h3><table class="mce-item-table"><thead><tr><th align="left"><code>MATCHER(IsEven, "") { return (arg % 2) == 0; }</code></th><th align="left">Defines a matcher&nbsp;<code>IsEven()</code>&nbsp;to match an even number.</th></tr></thead><tbody><tr><td align="left"><code>MATCHER_P(IsDivisibleBy, n, "") { *result_listener &lt;&lt; "where the remainder is " &lt;&lt; (arg % n); return (arg % n) == 0; }</code></td><td align="left">Defines a macher&nbsp;<code>IsDivisibleBy(n)</code>&nbsp;to match a number divisible by&nbsp;<code>n</code>.</td></tr><tr><td align="left"><code>MATCHER_P2(IsBetween, a, b, std::string(negation ? "isn't" : "is") + " between " + PrintToString(a) + " and " + PrintToString(b)) { return a &lt;= arg &amp;&amp; arg &lt;= b; }</code></td><td align="left">Defines a matcher&nbsp;<code>IsBetween(a, b)</code>&nbsp;to match a value in the range [<code>a</code>,&nbsp;<code>b</code>].</td></tr></tbody></table><p>笔记：</p><ol><li>MATCHER *宏不能在函数或类中使用。</li><li>匹配器主体必须是纯功能性的（即它不能有任何副作用，并且结果必须不依赖于被匹配的值和匹配器参数之外的任何东西）。</li><li>您可以使用PrintToString（x）将任何类型的值x转换为字符串。</li></ol><h3>14. 匹配作为测试断言</h3><table class="mce-item-table"><thead><tr><th align="left"><code>ASSERT_THAT(expression, m)</code></th><th align="left">Generates a&nbsp;<a href="https://github.com/google/googletest/blob/master/googletest/docs/Primer.md#assertions" data-mce-href="https://github.com/google/googletest/blob/master/googletest/docs/Primer.md#assertions">fatal failure</a>&nbsp;if the value of&nbsp;<code>expression</code>&nbsp;doesn't match matcher&nbsp;<code>m</code>.</th></tr></thead><tbody><tr><td align="left"><code>EXPECT_THAT(expression, m)</code></td><td align="left">Generates a non-fatal failure if the value of&nbsp;<code>expression</code>&nbsp;doesn't match matcher&nbsp;<code>m</code>.</td></tr></tbody></table><h2>六、动作Actions</h2><p>操作指定了mock函数在调用时应该执行的操作。</p><h3>1. 返回值</h3><table class="mce-item-table"><thead><tr><th align="left"><code>Return()</code></th><th align="left">Return from a&nbsp;<code>void</code>&nbsp;mock function.</th></tr></thead><tbody><tr><td align="left"><code>Return(value)</code></td><td align="left">Return&nbsp;<code>value</code>. If the type of&nbsp;<code>value</code>&nbsp;is different to the mock function's return type,&nbsp;<code>value</code>&nbsp;is converted to the latter type&nbsp;<em>at the time the expectation is set</em>, not when the action is executed.</td></tr><tr><td align="left"><code>ReturnArg&lt;N&gt;()</code></td><td align="left">Return the&nbsp;<code>N</code>-th (0-based) argument.</td></tr><tr><td align="left"><code>ReturnNew&lt;T&gt;(a1, ..., ak)</code></td><td align="left">Return&nbsp;<code>new T(a1, ..., ak)</code>; a different object is created each time.</td></tr><tr><td align="left"><code>ReturnNull()</code></td><td align="left">Return a null pointer.</td></tr><tr><td align="left"><code>ReturnPointee(ptr)</code></td><td align="left">Return the value pointed to by&nbsp;<code>ptr</code>.</td></tr><tr><td align="left"><code>ReturnRef(variable)</code></td><td align="left">Return a reference to&nbsp;<code>variable</code>.</td></tr><tr><td align="left"><code>ReturnRefOfCopy(value)</code></td><td align="left">Return a reference to a copy of&nbsp;<code>value</code>; the copy lives as long as the action.</td></tr></tbody></table><h3>2.&nbsp;副作用（Side Effects）</h3><table class="mce-item-table"><thead><tr><th align="left"><code>Assign(&amp;variable, value)</code></th><th align="left">Assign&nbsp;<code>value</code>&nbsp;to variable.</th></tr></thead><tbody><tr><td align="left"><code>DeleteArg&lt;N&gt;()</code></td><td align="left">Delete the&nbsp;<code>N</code>-th (0-based) argument, which must be a pointer.</td></tr><tr><td align="left"><code>SaveArg&lt;N&gt;(pointer)</code></td><td align="left">Save the&nbsp;<code>N</code>-th (0-based) argument to&nbsp;<code>*pointer</code>.</td></tr><tr><td align="left"><code>SaveArgPointee&lt;N&gt;(pointer)</code></td><td align="left">Save the value pointed to by the&nbsp;<code>N</code>-th (0-based) argument to&nbsp;<code>*pointer</code>.</td></tr><tr><td align="left"><code>SetArgReferee&lt;N&gt;(value)</code></td><td align="left">Assign value to the variable referenced by the&nbsp;<code>N</code>-th (0-based) argument.</td></tr><tr><td align="left"><code>SetArgPointee&lt;N&gt;(value)</code></td><td align="left">Assign&nbsp;<code>value</code>&nbsp;to the variable pointed by the&nbsp;<code>N</code>-th (0-based) argument.</td></tr><tr><td align="left"><code>SetArgumentPointee&lt;N&gt;(value)</code></td><td align="left">Same as&nbsp;<code>SetArgPointee&lt;N&gt;(value)</code>. Deprecated. Will be removed in v1.7.0.</td></tr><tr><td align="left"><code>SetArrayArgument&lt;N&gt;(first, last)</code></td><td align="left">Copies the elements in source range [<code>first</code>,&nbsp;<code>last</code>) to the array pointed to by the&nbsp;<code>N</code>-th (0-based) argument, which can be either a pointer or an iterator. The action does not take ownership of the elements in the source range.</td></tr><tr><td align="left"><code>SetErrnoAndReturn(error, value)</code></td><td align="left">Set&nbsp;<code>errno</code>&nbsp;to&nbsp;<code>error</code>&nbsp;and return&nbsp;<code>value</code>.</td></tr><tr><td align="left"><code>Throw(exception)</code></td><td align="left">Throws the given exception, which can be any copyable value. Available since v1.1.0.</td></tr></tbody></table><h3>3. 使用函数或函子作为动作Using a Function or a Functor as an Action</h3><table class="mce-item-table"><thead><tr><th align="left"><code>Invoke(f)</code></th><th align="left">Invoke&nbsp;<code>f</code>&nbsp;with the arguments passed to the mock function, where&nbsp;<code>f</code>&nbsp;can be a global/static function or a functor.</th></tr></thead><tbody><tr><td align="left"><code>Invoke(object_pointer, &amp;class::method)</code></td><td align="left">Invoke the {method on the object with the arguments passed to the mock function.</td></tr><tr><td align="left"><code>InvokeWithoutArgs(f)</code></td><td align="left">Invoke&nbsp;<code>f</code>, which can be a global/static function or a functor.&nbsp;<code>f</code>&nbsp;must take no arguments.</td></tr><tr><td align="left"><code>InvokeWithoutArgs(object_pointer, &amp;class::method)</code></td><td align="left">Invoke the method on the object, which takes no arguments.</td></tr><tr><td align="left"><code>InvokeArgument&lt;N&gt;(arg1, arg2, ..., argk)</code></td><td align="left">Invoke the mock function's&nbsp;<code>N</code>-th (0-based) argument, which must be a function or a functor, with the&nbsp;<code>k</code>&nbsp;arguments.</td></tr></tbody></table><p>被调用函数的返回值被用作动作的返回值。<br>定义要与Invoke *（）一起使用的函数或函数时，可以将任何未使用的参数声明为未使用：</p><pre id="leanote_ace_1478588393898_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 63px;">double Distance(Unused, double x, double y) { return sqrt(x*x + y*y); }
+  ...
+EXPECT_CALL(mock, Foo("Hi", _, _)).WillOnce(Invoke(Distance));</pre><p>在Invoke Argument &lt;N&gt;（...）中，如果一个参数需要通过引用传递，则将其包装在ByRef（）中。 例如，</p><pre id="leanote_ace_1478588487112_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 21px;">InvokeArgument&lt;2&gt;(5, string("Hi"), ByRef(foo))</pre><p>调用模拟函数＃2参数，通过值传递给它5和字符串（“Hi”），并通过引用传递foo。</p><h2>Default Action</h2><table class="mce-item-table"><thead><tr><th align="left"><code>DoDefault()</code></th><th align="left">Do the default action (specified by&nbsp;<code>ON_CALL()</code>&nbsp;or the built-in one).</th></tr></thead></table><p>Note:&nbsp;due to technical reasons,&nbsp;<code>DoDefault()</code>&nbsp;cannot be used inside a composite action - trying to do so will result in a run-time error.</p><h2><a id="user-content-composite-actions" class="anchor" href="https://github.com/google/googletest/blob/master/googlemock/docs/CheatSheet.md#composite-actions" data-mce-href="https://github.com/google/googletest/blob/master/googlemock/docs/CheatSheet.md#composite-actions"></a>Composite Actions</h2><table class="mce-item-table"><thead><tr><th align="left"><code>DoAll(a1, a2, ..., an)</code></th><th align="left">Do all actions&nbsp;<code>a1</code>&nbsp;to&nbsp;<code>an</code>&nbsp;and return the result of&nbsp;<code>an</code>&nbsp;in each invocation. The first&nbsp;<code>n - 1</code>sub-actions must return void.</th></tr></thead><tbody><tr><td align="left"><code>IgnoreResult(a)</code></td><td align="left">Perform action&nbsp;<code>a</code>&nbsp;and ignore its result.&nbsp;<code>a</code>&nbsp;must not return void.</td></tr><tr><td align="left"><code>WithArg&lt;N&gt;(a)</code></td><td align="left">Pass the&nbsp;<code>N</code>-th (0-based) argument of the mock function to action&nbsp;<code>a</code>&nbsp;and perform it.</td></tr><tr><td align="left"><code>WithArgs&lt;N1, N2, ..., Nk&gt;(a)</code></td><td align="left">Pass the selected (0-based) arguments of the mock function to action&nbsp;<code>a</code>&nbsp;and perform it.</td></tr><tr><td align="left"><code>WithoutArgs(a)</code></td><td align="left">Perform action&nbsp;<code>a</code>&nbsp;without any arguments.</td></tr></tbody></table><h2><a id="user-content-defining-actions" class="anchor" href="https://github.com/google/googletest/blob/master/googlemock/docs/CheatSheet.md#defining-actions" data-mce-href="https://github.com/google/googletest/blob/master/googlemock/docs/CheatSheet.md#defining-actions"></a>Defining Actions</h2><table class="mce-item-table"><thead><tr><th align="left"><code>ACTION(Sum) { return arg0 + arg1; }</code></th><th align="left">Defines an action&nbsp;<code>Sum()</code>&nbsp;to return the sum of the mock function's argument #0 and #1.</th></tr></thead><tbody><tr><td align="left"><code>ACTION_P(Plus, n) { return arg0 + n; }</code></td><td align="left">Defines an action&nbsp;<code>Plus(n)</code>&nbsp;to return the sum of the mock function's argument #0 and&nbsp;<code>n</code>.</td></tr><tr><td align="left"><code>ACTION_Pk(Foo, p1, ..., pk) { statements; }</code></td><td align="left">Defines a parameterized action&nbsp;<code>Foo(p1, ..., pk)</code>&nbsp;to execute the given&nbsp;<code>statements</code>.</td></tr></tbody></table><p>The&nbsp;<code>ACTION*</code>&nbsp;macros cannot be used inside a function or class.</p><h2>七、Cardinalities基数</h2><p>这些在Times（）中用于指定将调用模拟函数的次数：</p><table class="mce-item-table"><thead><tr><th align="left"><code>AnyNumber()</code></th><th align="left">The function can be called any number of times.</th></tr></thead><tbody><tr><td align="left"><code>AtLeast(n)</code></td><td align="left">The call is expected at least&nbsp;<code>n</code>&nbsp;times.</td></tr><tr><td align="left"><code>AtMost(n)</code></td><td align="left">The call is expected at most&nbsp;<code>n</code>&nbsp;times.</td></tr><tr><td align="left"><code>Between(m, n)</code></td><td align="left">The call is expected between&nbsp;<code>m</code>&nbsp;and&nbsp;<code>n</code>&nbsp;(inclusive) times.</td></tr><tr><td align="left"><code>Exactly(n) or n</code></td><td align="left">The call is expected exactly&nbsp;<code>n</code>&nbsp;times. In particular, the call should never happen when&nbsp;<code>n</code>&nbsp;is 0.</td></tr></tbody></table><h2>八、期望顺序（Expectation Order）</h2><p>默认情况下，期望可以按任何顺序匹配。如果一些或所有期望必须在给定的顺序中匹配，则有两种方式来指定它们。 它们可以单独使用或一起使用。</p><h3>1.The After Clause</h3><pre id="leanote_ace_1478588910329_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 126px;">using ::testing::Expectation;
+...
+Expectation init_x = EXPECT_CALL(foo, InitX());
+Expectation init_y = EXPECT_CALL(foo, InitY());
+EXPECT_CALL(foo, Bar())
+    .After(init_x, init_y);</pre><p>上边说，只有在InitX（）和InitY（）被调用之后才能调用Bar（）。</p><p>如果你不知道你写的期望有多少个前提条件，你可以使用ExpectationSet来收集它们：</p><pre id="leanote_ace_1478589311676_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 168px;">using ::testing::ExpectationSet;
+...
+ExpectationSet all_inits;
+for (int i = 0; i &lt; element_count; i++) {
+  all_inits += EXPECT_CALL(foo, InitElement(i));
+}
+EXPECT_CALL(foo, Bar())
+    .After(all_inits);</pre><p>上面说，只有在所有元素都被初始化之后才能调用Bar（）。（但我们不关心哪些元素在其他元素之前被初始化）。</p><p>在 .After(all_inits)﻿​中使用ExpectationSet之后再修改ExpectationSet不会影响.After（）的含义。</p><h3>2. 序列</h3><p>当你有一个长链的顺序期望，使用序列指定顺序更容易，这不需要给链中的每个期望一个不同的名称。同一序列中的所有预期调用必须按其指定的顺序发生。</p><pre id="leanote_ace_1478589730745_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 252px;">using ::testing::Sequence;
+Sequence s1, s2;
+...
+EXPECT_CALL(foo, Reset())
+    .InSequence(s1, s2)
+    .WillOnce(Return(true));
+EXPECT_CALL(foo, GetSize())
+    .InSequence(s1)
+    .WillOnce(Return(1));
+EXPECT_CALL(foo, Describe(A&lt;const char*&gt;()))
+    .InSequence(s2)
+    .WillOnce(Return("dummy"));</pre><p>上边说，Reset()必须在GetSize（）和Describe（）之前调用，后两个可以以任何顺序发生。</p><p>在一个序列中方便地提出许多期望：</p><pre id="leanote_ace_1478590011813_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 189px;">using ::testing::InSequence;
+{
+  InSequence dummy;
+
+  EXPECT_CALL(...)...;
+  EXPECT_CALL(...)...;
+  ...
+  EXPECT_CALL(...)...;
+}</pre><p>上边说，在dummy范围内的所有预期调用必须以严格的顺序发生。 名称dummy是不相关的。）</p><h2>九、验证和重置模拟</h2><p>Google Mock会在模拟对象被破坏时验证对模拟对象的期望，或者您可以更早地执行：</p><pre id="leanote_ace_1478590255751_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 210px;">using ::testing::Mock;
+...
+// Verifies and removes the expectations on mock_obj;
+// returns true iff successful.
+Mock::VerifyAndClearExpectations(&amp;mock_obj);
+...
+// Verifies and removes the expectations on mock_obj;
+// also removes the default actions set by ON_CALL();
+// returns true iff successful.
+Mock::VerifyAndClear(&amp;mock_obj);</pre><p>您还可以告诉Google Mock模拟对象可以泄漏，无需进行验证：</p><pre id="leanote_ace_1478590314169_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 21px;">Mock::AllowLeak(&amp;mock_obj);</pre><h2>十、模拟类</h2><p>Google Mock定义了一个方便的模拟类模板</p><pre id="leanote_ace_1478590399963_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 84px;">class MockFunction&lt;R(A1, ..., An)&gt; {
+ public:
+  MOCK_METHODn(Call, R(A1, ..., An));
+};</pre><p>See this&nbsp;<a href="https://github.com/google/googletest/blob/master/googlemock/docs/CookBook.md#using-check-points" data-mce-href="https://github.com/google/googletest/blob/master/googlemock/docs/CookBook.md#using-check-points">recipe</a>&nbsp;for one application of it.</p><h2>十 一、Flags</h2><table class="mce-item-table"><thead><tr><th align="left"><code>--gmock_catch_leaked_mocks=0</code></th><th align="left">Don't report leaked mock objects as failures.</th></tr></thead><tbody><tr><td align="left"><code>--gmock_verbose=LEVEL</code></td><td align="left">Sets the default verbosity level (<code>info</code>,&nbsp;<code>warning</code>, or&nbsp;<code>error</code>) of Google Mock messages.</td></tr></tbody></table><p><br data-mce-bogus="1"></p><p><br></p></div>
+	</div>
+
+<!-- 该js供其它处理 -->
+<script src="../leanote-html.js"></script>
+</body>
+</html>

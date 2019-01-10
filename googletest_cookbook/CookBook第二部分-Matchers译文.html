@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="tool" content="leanote-desktop-app">
+<title>CookBook第二部分-Matchers译文</title>
+<style>
+
+*{font-family:"lucida grande","lucida sans unicode",lucida,helvetica,"Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
+
+body {
+  margin: 0;
+}
+
+/*公用文字样式*/
+h1{font-size:30px}h2{font-size:24px}h3{font-size:18px}h4{font-size:14px}
+.note-container{
+    width:850px; 
+    margin:auto;
+    padding: 10px 20px;
+    box-shadow: 1px 1px 10px #eee;
+}
+#title {
+  margin: 0;
+}
+table {
+    margin-bottom: 16px;
+    border-collapse: collapse;
+}
+table th, table td {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+}
+table th {
+    font-weight: bold;
+}
+
+table tr {
+    background-color: none;
+    border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+    background-color: rgb(247, 247, 249);
+}
+.mce-item-table, .mce-item-table td, .mce-item-table th, .mce-item-table caption {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  padding: 6px 13px;
+}
+blockquote {
+  border-left-width:10px;
+  background-color:rgba(128,128,128,0.05);
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+  padding:15px 20px;
+  border-left:5px solid rgba(128,128,128,0.075);
+}
+blockquote p {
+  margin-bottom:1.1em;
+  font-size:1em;
+  line-height:1.45
+}
+blockquote ul:last-child,blockquote ol:last-child {
+  margin-bottom:0
+}
+pre {
+  padding: 18px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 3px;
+  display: block;
+}
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  white-space: nowrap;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+.footnote {
+  vertical-align: top;
+  position: relative;
+  top: -0.5em;
+  font-size: .8em;
+}
+
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+pre {
+  word-break:break-word
+}
+p,pre,pre.prettyprint,blockquote {
+  margin:0 0 1.1em
+}
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+.sequence-diagram,.flow-chart {
+  text-align:center;
+  margin-bottom:1.1em
+}
+.sequence-diagram text,.flow-chart text {
+  font-size:15px !important;
+  font-family:"Source Sans Pro",sans-serif !important
+}
+.sequence-diagram [fill="#ffffff"],.flow-chart [fill="#ffffff"] {
+  fill:#f6f6f6
+}
+.sequence-diagram [stroke="#000000"],.flow-chart [stroke="#000000"] {
+  stroke:#3f3f3f
+}
+.sequence-diagram text[stroke="#000000"],.flow-chart text[stroke="#000000"] {
+  stroke:none
+}
+.sequence-diagram [fill="#000"],.flow-chart [fill="#000"],.sequence-diagram [fill="#000000"],.flow-chart [fill="#000000"],.sequence-diagram [fill="black"],.flow-chart [fill="black"] {
+  fill:#3f3f3f
+}
+ul,ol {
+  margin-bottom:1.1em
+}
+ul ul,ol ul,ul ol,ol ol {
+  margin-bottom:1.1em
+}
+kbd {
+  padding:.1em .6em;
+  border:1px solid rgba(63,63,63,0.25);
+  -webkit-box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  font-size:.7em;
+  font-family:sans-serif;
+  background-color:#fff;
+  color:#333;
+  border-radius:3px;
+  display:inline-block;
+  margin:0 .1em;
+  white-space:nowrap
+}
+.toc ul {
+  list-style-type:none;
+  margin-bottom:15px
+}
+</style>
+<!-- 该css供自定义样式 -->
+<link href="../leanote-html.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<div class="note-container">
+		<h1 class="title" id="leanote-title">CookBook第二部分-Matchers译文</h1>
+		<div class="content-html" id="leanote-content"><h1>使用匹配</h1><h2>一、匹配参数值正确</h2><p>您可以<strong><span data-mce-style="color: #ff6600;">精确</span></strong>地指定模拟方法期望的参数：</p><pre id="leanote_ace_1478825967517_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 105px;">using&nbsp;::testing::Return;
+...
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThis(5))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(Return('a'));
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThat("Hello",&nbsp;bar));&nbsp;</pre><h2>二、 使用简单的匹配器</h2><p>您可以使用匹配器来匹配具有某个属性的参数：</p><pre id="leanote_ace_1478825969159_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 168px;">using&nbsp;::testing::Ge;
+using&nbsp;::testing::NotNull;
+using&nbsp;::testing::Return;
+...
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThis(Ge(5)))&nbsp;&nbsp;//&nbsp;The&nbsp;argument&nbsp;must&nbsp;be&nbsp;&gt;=&nbsp;5.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(Return('a'));
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThat("Hello",&nbsp;NotNull()));
+&nbsp;&nbsp;//&nbsp;The&nbsp;second&nbsp;argument&nbsp;must&nbsp;not&nbsp;be&nbsp;NULL.&nbsp;</pre><p>A frequently used matcher is&nbsp;<code>_</code>, which matches anything，通配符：</p><pre id="leanote_ace_1478825971214_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 84px;">using&nbsp;::testing::_;
+using&nbsp;::testing::NotNull;
+...
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThat(_,&nbsp;NotNull()));&nbsp;</pre><h2>三、组合匹配器</h2><p>You can build complex matchers from existing ones using&nbsp;<code>AllOf()</code>,&nbsp;<code>AnyOf()</code>, and&nbsp;<code>Not()</code>:</p><pre id="leanote_ace_1478825974350_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 273px;">using&nbsp;::testing::AllOf;
+using&nbsp;::testing::Gt;
+using&nbsp;::testing::HasSubstr;
+using&nbsp;::testing::Ne;
+using&nbsp;::testing::Not;
+...
+&nbsp;&nbsp;//&nbsp;The&nbsp;argument&nbsp;must&nbsp;be&nbsp;&gt;&nbsp;5&nbsp;and&nbsp;!=&nbsp;10.匹配所有的匹配器。
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThis(AllOf(Gt(5),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ne(10))));
+
+&nbsp;&nbsp;//&nbsp;The&nbsp;first&nbsp;argument&nbsp;must&nbsp;not&nbsp;contain&nbsp;sub-string&nbsp;"blah".
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThat(Not(HasSubstr("blah")),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NULL));&nbsp;</pre><p>AllOf（）是匹配括号内的所有参数，Not()是参数和匹配器不匹配。</p><h2>四、Casting Matchers 铸造匹配器</h2><p>类型间的转换。</p><p>1. Google Mock匹配器是静态类型的，这意味着如果使用错误类型的匹配器（例如，如果使用Eq（5）匹配字符串参数），编译器可以捕获您的错误。不错！</p><p>然而，有时，你知道你在做什么，并希望编译器给你一些宽限。一个例子是你有一个long的匹配器，你想匹配的参数是int。虽然两种类型不完全相同，但使用Matcher &lt;long&gt;来匹配一个int没有什么真正的错误 - 毕竟，我们可以先将int参数转换为long，然后再将其提供给匹配器。</p><p>为了支持这一需求，Google Mock为您提供<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">SafeMatcherCast &lt;T&gt;（m）</span></strong>功能。它将匹配器m转换为类型Matcher &lt;T&gt;。为了确保安全，Google Mock会检查（让U类型为m接受）：</p><ol><li>类型T可以隐式转换为类型U;</li><li>当T和U都是内置的算术类型（bool，整数和浮点数）时，从T到U的转换不是有损的（换句话说，T可表示的任何值也可以用U表示）。</li><li>当U是引用时，T也必须是引用（因为基本的匹配器可能对U值的地址感兴趣）。</li></ol><p>如果不满足任何这些条件，代码将不会编译。</p><p>这里有一个例子：</p><pre id="leanote_ace_1478829701962_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 315px;">using&nbsp;::testing::SafeMatcherCast;
+
+//&nbsp;A&nbsp;base&nbsp;class&nbsp;and&nbsp;a&nbsp;child&nbsp;class.
+class&nbsp;Base&nbsp;{&nbsp;...&nbsp;};
+class&nbsp;Derived&nbsp;:&nbsp;public&nbsp;Base&nbsp;{&nbsp;...&nbsp;};
+
+class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;MOCK_METHOD1(DoThis,&nbsp;void(Derived*&nbsp;derived));
+};
+...
+
+&nbsp;&nbsp;MockFoo&nbsp;foo;
+&nbsp;&nbsp;//&nbsp;m&nbsp;is&nbsp;a&nbsp;Matcher&lt;Base*&gt;&nbsp;we&nbsp;got&nbsp;from&nbsp;somewhere.
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThis(SafeMatcherCast&lt;Derived*&gt;(m)));</pre><p>2. 如果您发现SafeMatcherCast &lt;T&gt;（m）太限制，您可以使用类似的函数MatcherCast &lt;T&gt;（m）。 区别是MatcherCast只要求你可以将static_cast类型的T转化为U型。</p><p>MatcherCast本质上允许你绕过C ++的类型系统（static_cast并不总是安全的，因为它可以丢弃信息），所以要小心不要滥用/滥用它。</p><h2>五、选择重载函数</h2><p>如果你期望调用一个重载的函数，编译器可能需要一些关于它的重载版本的帮助。</p><h3>1.&nbsp;常量重载函数</h3><p>要消除对此对象的常量重载函数的歧义，使用Const（）参数包装。</p><pre id="leanote_ace_1478830447606_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 315px;">using&nbsp;::testing::ReturnRef;
+
+class&nbsp;MockFoo&nbsp;:&nbsp;public&nbsp;Foo&nbsp;{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;MOCK_METHOD0(GetBar,&nbsp;Bar&amp;());
+&nbsp;&nbsp;MOCK_CONST_METHOD0(GetBar,&nbsp;const&nbsp;Bar&amp;());
+};
+...
+
+&nbsp;&nbsp;MockFoo&nbsp;foo;
+&nbsp;&nbsp;Bar&nbsp;bar1,&nbsp;bar2;
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;GetBar())&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;The&nbsp;non-const&nbsp;GetBar().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(ReturnRef(bar1));
+&nbsp;&nbsp;EXPECT_CALL(Const(foo),&nbsp;GetBar())&nbsp;&nbsp;//&nbsp;The&nbsp;const&nbsp;GetBar().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillOnce(ReturnRef(bar2));</pre><p>(Const() is defined by Google Mock and returns a const reference to its argument.)</p><h3>2. 数量相同但类型不同的重载函数</h3><p>代码：GoogleMockTest\MockClassTest\MockClassTest.cpp</p><p>要消除具有相同数量的参数但不同类型的重载函数，你可能需要指定匹配器的确切类型：</p><ul><li>通过在Matcher &lt;type&gt;（）中包装您的匹配器</li><li>使用类型为fixed(<code>TypedEq&lt;type&gt;</code>,&nbsp;<code>An&lt;type&gt;()</code>)的匹配器：</li></ul><pre id="leanote_ace_1478830963838_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 462px;">using&nbsp;::testing::An;
+using&nbsp;::testing::Lt;
+using&nbsp;::testing::Matcher;
+using&nbsp;::testing::TypedEq;
+
+class&nbsp;MockPrinter&nbsp;:&nbsp;public&nbsp;Printer&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;MOCK_METHOD1(Print,&nbsp;void(int&nbsp;n));
+&nbsp;&nbsp;MOCK_METHOD1(Print,&nbsp;void(char&nbsp;c));
+};
+
+TEST(PrinterTest,&nbsp;Print)&nbsp;{
+&nbsp;&nbsp;MockPrinter&nbsp;printer;
+
+&nbsp;&nbsp;EXPECT_CALL(printer,&nbsp;Print(An&lt;int&gt;()));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;void&nbsp;Print(int);
+&nbsp;&nbsp;EXPECT_CALL(printer,&nbsp;Print(Matcher&lt;int&gt;(Lt(5))));&nbsp;&nbsp;//&nbsp;void&nbsp;Print(int);
+&nbsp;&nbsp;EXPECT_CALL(printer,&nbsp;Print(TypedEq&lt;char&gt;('a')));&nbsp;&nbsp;&nbsp;//&nbsp;void&nbsp;Print(char);
+
+&nbsp;&nbsp;printer.Print(3);
+&nbsp;&nbsp;printer.Print(6);
+&nbsp;&nbsp;printer.Print('a');
+}</pre><h2>&nbsp;六、基于参数执行不同的操作</h2><p>当调用模拟方法时，将选择仍然活动的最后一个匹配期望（认为“较新的覆盖较旧”）。 所以，你可以让一个方法做不同的事情，取决于它的参数值，像这样：</p><pre id="leanote_ace_1478832649407_0" class="ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 231px;">using&nbsp;::testing::_;
+using&nbsp;::testing::Lt;
+using&nbsp;::testing::Return;
+...
+&nbsp;&nbsp;//&nbsp;The&nbsp;default&nbsp;case.
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThis(_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillRepeatedly(Return('b'));
+
+&nbsp;&nbsp;//&nbsp;The&nbsp;more&nbsp;specific&nbsp;case.
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;DoThis(Lt(5)))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.WillRepeatedly(Return('a'));</pre><p>Now, if&nbsp;<code>foo.DoThis()</code>&nbsp;is called with a value less than 5,&nbsp;<code>'a'</code>&nbsp;will be returned; otherwise&nbsp;<code>'b'</code>&nbsp;will be returned.</p><h2>七、匹配多个参数作为一个整体</h2><p>&nbsp; 1. 有时仅仅单独匹配参数是不够的。 例如，我们可能想说第一个参数必须小于第二个参数。 With（）子句允许我们匹配mock函数的所有参数作为一个整体。 例如，</p><pre id="leanote_ace_1478832908435_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 126px;">using&nbsp;::testing::_;
+using&nbsp;::testing::Lt;
+using&nbsp;::testing::Ne;
+...
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;InRange(Ne(0),&nbsp;_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.With(Lt());</pre><p>如上，InRange（）的第一个参数不能为0，并且必须小于第二个参数。</p><p>With（）中的表达式必须是Matcher &lt;:: testing :: tuple &lt;A1，...，An&gt;&gt;类型的匹配器，其中A1，...，An是函数参数的类型。</p><p>你还可以在.With（）中写入AllArgs（m）而不是m。 这两种形式是等效的，但是.With（AllArgs（Lt（）））比.With（Lt（））更具可读性。</p><p>&nbsp; 2. 您可以使用Args &lt;k1，...，kn&gt;（m）将n个选定参数（作为元组）与m匹配。 例如，</p><pre id="leanote_ace_1478833551008_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 147px;">using&nbsp;::testing::_;
+using&nbsp;::testing::AllOf;
+using&nbsp;::testing::Args;
+using&nbsp;::testing::Lt;
+...
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;Blah(_,&nbsp;_,&nbsp;_))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.With(AllOf(Args&lt;0,&nbsp;1&gt;(Lt()),&nbsp;Args&lt;1,&nbsp;2&gt;(Lt())));</pre><p>上面说Blah（）将用参数x，y和z调用，其中x &lt;y &lt;z。</p><p>&nbsp; 3. 作为一个方便和示例，Google Mock提供了一些2元组的匹配器，包括上面的Lt（）匹配器。 查看CheatSheet完整列表。</p><p><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">注意，</span></strong>如果你想传递参数到你自己的谓词（例如.With（Args &lt;0，1&gt;（Truly（＆MyPredicate）））），该谓词必须写成一个:: testing :: tuple 如同它的参数; Google Mock会将n个选定的参数作为单个元组传递给谓词。</p><h2>八、使用匹配器作为谓词</h2><p>你注意到一个匹配器只是一个花哨的谓词，也知道如何描述自己？ 许多现有算法将谓词作为参数（例如，在STL的&lt;algorithm&gt;头中定义的那些），如果Google Mock匹配器不允许参与，那将是一种耻辱。</p><p>Luckily, you can use a matcher where a unary predicate functor is expected by wrapping it inside the&nbsp;<code>Matches()</code>&nbsp;function(幸运的是，你可以使用一个期望一个谓词函子的匹配器，通过将它包装在Matches（）函数中)。 例如，</p><pre id="leanote_ace_1478842206038_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 147px;">#include&nbsp;&lt;algorithm&gt;
+#include&nbsp;&lt;vector&gt;
+
+std::vector&lt;int&gt;&nbsp;v;
+...
+//&nbsp;How&nbsp;many&nbsp;elements&nbsp;in&nbsp;v&nbsp;are&nbsp;&gt;=&nbsp;10?
+const&nbsp;int&nbsp;count&nbsp;=&nbsp;count_if(v.begin(),&nbsp;v.end(),&nbsp;Matches(Ge(10)));</pre><p>因为你可以使用Google Mock从更简单的对象构建复杂的匹配器，这给了你一个方便的构造复合谓词的方法（使用STL的 &lt;functional&gt;标头做同样的事情是痛苦的）。 例如，这里有一个谓词，满足任何数字是&gt;= 0，&lt;= 100and！= 50：</p><pre id="leanote_ace_1478842364196_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 21px;">Matches(AllOf(Ge(0),&nbsp;Le(100),&nbsp;Ne(50)))</pre><p><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">&nbsp;在下边的断言使用？？</span></strong>。。。<br></p><h2>九、在Google测试断言中使用匹配器</h2><p>因为匹配器基本上是谓词，也知道如何描述自己，有一种方法可以在Google Test断言上用它们。 它被称为ASSERT_THAT和EXPECT_THAT：</p><pre id="leanote_ace_1478843395710_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 42px;">&nbsp;ASSERT_THAT(value,&nbsp;matcher);&nbsp;&nbsp;//&nbsp;Asserts&nbsp;that&nbsp;value&nbsp;matches&nbsp;matcher.
+&nbsp;EXPECT_THAT(value,&nbsp;matcher);&nbsp;&nbsp;//&nbsp;The&nbsp;non-fatal&nbsp;version.&nbsp;</pre><p>&nbsp;For example, in a Google Test test you can write:<br></p><pre id="leanote_ace_1478843447356_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 252px;">#include&nbsp;"gmock/gmock.h"
+
+using&nbsp;::testing::AllOf;
+using&nbsp;::testing::Ge;
+using&nbsp;::testing::Le;
+using&nbsp;::testing::MatchesRegex;
+using&nbsp;::testing::StartsWith;
+...
+
+&nbsp;&nbsp;EXPECT_THAT(Foo(),&nbsp;StartsWith("Hello"));
+&nbsp;&nbsp;EXPECT_THAT(Bar(),&nbsp;MatchesRegex("Line&nbsp;\\d+"));
+&nbsp;&nbsp;ASSERT_THAT(Baz(),&nbsp;AllOf(Ge(5),&nbsp;Le(10)));&nbsp;</pre><p>&nbsp;which (as you can probably guess) executes&nbsp;<code>Foo()</code>,&nbsp;<code>Bar()</code>, and&nbsp;<code>Baz()</code>, and verifies that:<br></p><ul><li>Foo（）返回一个以“Hello”开头的字符串。</li><li>Bar（）返回一个匹配正则表达式“Line \\ d +”的字符串。</li><li>Baz（）返回范围[5,10]中的数字。</li></ul><p>这些宏符合语言习惯。 它们也生成信息性消息。 例如，如果上面的第一个EXPECT_THAT（）失败，消息将是：<br></p><pre id="leanote_ace_1478843680165_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 63px;">Value&nbsp;of:&nbsp;Foo()
+&nbsp;&nbsp;Actual:&nbsp;"Hi,&nbsp;world!"
+Expected:&nbsp;starts&nbsp;with&nbsp;"Hello"</pre><p><br></p><h2>十、使用谓词作为匹配器</h2><p>Google Mock提供了一组内置的匹配器。 如果你发现它们缺乏，你可以使用任意一元谓词函数或函子(functor)作为匹配器 - 只要谓词接受你想要的类型的值。 你可以通过在Truly（）函数中包装谓词来实现，例如：</p><pre id="leanote_ace_1478844047598_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 147px;">using&nbsp;::testing::Truly;
+
+int&nbsp;IsEven(int&nbsp;n)&nbsp;{&nbsp;return&nbsp;(n&nbsp;%&nbsp;2)&nbsp;==&nbsp;0&nbsp;?&nbsp;1&nbsp;:&nbsp;0;&nbsp;}
+...
+
+&nbsp;&nbsp;//&nbsp;Bar()&nbsp;must&nbsp;be&nbsp;called&nbsp;with&nbsp;an&nbsp;even&nbsp;number.
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;Bar(Truly(IsEven)));</pre><p><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">注意</span></strong>，谓词函数/函子不必返回bool。 只要返回值可以用作if语句的条件 if(condition)....</p><h2>十 一、匹配不可复制的参数</h2><p>当您执行EXPECT_CALL(mock_obj,Foo(bar))时，<strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">Google Mock会保存一个bar的副本</span></strong>。 稍后调用Foo()时，Google Mock将参数Foo()与保存的bar副本进行比较。 这样，您不需要担心在执行EXPECT_CALL()后，bar被修改或销毁。 当使用像Eq(bar)，Le(bar)等等匹配器时也是如此。</p><p>但是，如果bar不能被复制（即没有复制构造函数）？ 你可以定义自己的匹配器函数，并与Truly（）一起使用，就像前面几个配方所示。 或者，如果您可以保证在执行EXPECT_CALL（）后不会更改bar，您可以避开它。 只要告诉Google Mock应该保存对bar的引用，而不是它的副本。 方法如下：</p><pre id="leanote_ace_1478845579136_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 189px;">using&nbsp;::testing::Eq;
+using&nbsp;::testing::ByRef;
+using&nbsp;::testing::Lt;
+...
+&nbsp;&nbsp;//&nbsp;Expects&nbsp;that&nbsp;Foo()'s&nbsp;argument&nbsp;==&nbsp;bar.
+&nbsp;&nbsp;EXPECT_CALL(mock_obj,&nbsp;Foo(Eq(ByRef(bar))));
+
+&nbsp;&nbsp;//&nbsp;Expects&nbsp;that&nbsp;Foo()'s&nbsp;argument&nbsp;&lt;&nbsp;bar.
+&nbsp;&nbsp;EXPECT_CALL(mock_obj,&nbsp;Foo(Lt(ByRef(bar))));&nbsp;</pre><p>记住：如果这样做，在EXPECT_CALL（）之后不要更改bar，否则结果是未定义的。</p><h2>十二、验证对象的成员</h2><p>通常，mock函数引用对象作为参数。 当匹配参数时，您可能不希望将整个对象与固定对象进行比较，因为这可能是过度规范。 相反，您可能需要验证某个成员变量或对象的某个getter方法的结果。 你可以使用Field（）和Property（）。 进一步来说，</p><pre id="leanote_ace_1478846622373_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 21px;">Field(&amp;Foo::bar,&nbsp;m)</pre><p>&nbsp;匹配器--Foo对象的bar成员变量匹配m。<br></p><pre id="leanote_ace_1478846749920_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 21px;">Property(&amp;Foo::baz,&nbsp;m)&nbsp;</pre><p>&nbsp;匹配器---Foo对象的baz()方法的返回值匹配m</p><table class="mce-item-table"><thead><tr><th align="left"><code>Field(&amp;Foo::number, Ge(3))</code></th><th align="left">Matches&nbsp;<code>x</code>&nbsp;where&nbsp;<code>x.number &gt;= 3</code>.</th></tr></thead><tbody><tr><td align="left"><code>Property(&amp;Foo::name, StartsWith("John "))</code></td><td align="left">Matches&nbsp;<code>x</code>&nbsp;where&nbsp;<code>x.name()</code>&nbsp;starts with&nbsp;<code>"John "</code>.</td></tr></tbody></table><p>注意，在Property(＆Foo :: baz , ...) 中，方法baz（）必须不带参数，并且声明为const。</p><p>BTW，Field（）和Property（）也可以匹配对象的简单指针。 例如，</p><pre id="leanote_ace_1478847021280_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 21px;">Field(&amp;Foo::number,&nbsp;Ge(3))&nbsp;</pre><p>&nbsp;.......</p><h2>十三、验证指针参数指向的值</h2><p>C ++函数通常将指针作为参数。 你可以使用像IsNull（），NotNull（）和其他比较匹配器匹配一个指针，但如果你想确保指针指向的值，而不是指针本身，有一定的属性？ 嗯，你可以使用Pointee（m）匹配器。</p><p>Pointee（m）匹配指针iff m匹配指针指向的值。 例如：</p><pre id="leanote_ace_1478847125192_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 84px;">using&nbsp;::testing::Ge;
+using&nbsp;::testing::Pointee;
+...
+&nbsp;&nbsp;EXPECT_CALL(foo,&nbsp;Bar(Pointee(Ge(3))));&nbsp;</pre><p>期望调用foo.Bar（）的指针指向的值大于或等于3。</p><p>Pointee（）的一个好处是，它将一个NULL指针视为匹配失败，因此您可以编写Pointee（m）而不是</p><pre id="leanote_ace_1478847255143_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 21px;">AllOf(NotNull(),&nbsp;Pointee(m))</pre><p>。。。。。。。//未完待续</p><h2>十四、测试对象的某个属性</h2><p>有时你想指定一个对象参数有一定的属性，但没有现有的匹配器这样做。 如果你想要好的错误消息，你应该定义一个匹配器。</p><p>让我们假设你有一个mock函数，它接受一个类型为Foo的对象，它有一个int bar（）方法和一个int baz（）方法，你想约束参数的bar（）值加上它的baz的值是给定数字。 以下是如何定义匹配器：</p><pre id="leanote_ace_1478847371201_0" class="brush:c_cpp ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 609px;">using&nbsp;::testing::MatcherInterface;
+using&nbsp;::testing::MatchResultListener;
+
+class&nbsp;BarPlusBazEqMatcher&nbsp;:&nbsp;public&nbsp;MatcherInterface&lt;const&nbsp;Foo&amp;&gt;&nbsp;{
+&nbsp;public:
+&nbsp;&nbsp;explicit&nbsp;BarPlusBazEqMatcher(int&nbsp;expected_sum)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;expected_sum_(expected_sum)&nbsp;{}
+
+&nbsp;&nbsp;virtual&nbsp;bool&nbsp;MatchAndExplain(const&nbsp;Foo&amp;&nbsp;foo,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MatchResultListener*&nbsp;listener)&nbsp;const&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(foo.bar()&nbsp;+&nbsp;foo.baz())&nbsp;==&nbsp;expected_sum_;
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;DescribeTo(::std::ostream*&nbsp;os)&nbsp;const&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;*os&nbsp;&lt;&lt;&nbsp;"bar()&nbsp;+&nbsp;baz()&nbsp;equals&nbsp;"&nbsp;&lt;&lt;&nbsp;expected_sum_;
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;virtual&nbsp;void&nbsp;DescribeNegationTo(::std::ostream*&nbsp;os)&nbsp;const&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;*os&nbsp;&lt;&lt;&nbsp;"bar()&nbsp;+&nbsp;baz()&nbsp;does&nbsp;not&nbsp;equal&nbsp;"&nbsp;&lt;&lt;&nbsp;expected_sum_;
+&nbsp;&nbsp;}
+&nbsp;private:
+&nbsp;&nbsp;const&nbsp;int&nbsp;expected_sum_;
+};
+
+inline&nbsp;Matcher&lt;const&nbsp;Foo&amp;&gt;&nbsp;BarPlusBazEq(int&nbsp;expected_sum)&nbsp;{
+&nbsp;&nbsp;return&nbsp;MakeMatcher(new&nbsp;BarPlusBazEqMatcher(expected_sum));
+}
+...
+&nbsp;EXPECT_CALL(...,&nbsp;DoThis(BarPlusBazEq(5)))...;</pre><h2>十五、匹配容器</h2><p>有时，STL容器（例如，列表，向量，映射，...）被传递到模拟函数，你可能想要验证它。 因为大多数STL容器支持==运算符，所以可以写Eq（expected_container）或者只是expect_container来完全匹配容器。</p><p>有时候，你可能想要更灵活（例如，第一个元素必须是完全匹配，但第二个元素可以是任何正数，等等）。 此外，在测试中使用的容器通常具有少量的元件，并且必须在线外定义期望的容器是有点麻烦。</p><p>在这种情况下，您可以使用ElementsAre（）或UnorderedElementsAre（）匹配器：</p><pre id="leanote_ace_1478847761135_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 189px;">using&nbsp;::testing::_;
+using&nbsp;::testing::ElementsAre;
+using&nbsp;::testing::Gt;
+...
+
+&nbsp;&nbsp;MOCK_METHOD1(Foo,&nbsp;void(const&nbsp;vector&lt;int&gt;&amp;&nbsp;numbers));
+...
+
+&nbsp;&nbsp;EXPECT_CALL(mock,&nbsp;Foo(ElementsAre(1,&nbsp;Gt(0),&nbsp;_,&nbsp;5)));</pre><p>上面的匹配器说容器必须有4个元素，分别必须是1，大于0，任何东西和5。</p><p>如果你改为写：</p><pre id="leanote_ace_1478847820325_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 189px;">using&nbsp;::testing::_;
+using&nbsp;::testing::Gt;
+using&nbsp;::testing::UnorderedElementsAre;
+...
+
+&nbsp;&nbsp;MOCK_METHOD1(Foo,&nbsp;void(const&nbsp;vector&lt;int&gt;&amp;&nbsp;numbers));
+...
+
+&nbsp;&nbsp;EXPECT_CALL(mock,&nbsp;Foo(UnorderedElementsAre(1,&nbsp;Gt(0),&nbsp;_,&nbsp;5)));</pre><p>这意味着容器必须有4个元素，在一些排列下必须是1，分别大于0，任何东西和5。</p><p>ElementsAre（）和UnorderedElementsAre（）重载以获取0到10个参数。 如果需要更多，可以将它们放在C风格的数组中，并使用ElementsAreArray（）或UnorderedElementsAreArray（）：</p><pre id="leanote_ace_1478847897107_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 210px;">using&nbsp;::testing::ElementsAreArray;
+...
+
+&nbsp;&nbsp;//&nbsp;ElementsAreArray&nbsp;accepts&nbsp;an&nbsp;array&nbsp;of&nbsp;element&nbsp;values.
+&nbsp;&nbsp;const&nbsp;int&nbsp;expected_vector1[]&nbsp;=&nbsp;{&nbsp;1,&nbsp;5,&nbsp;2,&nbsp;4,&nbsp;...&nbsp;};
+&nbsp;&nbsp;EXPECT_CALL(mock,&nbsp;Foo(ElementsAreArray(expected_vector1)));
+
+&nbsp;&nbsp;//&nbsp;Or,&nbsp;an&nbsp;array&nbsp;of&nbsp;element&nbsp;matchers.
+&nbsp;&nbsp;Matcher&lt;int&gt;&nbsp;expected_vector2&nbsp;=&nbsp;{&nbsp;1,&nbsp;Gt(2),&nbsp;_,&nbsp;3,&nbsp;...&nbsp;};
+&nbsp;&nbsp;EXPECT_CALL(mock,&nbsp;Foo(ElementsAreArray(expected_vector2)));</pre><p>如果数组需要动态创建（因此编译器不能推断数组大小），您可以给ElementsAreArray（）一个额外的参数来指定数组大小：</p><pre id="leanote_ace_1478848005348_0" class="brush:c_cpp ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 105px;">using&nbsp;::testing::ElementsAreArray;
+...
+&nbsp;&nbsp;int*&nbsp;const&nbsp;expected_vector3&nbsp;=&nbsp;new&nbsp;int[count];
+&nbsp;&nbsp;...&nbsp;fill&nbsp;expected_vector3&nbsp;with&nbsp;values&nbsp;...
+&nbsp;&nbsp;EXPECT_CALL(mock,&nbsp;Foo(ElementsAreArray(expected_vector3,&nbsp;count)));</pre><p><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">提示：</span></strong></p><ul><li>ElementsAre *（）可以用于匹配实现STL迭代器模式的任何容器（即它具有const_iterator类型并支持begin（）/ end（）），而不仅仅是在STL中定义的那些。 它甚至可以与尚未编写的容器类型一起工作 - 只要它们遵循上述模式即可。</li><li>您可以使用嵌套的ElementsAre *（）来匹配嵌套（多维）容器。</li><li>如果容器通过指针而不是引用传递，只需写入Pointee（ElementsAre *（...））。</li><li><strong><span style="color: #ff6600;" data-mce-style="color: #ff6600;">元素的顺序对于ElementsAre *（）很重要。</span></strong> 因此，不要将其用于其元素顺序未定义的容器（例如，hash_map）。</li></ul><p>十六、共享匹配</p><p>在引擎盖下，Google Mock匹配器对象包含一个指向ref计数的实现对象的指针。 复制匹配器是允许的，非常有效，因为只有指针被复制。 当引用实现对象的最后一个匹配器死掉时，实现对象将被删除。</p><p>。。。。。。</p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p></div>
+	</div>
+
+<!-- 该js供其它处理 -->
+<script src="../leanote-html.js"></script>
+</body>
+</html>
