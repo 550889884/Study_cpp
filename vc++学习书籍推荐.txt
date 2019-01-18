@@ -1,0 +1,19 @@
+C++ Primer----------Stanley B. Lippman“帮助全球无数程序员学会C++”---
+
+Windows 程序设计（第5版）-----Charles Petzold“windows编程泰山北斗”---
+
+Windows核心编程----------Jeffrey Richter“windows编程泰山北斗”---
+
+Windows高级编程指南---------Jeffrey Richter“windows编程泰山北斗”---
+
+
+--------------------------------------------------------------------------------
+
+
+深入浅出MFC（第二版）-----“MFC四大天王”-------侯捷
+
+MFC Windows程序设计（第2版)---MFC四大天王”---------Jeff Prosise
+
+Visual C++ 技术内幕（第4版)--MFC四大天王”--------David Kruglinski
+
+深入解析MFC-------------MFC四大天王”-----------George Shepherd
